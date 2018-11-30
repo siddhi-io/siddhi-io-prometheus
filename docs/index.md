@@ -9,9 +9,9 @@ The **siddhi-io-prometheus extension** is an extension to <a target="_blank" hre
 * Prometheus Pushgateway should be started. (optional)
 
 Find some useful links below:
-* <a target="_blank" href="https://github.com/HindujaB/siddhi-io-prometheus">Source code</a>
-* Releases
-* <a target="_blank" href="https://github.com/HindujaB/siddhi-io-prometheus/issues">Issue tracker</a>
+* <a target="_blank" href="https://github.com/wso2-extensions/siddhi-io-prometheus">Source code</a>
+* <a target="_blank" href="https://github.com/wso2-extensions/siddhi-io-prometheus/releases">Releases</a>
+* <a target="_blank" href="https://github.com/wso2-extensions/siddhi-io-prometheus/issues">Issue tracker</a>
 
 ## How to use
 
@@ -35,7 +35,7 @@ Find some useful links below:
 
 ## Features
 
-* prometheus(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink">sink</a>)
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.0/#prometheus-sink">prometheus</a> (<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink">sink</a>)
 
      The sink extension publishes events processed by WSO2 SP into Prometheus metrics and expose them to Prometheus server at the provided url. The created metrics will be published to Prometheus through,
      
@@ -44,26 +44,15 @@ Find some useful links below:
      
      The metric types that are supported by Prometheus sink are counter, gauge, histogram and summary. And the values and labels of the Prometheus metrics will be updated according to each event.
 
-* prometheus(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source">source</a>)
 
 ## How to contribute
-* Report issues at <a target="_blank" href="https://github.com/HindujaB/siddhi-io-prometheus/issues">GitHub Issue Tracker</a>.
+* Report issues at <a target="_blank" href="https://github.com/wso2-extensions/siddhi-io-prometheus/issues">GitHub Issue Tracker</a>.
 
-* Send your contributions as pull requests to the <a target="_blank" href="https://github.com/HindujaB/siddhi-io-prometheus">master branch</a>.
+* Send your contributions as pull requests to the <a target="_blank" href="https://github.com/wso2-extensions/siddhi-io-prometheus">master branch</a>.
 
 ## Running Integration tests in docker containers (Optional)
-* The prometheus sink can be tested with the docker base integration test framework. The test framework initialize a docker container with required configuration before execute the test suit.
-   
-  To start integration tests,
-    1. Install and run docker
-    2. To run the integration tests,
-        - navigate to the siddhi-io-prometheus/ directory and issue the following command.
-          ```
-          mvn verify -P local-prometheus
-          ```
-* Prometheus target configurations can be modified at the directory for integration tests : 
-
-     siddhi-io-prometheus/component/src/test/resources/prometheus/prometheus.yml
+ * Integration tests are still under development.
+ 
 ## Contact us
  * Post your questions with the <a target="_blank" href="http://stackoverflow.com/search?q=siddhi">"Siddhi"</a> tag in <a target="_blank" href="http://stackoverflow.com/search?q=siddhi">Stackoverflow</a>.
 

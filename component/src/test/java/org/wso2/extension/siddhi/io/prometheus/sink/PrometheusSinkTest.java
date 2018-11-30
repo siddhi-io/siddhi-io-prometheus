@@ -50,15 +50,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Test cases for prometheus sink in server and pushgateway publish mode.
- * The functionality can be tested with the docker base integration test framework.
- * The test framework initialize a docker container with required configuration before execute the test suit.
- * To start integration tests,
- * 1. Install and run docker
- * 2. To run the integration tests,
- * - navigate to the siddhi-io-prometheus/ directory and issue the following commands.
- * mvn verify -P local-prometheus
- * (Prometheus target configurations can be modified at the directory
- * siddhi-io-prometheus/component/src/test/resources/prometheus/prometheus.yml)
+ * Prometheus server and pushgateway must be up and running for the testcases to pass.
+ * Targets must be configured inside the Prometheus configuration file (prometheus.yml) as,
+ * - job_name: 'server'
+ * honor_labels: true
+ * static_configs:
+ * - targets: ['localhost:9080']
+ * <p>
+ * - job_name: 'pushgateway'
+ * honor_labels: true
+ * static_configs:
+ * - targets: ['localhost:9091']
  */
 public class PrometheusSinkTest {
 
@@ -79,9 +81,10 @@ public class PrometheusSinkTest {
         String prometheusPort = System.getenv("PROMETHEUS_PORT");
         String pushPort = System.getenv("PUSHGATEWAY_PORT");
         String serverPort = System.getenv("SERVER_PORT");
-        String host = System.getenv("HOST_IP");
+        String host = "localhost";
+                //System.getenv("CONTAINER_ID");
         pushgatewayURL = "http://" + host + ":" + pushPort;
-        serverURL = "http://" + host + ":" + pushPort;
+        serverURL = "http://" + host + ":" + serverPort;
         prometheusServerURL = "http://" + host + ":" + prometheusPort + "/api/v1/query?query=";
         buckets = "2, 4, 6, 8";
         quantiles = "0.4,0.65,0.85";
@@ -106,12 +109,12 @@ public class PrometheusSinkTest {
 
     public void getMetrics(String metricName) {
 
-        prometheusServerURL += metricName;
+        String requestURL = prometheusServerURL + metricName;
 
-        StringBuilder out = new StringBuilder();
+        /*StringBuilder out = new StringBuilder();*/
 
         try {
-            URL url = new URL(prometheusServerURL);
+            URL url = new URL(requestURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             StringBuilder response = new StringBuilder();
@@ -129,9 +132,7 @@ public class PrometheusSinkTest {
                 reader.close();
                 JSONObject queryResult = new JSONObject(response.toString());
                 JSONArray results = queryResult.getJSONObject("data").getJSONArray("result");
-                for (int i = 0; i < results.length(); i++) {
-                    Object name = results.getJSONObject(i).getJSONObject("metric").get("__name__");
-                    Object job = results.getJSONObject(i).getJSONObject("metric").get("job");
+                for (int i = results.length() -1 ; i >= 0 ; i--) {
                     Object symbol = results.getJSONObject(i).getJSONObject("metric").get("symbol");
                     Object price = results.getJSONObject(i).getJSONObject("metric").get("price");
                     Object value = results.getJSONObject(i).getJSONArray("value").get(1);
@@ -164,7 +165,8 @@ public class PrometheusSinkTest {
                 "                        \"define stream InputStream (symbol String, value int, price double);";
         String sinkStream = "@sink(type='prometheus'," +
                 "job='sinkTest'," +
-                "publish.mode='pushgateway'," +
+                "publish.mode='server'," +
+                "push.url='" + serverURL + "'," +
                 "metric.type='counter'," +
                 "@map(type = 'keyvalue'))" +
                 "Define stream SinkMapTestStream (symbol String, value int, price double);";
@@ -203,6 +205,8 @@ public class PrometheusSinkTest {
 
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.assertEquals(eventCount.get(), 2);
+        } else {
+            Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();
     }
@@ -227,11 +231,9 @@ public class PrometheusSinkTest {
                 "job='prometheusSinkTest'," +
                 "server.url='" + serverURL + "'," +
                 "publish.mode='server'," +
-                "metric.type='summary'," +
-                "quantiles = '" + quantiles + "'," +
-                "quantile.error  = '0.1' ," +
+                "metric.type='gauge'," +
                 "metric.help= 'Server mode test'," +
-                "metric.name= 'test_metrics'," +
+                "metric.name= 'testing_metrics'," +
                 "value.attribute= 'volume', " +
                 "@map(type = \'keyvalue\'))"
                 + "Define stream TestStream (symbol String, volume int, price double);";
@@ -265,10 +267,12 @@ public class PrometheusSinkTest {
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
         Thread.sleep(1000);
-        getMetrics("TestStream");
+        getMetrics("testing_metrics");
 
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.assertEquals(eventCount.get(), 2);
+        } else {
+            Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();
     }
@@ -334,6 +338,8 @@ public class PrometheusSinkTest {
 
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.assertEquals(eventCount.get(), 2);
+        } else {
+            Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();
     }
@@ -351,12 +357,14 @@ public class PrometheusSinkTest {
         String sinkStream1 = "@sink(type='prometheus'," +
                 "job='Test'," +
                 "publish.mode='server'," +
+                "server.url='" + serverURL + "'," +
                 "metric.type='counter'," +
                 "@map(type = \'keyvalue\'))" +
                 "Define stream TestStream1 (symbol String, value int, price double);";
         String sinkStream2 = "@sink(type='prometheus'," +
                 "job='Test'," +
                 "publish.mode='server'," +
+                "server.url='" + serverURL + "'," +
                 "metric.type='gauge'," +
                 "@map(type = \'keyvalue\'))" +
                 "Define stream TestStream2 (symbol String, value int, price double);";
@@ -390,18 +398,26 @@ public class PrometheusSinkTest {
         List<Object[]> inputEvents = new ArrayList<>();
         Object[] inputEvent1 = new Object[]{"WSO2", 100, 78.8};
         Object[] inputEvent2 = new Object[]{"IBM", 125, 65.32};
+        inputHandler.send(inputEvent1);
         inputHandler.send(inputEvent2);
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
         Thread.sleep(1000);
-        getMetrics("TestStream1");
-        SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents);
 
+        getMetrics("TestStream1");
+        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
+            Assert.assertEquals(eventCount.get(), 4);
+        } else {
+            Assert.fail("Events does not match");
+        }
         createdEvents.clear();
+
         getMetrics("TestStream2");
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 2);
+            Assert.assertEquals(eventCount.get(), 4);
+        } else {
+            Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();
     }

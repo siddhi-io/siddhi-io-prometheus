@@ -206,8 +206,8 @@ import static java.lang.Double.parseDouble;
         examples = {
                 @Example(
                         syntax =
-                                "@sink(type='prometheus',job='fooOrderCount', target='http://localhost:9080',\n " +
-                                        "build.mode='server', metric.type='counter', \n" +
+                                "@sink(type='prometheus',job='fooOrderCount', server.url ='http://localhost:9080',\n " +
+                                        "publish.mode='server', metric.type='counter', \n" +
                                         "metric.help= 'Number of foo orders', @map(type='keyvalue'))\n" +
                                         "define stream FooCountStream (Name String, quantity int, value int);\n",
                         description = " In the above example, the Prometheus-sink will create a counter metric " +
@@ -216,8 +216,8 @@ import static java.lang.Double.parseDouble;
                 ),
                 @Example(
                         syntax =
-                                "@sink(type='prometheus',job='inventoryLevel', target='http://localhost:9080',\n " +
-                                        "build.mode='pushGateway', metric.type='gauge',\n" +
+                                "@sink(type='prometheus',job='inventoryLevel', push.url='http://localhost:9080',\n " +
+                                        "publish.mode='pushGateway', metric.type='gauge',\n" +
                                         " metric.help= 'Current level of inventory', @map(type='keyvalue'))\n" +
                                         "define stream InventoryLevelStream (Name String, value int);\n",
                         description = " In the above example, the Prometheus-sink will create a gauge metric " +
@@ -440,7 +440,7 @@ public class PrometheusSink extends Sink {
             switch (publishMode) {
                 case PrometheusConstants.SERVER_PUBLISH_MODE:
                     target = new URL(serverURL);
-                    initiateServer(target.getPort());
+                    initiateServer(target.getHost(), target.getPort());
                     log.info(metricName + " has successfully connected at " + serverURL);
                     break;
                 case PrometheusConstants.PUSHGATEWAY_PUBLISH_MODE:
@@ -456,9 +456,9 @@ public class PrometheusSink extends Sink {
         }
     }
 
-    private void initiateServer(int port) {
+    private void initiateServer(String host, int port) {
         try {
-            server = new HTTPServer(port);
+            server = new HTTPServer(host, port);
         } catch (IOException e) {
             if (!(e instanceof BindException && e.getMessage().equals("Address already in use"))) {
                 log.error("Unable to establish connection ", new ConnectionUnavailableException(e));
