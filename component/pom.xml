@@ -52,6 +52,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.wso2.extension.siddhi.map.xml</groupId>
@@ -132,6 +133,7 @@
                                     <alias>siddhi-io-prometheus</alias>
                                     <name>prom/prometheus</name>
                                     <run>
+                                        <net>host</net>
                                         <volumes>
                                             <bind>
                                                 <volume>
@@ -159,7 +161,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>3.0.0-M1</version>
+                        <version>2.19.1</version>
                         <executions>
                             <execution>
                                 <id>integration-test-for-prometheus</id>
@@ -181,7 +183,7 @@
                                 <PROMETHEUS_PORT>9090</PROMETHEUS_PORT>
                                 <PUSHGATEWAY_PORT>9091</PUSHGATEWAY_PORT>
                                 <SERVER_PORT>9080</SERVER_PORT>
-                                <HOST_IP>127.0.0.1</HOST_IP>
+                                <CONTAINER_ID>${docker.container.siddhi-io-prometheus.id}</CONTAINER_ID>
                             </environmentVariables>
                             <suiteXmlFiles>
                                 <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>

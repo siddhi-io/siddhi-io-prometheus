@@ -25,7 +25,6 @@
         <classes>
             <class name="org.wso2.extension.siddhi.io.prometheus.sink.PrometheusSinkTest"/>
             <class name="org.wso2.extension.siddhi.io.prometheus.sink.ExceptionTestcase"/>
-            <class name="org.wso2.extension.siddhi.io.prometheus.source.TestCaseOfPrometheusSource"/>
         </classes>
     </test>
 </suite>

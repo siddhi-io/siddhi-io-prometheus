@@ -130,8 +130,8 @@
 <span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
 <span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
 ```
-@sink(type='prometheus',job='fooOrderCount', target='http://localhost:9080',
- build.mode='server', metric.type='counter', 
+@sink(type='prometheus',job='fooOrderCount', server.url ='http://localhost:9080',
+ publish.mode='server', metric.type='counter', 
 metric.help= 'Number of foo orders', @map(type='keyvalue'))
 define stream FooCountStream (Name String, quantity int, value int);
 
@@ -140,10 +140,29 @@ define stream FooCountStream (Name String, quantity int, value int);
 
 <span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
 ```
-@sink(type='prometheus',job='inventoryLevel', target='http://localhost:9080',
- build.mode='pushGateway', metric.type='gauge',
+@sink(type='prometheus',job='inventoryLevel', push.url='http://localhost:9080',
+ publish.mode='pushGateway', metric.type='gauge',
  metric.help= 'Current level of inventory', @map(type='keyvalue'))
 define stream InventoryLevelStream (Name String, value int);
 
 ```
 <p style="word-wrap: break-word"> In the above example, the Prometheus-sink will create a gauge metric with the Stream name and defined attributes as labels.<br>The metric will be pushed to Prometheus pushGateway at the target url.</p>
+
+## Source
+
+### prometheus *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source">(Source)</a>*
+
+<p style="word-wrap: break-word"> </p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+@source(type="prometheus", @map(...)))
+```
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+ 
+```
+<p style="word-wrap: break-word"> </p>
+
