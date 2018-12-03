@@ -135,10 +135,8 @@
                                     <run>
                                         <network>
                                             <mode>host</mode>
-                                            <!--<name>localhost</name>-->
                                             <alias>prometheus-server</alias>
                                         </network>
-                                        <!--<hostname>localhost</hostname>-->
                                         <volumes>
                                             <bind>
                                                 <volume>
@@ -147,9 +145,6 @@
                                             </bind>
                                         </volumes>
                                         <namingStrategy>alias</namingStrategy>
-                                        <!--<ports>-->
-                                            <!--<port>${prometheus-test.port}:9090</port>-->
-                                        <!--</ports>-->
                                         <wait>
                                             <tcp>
                                                 <ports>
@@ -166,14 +161,9 @@
                                     <run>
                                         <network>
                                             <mode>host</mode>
-                                            <!--<name>localhost</name>-->
                                             <alias>prometheus-pushgateway-server</alias>
                                         </network>
-                                        <!--<hostname>localhost</hostname>-->
                                         <namingStrategy>alias</namingStrategy>
-                                        <!--<ports>-->
-                                            <!--<port>${prometheus-pushgateway-test.port}:9091</port>-->
-                                        <!--</ports>-->
                                         <wait>
                                             <tcp>
                                                 <ports>
@@ -213,7 +203,6 @@
                                 <PUSHGATEWAY_PORT>9091</PUSHGATEWAY_PORT>
                                 <SERVER_PORT>9080</SERVER_PORT>
                                 <HOST_NAME>localhost</HOST_NAME>
-                                <!--<CONTAINER_ID>${docker.container.siddhi-io-prometheus.id}</CONTAINER_ID>-->
                             </environmentVariables>
                             <suiteXmlFiles>
                                 <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
@@ -273,7 +262,8 @@
                             org.wso2.extension.siddhi.io.prometheus.*
                         </Export-Package>
                         <Import-Package>
-                            *;resolution:=optional;
+                            io.prometheus.client.exporter.*; version="${prometheus.client.version.range}"
+                            org.wso2.siddhi.*; version="${siddhi.import.version.range}"
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Include-Resource>

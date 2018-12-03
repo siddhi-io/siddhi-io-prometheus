@@ -131,7 +131,7 @@ public class PrometheusSinkTest {
                 reader.close();
                 JSONObject queryResult = new JSONObject(response.toString());
                 JSONArray results = queryResult.getJSONObject("data").getJSONArray("result");
-                for (int i = results.length() -1 ; i >= 0 ; i--) {
+                for (int i = results.length() - 1; i >= 0; i--) {
                     Object symbol = results.getJSONObject(i).getJSONObject("metric").get("symbol");
                     Object price = results.getJSONObject(i).getJSONObject("metric").get("price");
                     Object value = results.getJSONObject(i).getJSONArray("value").get(1);
