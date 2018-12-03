@@ -52,8 +52,8 @@ public class PrometheusUtil {
             try {
                 return stringList.stream().mapToDouble(Double::parseDouble).toArray();
             } catch (NumberFormatException e) {
-                throw new SiddhiAppCreationException("Error in buckets/quantiles format. \" +\n" +
-                        " \"please insert the numerical values as \"2,3,4,5\" format in sink definition.");
+                throw new SiddhiAppCreationException("Error in buckets/quantiles format. \n" +
+                        " please insert the numerical values as \"2,3,4,5\" format in sink definition.");
             }
         } else {
             return new double[0];

@@ -106,12 +106,9 @@ public class PrometheusSinkTest {
         eventArrived.set(false);
     }
 
-    public void getMetrics(String metricName) {
+    public void getAndValidateMetrics(String metricName) {
 
         String requestURL = prometheusServerURL + metricName;
-
-        /*StringBuilder out = new StringBuilder();*/
-
         try {
             URL url = new URL(requestURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -200,7 +197,7 @@ public class PrometheusSinkTest {
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
         Thread.sleep(1000);
-        getMetrics("SinkMapTestStream");
+        getAndValidateMetrics("SinkMapTestStream");
 
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.assertEquals(eventCount.get(), 2);
@@ -266,7 +263,7 @@ public class PrometheusSinkTest {
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
         Thread.sleep(1000);
-        getMetrics("testing_metrics");
+        getAndValidateMetrics("testing_metrics");
 
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.assertEquals(eventCount.get(), 2);
@@ -333,7 +330,7 @@ public class PrometheusSinkTest {
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
         Thread.sleep(1000);
-        getMetrics("test_metrics");
+        getAndValidateMetrics("test_metrics");
 
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.assertEquals(eventCount.get(), 2);
@@ -404,7 +401,7 @@ public class PrometheusSinkTest {
         Assert.assertTrue(eventArrived.get());
         Thread.sleep(1000);
 
-        getMetrics("TestStream1");
+        getAndValidateMetrics("TestStream1");
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.assertEquals(eventCount.get(), 4);
         } else {
@@ -412,7 +409,7 @@ public class PrometheusSinkTest {
         }
         createdEvents.clear();
 
-        getMetrics("TestStream2");
+        getAndValidateMetrics("TestStream2");
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.assertEquals(eventCount.get(), 4);
         } else {

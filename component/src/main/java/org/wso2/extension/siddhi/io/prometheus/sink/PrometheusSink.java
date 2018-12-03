@@ -266,13 +266,13 @@ public class PrometheusSink extends Sink {
     protected void init(StreamDefinition outputstreamDefinition, OptionHolder optionHolder, ConfigReader configReader,
                         SiddhiAppContext siddhiAppContext) {
         if (!optionHolder.isOptionExists(PrometheusConstants.JOB_NAME)) {
-            throw new SiddhiAppCreationException("job name not found");
+            throw new SiddhiAppCreationException("mandatory field \'job.name\' is not found in sink configuration");
         }
         if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_PUBLISH_MODE)) {
-            throw new SiddhiAppCreationException("publish mode not found");
+            throw new SiddhiAppCreationException("mandatory field \'publish.mode\' is not found in sink configuration");
         }
         if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_TYPE)) {
-            throw new SiddhiAppCreationException("metric type not defined");
+            throw new SiddhiAppCreationException("mandatory field \'metric.type\' is not found in sink configuration");
         }
 
         //check for custom mapping

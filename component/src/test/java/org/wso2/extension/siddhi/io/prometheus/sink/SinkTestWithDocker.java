@@ -110,12 +110,9 @@ public class SinkTestWithDocker {
         createdEvents.clear();
     }
 
-    public void getMetrics(String metricName) {
+    public void getAndValidateMetrics(String metricName) {
 
         String requestURL = prometheusServerURL + metricName;
-
-        /*StringBuilder out = new StringBuilder();*/
-
         try {
             URL url = new URL(requestURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -204,7 +201,7 @@ public class SinkTestWithDocker {
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
         SiddhiTestHelper.waitForEvents(3000, 2, eventCount, 3000);
-        getMetrics("SinkMapTestStream");
+        getAndValidateMetrics("SinkMapTestStream");
         if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }
@@ -267,7 +264,7 @@ public class SinkTestWithDocker {
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
         SiddhiTestHelper.waitForEvents(3000, 2, eventCount, 3000);
-        getMetrics("testing_metrics");
+        getAndValidateMetrics("testing_metrics");
         if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }
@@ -331,7 +328,7 @@ public class SinkTestWithDocker {
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
         SiddhiTestHelper.waitForEvents(3000, 2, eventCount, 3000);
-        getMetrics("test_metrics");
+        getAndValidateMetrics("test_metrics");
         if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }
@@ -399,12 +396,12 @@ public class SinkTestWithDocker {
         Assert.assertTrue(eventArrived.get());
         Thread.sleep(3000);
         SiddhiTestHelper.waitForEvents(3000, 4, eventCount, 3000);
-        getMetrics("TestStream1");
+        getAndValidateMetrics("TestStream1");
         if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }
         createdEvents.clear();
-        getMetrics("TestStream2");
+        getAndValidateMetrics("TestStream2");
         if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }

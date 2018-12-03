@@ -27,6 +27,8 @@ import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 
+import java.io.IOException;
+
 /**
  * Test cases for invalid sink definitions.
  */
@@ -72,8 +74,9 @@ public class ValidationTestcase {
      *
      * @throws Exception Interrupted exception
      */
-    @Test
-    public void prometheusSinkTest3() throws InterruptedException {
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Unsupported mapping")
+    public void prometheusValidationTest1() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
 
@@ -88,13 +91,19 @@ public class ValidationTestcase {
                         "metric.help= 'Metric definition test', " +
                         "@map(type = \'keyvalue\', @payload(mode = 'mode', value = 'value')))" +
                         "Define stream SinkTestStream (symbol String, value int);";
-
         try {
             startSiddhiApp(streamDefinition1);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Unsupported mapping");
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Invalid publish mode : .*")
+    public void prometheusValidationTest2() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
+
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with undefined build mode");
@@ -114,8 +123,14 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition2);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Invalid publish mode : " + publishMode);
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Metric type contains illegal value")
+    public void prometheusValidationTest3() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with undefined metric type");
@@ -134,8 +149,14 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition3);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Metric type contains illegal value");
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Unsupported metric type for buckets")
+    public void prometheusValidationTest4() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with unsupported metric type with buckets");
@@ -153,8 +174,15 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition4);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Unsupported metric type for buckets");
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Error in buckets/quantiles format. \n" +
+                    " please insert the numerical values as \"2,3,4,5\" format in sink definition.")
+    public void prometheusValidationTest5() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with unsupported values for buckets");
@@ -170,9 +198,14 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition5);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Error in buckets/quantiles format. \" +\n" +
-                    " \"please insert the numerical values as \"2,3,4,5\" format in sink definition.");
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "unsupported metric type for quantiles")
+    public void prometheusValidationTest6() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with unsupported metric type for quantiles");
@@ -189,8 +222,14 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition6);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "unsupported metric type for quantiles");
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Invalid values for quantiles")
+    public void prometheusValidationTest7() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with unsupported values for quantiles");
@@ -207,8 +246,14 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition7);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Invalid values for quantiles");
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Invalid format of metric name: .*")
+    public void prometheusValidationTest8() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with user defined metric name in unsupported format");
@@ -226,8 +271,14 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition8);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Invalid format of metric name: " + metricName);
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "The value attribute (.*) is not found in stream definition.")
+    public void prometheusValidationTest9() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test without value attribute configuration or" +
@@ -246,9 +297,14 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition9);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(),
-                    "The value attribute " + valueAttribute + " is not found in stream definition.");
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Invalid type for value attribute")
+    public void prometheusValidationTest10() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test without value attribute in unsupported type");
@@ -264,8 +320,14 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition10);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Invalid type for value attribute");
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Invalid value for push operation : .*")
+    public void prometheusValidationTest11() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
 
         log.info("----------------------------------------------------------------------------------");
@@ -286,9 +348,15 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition11);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Invalid value for push operation : " +
-                    pushOperation);
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class,
+            expectedExceptionsMessageRegExp = "Grouping key is not in the expected format" +
+                    " please insert them as 'key1:val1','key2:val2' format in prometheus sink.")
+    public void prometheusValidationTest12() throws InterruptedException {
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with grouping key configuration in unsupported format");
@@ -307,8 +375,7 @@ public class ValidationTestcase {
             startSiddhiApp(streamDefinition12);
             Assert.fail("Exception expected");
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Grouping key is not in the expected format" +
-                    " please insert them as 'key1:val1','key2:val2' format in prometheus sink.");
+            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
         }
 
     }
