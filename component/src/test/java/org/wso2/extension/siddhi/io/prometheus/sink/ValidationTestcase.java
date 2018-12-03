@@ -27,8 +27,6 @@ import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 
-import java.io.IOException;
-
 /**
  * Test cases for invalid sink definitions.
  */

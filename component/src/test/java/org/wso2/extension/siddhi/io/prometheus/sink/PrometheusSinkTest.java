@@ -104,6 +104,7 @@ public class PrometheusSinkTest {
     public void beforeTest() {
         eventCount.set(0);
         eventArrived.set(false);
+        createdEvents.clear();
     }
 
     public void getAndValidateMetrics(String metricName) {

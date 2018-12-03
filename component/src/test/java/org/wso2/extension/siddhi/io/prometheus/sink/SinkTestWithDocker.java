@@ -22,7 +22,6 @@ import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -103,10 +102,6 @@ public class SinkTestWithDocker {
     public void beforeTest() {
         eventCount.set(0);
         eventArrived.set(false);
-    }
-
-    @AfterMethod
-    public void afterTest() {
         createdEvents.clear();
     }
 
@@ -154,8 +149,8 @@ public class SinkTestWithDocker {
      *
      * @throws InterruptedException
      */
-    @Test
-    public void prometheusSinkTest() throws InterruptedException {
+    @Test(sequential = true)
+    public void prometheusSinkTest1() throws InterruptedException {
 
         SiddhiManager siddhiManager = new SiddhiManager();
         log.info("----------------------------------------------------------------------------------");
@@ -200,9 +195,12 @@ public class SinkTestWithDocker {
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
-        SiddhiTestHelper.waitForEvents(3000, 2, eventCount, 3000);
+        Thread.sleep(1000);
         getAndValidateMetrics("SinkMapTestStream");
-        if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
+
+        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
+            Assert.assertEquals(eventCount.get(), 2);
+        } else {
             Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();
@@ -213,8 +211,8 @@ public class SinkTestWithDocker {
      *
      * @throws Exception Interrupted exception
      */
-    @Test
-    public void prometheusSinkTestServerMode() throws InterruptedException {
+    @Test(sequential = true)
+    public void prometheusSinkTest2() throws InterruptedException {
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with server mode");
@@ -263,9 +261,12 @@ public class SinkTestWithDocker {
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
-        SiddhiTestHelper.waitForEvents(3000, 2, eventCount, 3000);
+        Thread.sleep(1000);
         getAndValidateMetrics("testing_metrics");
-        if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
+
+        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
+            Assert.assertEquals(eventCount.get(), 2);
+        } else {
             Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();
@@ -276,8 +277,8 @@ public class SinkTestWithDocker {
      *
      * @throws Exception Interrupted exception
      */
-    @Test
-    public void prometheusSinkTestPushgatewayMode() throws InterruptedException {
+    @Test(sequential = true)
+    public void prometheusSinkTest3() throws InterruptedException {
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with pushgateway mode");
         log.info("----------------------------------------------------------------------------------");
@@ -335,8 +336,8 @@ public class SinkTestWithDocker {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test
-    public void prometheusConnectionTestMultipleSink() throws Exception {
+    @Test(sequential = true)
+    public void prometheusSinkTest4() throws Exception {
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Test to verify Prometheus sink with multiple sink definitions in server mode.");
@@ -413,8 +414,8 @@ public class SinkTestWithDocker {
      *
      * @throws InterruptedException
      **/
-    @Test
-    public void prometheusSinkTestNodeFailure() throws InterruptedException, CannotRestoreSiddhiAppStateException {
+    @Test(sequential = true)
+    public void prometheusSinkTest5() throws InterruptedException, CannotRestoreSiddhiAppStateException {
 
         log.info("----------------------------------------------------------------------------------");
         log.info("Test to verify recovering of the Siddhi node on a failure ");
