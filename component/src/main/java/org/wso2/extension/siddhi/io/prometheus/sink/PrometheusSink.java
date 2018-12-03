@@ -92,6 +92,7 @@ import static java.lang.Double.parseDouble;
                         description = "This parameter specifies the mode of exposing metrics to Prometheus server." +
                                 "The mode can be either \'server\' or \'pushGateway\'.",
                         defaultValue = "server",
+                        optional = true,
                         type = {DataType.STRING}
                 ),
                 @Parameter(

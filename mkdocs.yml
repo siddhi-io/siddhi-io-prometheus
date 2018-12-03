@@ -35,13 +35,4 @@ pages:
 - API Docs:
   - latest: api/latest.md
 - License: about/license.md
-  theme:
-    name: material
-    logo: images/siddhi-logo-w.svg
-    favicon: images/favicon.ico
-    palette:
-      primary: teal
-      accent: teal
-  google_analytics:
-  - UA-103065-28
-  - auto
+

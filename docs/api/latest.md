@@ -34,7 +34,7 @@
         <td style="vertical-align: top; word-wrap: break-word">This parameter specifies the mode of exposing metrics to Prometheus server.The mode can be either 'server' or 'pushGateway'.</td>
         <td style="vertical-align: top">server</td>
         <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>
@@ -147,22 +147,4 @@ define stream InventoryLevelStream (Name String, value int);
 
 ```
 <p style="word-wrap: break-word"> In the above example, the Prometheus-sink will create a gauge metric with the Stream name and defined attributes as labels.<br>The metric will be pushed to Prometheus pushGateway at the target url.</p>
-
-## Source
-
-### prometheus *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source">(Source)</a>*
-
-<p style="word-wrap: break-word"> </p>
-
-<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
-```
-@source(type="prometheus", @map(...)))
-```
-
-<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
-<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
-```
- 
-```
-<p style="word-wrap: break-word"> </p>
 
