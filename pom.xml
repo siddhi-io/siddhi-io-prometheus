@@ -80,18 +80,6 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.wso2.extension.siddhi.map.xml</groupId>
-                <artifactId>siddhi-map-xml</artifactId>
-                <version>${siddhi.map.xml.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.extension.siddhi.map.json</groupId>
-                <artifactId>siddhi-map-json</artifactId>
-                <version>${siddhi.map.json.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>${testng.version}</version>
@@ -121,15 +109,6 @@
         </dependencies>
     </dependencyManagement>
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>${jacoco.plugin.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.wso2.carbon.maven</groupId>
@@ -140,7 +119,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
-                    <preparationGoals>clean install</preparationGoals>
+                    <preparationGoals>clean install -Pdocumentation-deploy</preparationGoals>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
@@ -171,6 +150,7 @@
         <testng.version>6.11</testng.version>
         <prometheus.client.version>0.5.0</prometheus.client.version>
         <keyvalue.mapper.version>1.0.17</keyvalue.mapper.version>
+        <tapestry-json.version>5.4.1.wso2v1</tapestry-json.version>
         <prometheus-test.port>9090</prometheus-test.port>
         <prometheus-pushgateway-test.port>9091</prometheus-pushgateway-test.port>
     </properties>

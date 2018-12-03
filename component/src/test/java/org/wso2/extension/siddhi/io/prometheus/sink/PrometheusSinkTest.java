@@ -153,7 +153,7 @@ public class PrometheusSinkTest {
      *
      * @throws InterruptedException
      */
-    @Test
+    @Test(sequential = true)
     public void prometheusSinkTest() throws InterruptedException {
 
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -215,7 +215,7 @@ public class PrometheusSinkTest {
      *
      * @throws Exception Interrupted exception
      */
-    @Test
+    @Test(sequential = true)
     public void prometheusSinkTestServerMode() throws InterruptedException {
 
         log.info("----------------------------------------------------------------------------------");
@@ -281,7 +281,7 @@ public class PrometheusSinkTest {
      *
      * @throws Exception Interrupted exception
      */
-    @Test
+    @Test(sequential = true)
     public void prometheusSinkTestPushgatewayMode() throws InterruptedException {
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with pushgateway mode");
@@ -343,7 +343,7 @@ public class PrometheusSinkTest {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test
+    @Test(sequential = true)
     public void prometheusConnectionTestMultipleSink() throws Exception {
 
         log.info("----------------------------------------------------------------------------------");
@@ -426,7 +426,7 @@ public class PrometheusSinkTest {
      *
      * @throws InterruptedException
      **/
-    @Test
+    @Test(sequential = true)
     public void prometheusSinkTestNodeFailure() throws InterruptedException, CannotRestoreSiddhiAppStateException {
 
         log.info("----------------------------------------------------------------------------------");
