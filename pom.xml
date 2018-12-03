@@ -173,5 +173,6 @@
         <prometheus.httpserver.version>0.5.0</prometheus.httpserver.version>
         <keyvalue.mapper.version>1.0.17</keyvalue.mapper.version>
         <prometheus-test.port>9090</prometheus-test.port>
+        <prometheus-pushgateway-test.port>9091</prometheus-pushgateway-test.port>
     </properties>
 </project>

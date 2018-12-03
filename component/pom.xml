@@ -130,10 +130,15 @@
                         <configuration>
                             <images>
                                 <image>
-                                    <alias>siddhi-io-prometheus</alias>
+                                    <alias>prometheus-server</alias>
                                     <name>prom/prometheus</name>
                                     <run>
-                                        <net>host</net>
+                                        <network>
+                                            <mode>host</mode>
+                                            <!--<name>localhost</name>-->
+                                            <alias>prometheus-server</alias>
+                                        </network>
+                                        <!--<hostname>localhost</hostname>-->
                                         <volumes>
                                             <bind>
                                                 <volume>
@@ -142,13 +147,37 @@
                                             </bind>
                                         </volumes>
                                         <namingStrategy>alias</namingStrategy>
-                                        <ports>
-                                            <port>${prometheus-test.port}:9090</port>
-                                        </ports>
+                                        <!--<ports>-->
+                                            <!--<port>${prometheus-test.port}:9090</port>-->
+                                        <!--</ports>-->
                                         <wait>
                                             <tcp>
                                                 <ports>
                                                     <port>9090</port>
+                                                </ports>
+                                            </tcp>
+                                            <time>600000</time>
+                                        </wait>
+                                    </run>
+                                </image>
+                                <image>
+                                    <alias>prometheus-pushgateway</alias>
+                                    <name>prom/prometheus</name>
+                                    <run>
+                                        <network>
+                                            <mode>host</mode>
+                                            <!--<name>localhost</name>-->
+                                            <alias>prometheus-pushgateway-server</alias>
+                                        </network>
+                                        <!--<hostname>localhost</hostname>-->
+                                        <namingStrategy>alias</namingStrategy>
+                                        <!--<ports>-->
+                                            <!--<port>${prometheus-pushgateway-test.port}:9091</port>-->
+                                        <!--</ports>-->
+                                        <wait>
+                                            <tcp>
+                                                <ports>
+                                                    <port>9091</port>
                                                 </ports>
                                             </tcp>
                                             <time>600000</time>
@@ -183,7 +212,8 @@
                                 <PROMETHEUS_PORT>9090</PROMETHEUS_PORT>
                                 <PUSHGATEWAY_PORT>9091</PUSHGATEWAY_PORT>
                                 <SERVER_PORT>9080</SERVER_PORT>
-                                <CONTAINER_ID>${docker.container.siddhi-io-prometheus.id}</CONTAINER_ID>
+                                <HOST_NAME>localhost</HOST_NAME>
+                                <!--<CONTAINER_ID>${docker.container.siddhi-io-prometheus.id}</CONTAINER_ID>-->
                             </environmentVariables>
                             <suiteXmlFiles>
                                 <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>

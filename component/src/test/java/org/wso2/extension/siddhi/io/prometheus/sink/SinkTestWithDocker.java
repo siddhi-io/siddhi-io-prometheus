@@ -22,6 +22,7 @@ import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -50,21 +51,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Test cases for prometheus sink in server and pushgateway publish mode.
- * Prometheus server and pushgateway must be up and running for the testcases to pass.
- * Targets must be configured inside the Prometheus configuration file (prometheus.yml) as,
- * - job_name: 'server'
- * honor_labels: true
- * static_configs:
- * - targets: ['localhost:9080']
- * <p>
- * - job_name: 'pushgateway'
- * honor_labels: true
- * static_configs:
- * - targets: ['localhost:9091']
+ * The functionality can be tested with the docker base integration test framework.
+ * The test framework initialize a docker container with required configuration before execute the test suit.
+ * To start integration tests,
+ * 1. Install and run docker
+ * 2. To run the integration tests,
+ * - navigate to the siddhi-io-prometheus/ directory and issue the following commands.
+ * mvn verify -P local-prometheus
+ * (Prometheus target configurations can be modified at the directory
+ * siddhi-io-prometheus/component/src/test/resources/prometheus/prometheus.yml)
  */
-public class PrometheusSinkTest {
+public class SinkTestWithDocker {
 
-    private static final Logger log = Logger.getLogger(PrometheusSinkTest.class);
+    private static final Logger log = Logger.getLogger(SinkTestWithDocker.class);
     private static String pushgatewayURL;
     private static String serverURL;
     private static String buckets;
@@ -106,6 +105,11 @@ public class PrometheusSinkTest {
         eventArrived.set(false);
     }
 
+    @AfterMethod
+    public void afterTest() {
+        createdEvents.clear();
+    }
+
     public void getMetrics(String metricName) {
 
         String requestURL = prometheusServerURL + metricName;
@@ -131,7 +135,7 @@ public class PrometheusSinkTest {
                 reader.close();
                 JSONObject queryResult = new JSONObject(response.toString());
                 JSONArray results = queryResult.getJSONObject("data").getJSONArray("result");
-                for (int i = results.length() -1 ; i >= 0 ; i--) {
+                for (int i = results.length() - 1; i >= 0; i--) {
                     Object symbol = results.getJSONObject(i).getJSONObject("metric").get("symbol");
                     Object price = results.getJSONObject(i).getJSONObject("metric").get("price");
                     Object value = results.getJSONObject(i).getJSONArray("value").get(1);
@@ -199,12 +203,9 @@ public class PrometheusSinkTest {
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
-        Thread.sleep(1000);
+        SiddhiTestHelper.waitForEvents(3000, 2, eventCount, 3000);
         getMetrics("SinkMapTestStream");
-
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 2);
-        } else {
+        if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();
@@ -265,12 +266,9 @@ public class PrometheusSinkTest {
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
-        Thread.sleep(1000);
+        SiddhiTestHelper.waitForEvents(3000, 2, eventCount, 3000);
         getMetrics("testing_metrics");
-
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 2);
-        } else {
+        if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();
@@ -332,12 +330,9 @@ public class PrometheusSinkTest {
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
-        Thread.sleep(1000);
+        SiddhiTestHelper.waitForEvents(3000, 2, eventCount, 3000);
         getMetrics("test_metrics");
-
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 2);
-        } else {
+        if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();
@@ -402,20 +397,15 @@ public class PrometheusSinkTest {
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
-        Thread.sleep(1000);
-
+        Thread.sleep(3000);
+        SiddhiTestHelper.waitForEvents(3000, 4, eventCount, 3000);
         getMetrics("TestStream1");
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 4);
-        } else {
+        if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }
         createdEvents.clear();
-
         getMetrics("TestStream2");
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 4);
-        } else {
+        if (!SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.fail("Events does not match");
         }
         siddhiAppRuntime.shutdown();

@@ -30,8 +30,8 @@ import org.wso2.siddhi.core.stream.input.InputHandler;
 /**
  * Test cases for invalid sink definitions.
  */
-public class ExceptionTestcase {
-    private static final Logger log = Logger.getLogger(ExceptionTestcase.class);
+public class ValidationTestcase {
+    private static final Logger log = Logger.getLogger(ValidationTestcase.class);
     private static String pushgatewayURL;
     private static String serverURL;
     private static String buckets;
