@@ -53,7 +53,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.lang.Double.parseDouble;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.DEFAULT_ERROR;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.EMPTY_STRING;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.HELP_STRING;
@@ -64,6 +63,8 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.P
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.SERVER_PUBLISH_MODE;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.SPACE_STRING;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.VALUE_STRING;
+
+import static java.lang.Double.parseDouble;
 
 /**
  * Extension for Siddhi to publish events as Prometheus metrics.
@@ -309,13 +310,6 @@ public class PrometheusSink extends Sink {
     @Override
     protected void init(StreamDefinition outputstreamDefinition, OptionHolder optionHolder, ConfigReader configReader,
                         SiddhiAppContext siddhiAppContext) {
-//        if (!optionHolder.isOptionExists(PrometheusConstants.JOB_NAME)) {
-//            throw new SiddhiAppCreationException("mandatory field \'job.name\' is not found in sink configuration");
-//        }
-//        if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_PUBLISH_MODE)) {
-//            throw new SiddhiAppCreationException("mandatory field \'publish.mode\' is
-//              not found in sink configuration");
-//        }
         if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_TYPE)) {
             throw new SiddhiAppCreationException("mandatory field \'metric.type\' is not found in sink configuration");
         }
@@ -454,7 +448,15 @@ public class PrometheusSink extends Sink {
                 case PrometheusConstants.PUSHGATEWAY_PUBLISH_MODE:
                     target = new URL(pushURL);
                     pushGateway = new PushGateway(target);
-                    log.info(metricName + " has successfully connected to pushGateway at " + pushURL);
+                    try {
+                        pushGateway.pushAdd(prometheusMetricBuilder.getRegistry(), jobName, groupingKey);
+                        log.info(metricName + " has successfully connected to pushGateway at " + pushURL);
+                    } catch (IOException e) {
+                        if (e.getMessage().equalsIgnoreCase("Connection refused (Connection refused)")) {
+                            log.error("Pushgateway is not listening at " + target,
+                                    new ConnectionUnavailableException(e));
+                        }
+                    }
                     break;
                 default:
                     //default will never be executed
