@@ -29,6 +29,7 @@ import org.wso2.extension.siddhi.io.prometheus.util.PrometheusUtil;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
 import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.SystemParameter;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
@@ -52,9 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.lang.Double.parseDouble;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.DEFAULT_ERROR;
-import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.DEFAULT_PUSH_URL;
-import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.DEFAULT_SERVER_URL;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.EMPTY_STRING;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.HELP_STRING;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.METRIC_TYPE;
@@ -64,7 +64,6 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.P
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.SERVER_PUBLISH_MODE;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.SPACE_STRING;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.VALUE_STRING;
-import static java.lang.Double.parseDouble;
 
 /**
  * Extension for Siddhi to publish events as Prometheus metrics.
@@ -85,12 +84,14 @@ import static java.lang.Double.parseDouble;
                         name = "job",
                         description = "This parameter specifies the job name of the metric. The name must be " +
                                 "the same job name as defined in the prometheus configuration file.",
+                        defaultValue = "siddhiJob",
+                        optional = true,
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "publish.mode",
                         description = "This parameter specifies the mode of exposing metrics to Prometheus server." +
-                                "The mode can be either \'server\' or \'pushGateway\'.",
+                                "The mode can be either \'server\' or \'pushgateway\'.",
                         defaultValue = "server",
                         optional = true,
                         type = {DataType.STRING}
@@ -225,9 +226,51 @@ import static java.lang.Double.parseDouble;
                                 "with the Stream name and defined attributes as labels.\n" +
                                 "The metric will be pushed to Prometheus pushGateway at the target url."
                 )
+        },
+        systemParameter = {
+                @SystemParameter(
+                        name = "jobName",
+                        description = "This is the property that specifies the default job name for the metric. " +
+                                "The name must be the same job name as defined in the prometheus configuration file.",
+                        defaultValue = "siddhiJob",
+                        possibleParameters = "Any string"
+                ),
+                @SystemParameter(
+                        name = "publishMode",
+                        description = "The default publish mode for the Prometheus sink for exposing metrics to" +
+                                " Prometheus server. The mode can be either \'server\' or \'pushgateway\'. ",
+                        defaultValue = "server",
+                        possibleParameters = "server or pushgateway"
+                ),
+                @SystemParameter(
+                        name = "serverURL",
+                        description = "This property configures the url where the http server will be initiated " +
+                                "to expose metrics. This url must be previously defined in prometheus " +
+                                "configuration file as a target to be identified by Prometheus. By default, " +
+                                "the http server will be initiated at \'http://localhost:9080\'",
+                        defaultValue = "http://localhost:9080",
+                        possibleParameters = "Any valid URL"
+                ),
+                @SystemParameter(
+                        name = "pushURL",
+                        description = "This property configures the target url of Prometheus pushGateway " +
+                                "where the pushGateway must be listening. This url should be previously " +
+                                "defined in prometheus configuration file as a target to be identified by Prometheus.",
+                        defaultValue = "http://localhost:9091",
+                        possibleParameters = "Any valid URL"
+                ),
+                @SystemParameter(
+                        name = "groupingKey",
+                        description = "This property configures the grouping key of created metrics in key-value " +
+                                "pairs. Grouping key is used only in pushGateway mode in order to distinguish the " +
+                                "metrics from already existing metrics under same job. " +
+                                "The expected format of the grouping key is as follows: " +
+                                "\"'key1:value1','key2:value2'\"",
+                        defaultValue = "null",
+                        possibleParameters = "Any key value pairs in the supported format"
+                )
         }
 )
-// for more information refer https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sinks
 
 public class PrometheusSink extends Sink {
     private static final Logger log = Logger.getLogger(PrometheusSink.class);
@@ -251,6 +294,7 @@ public class PrometheusSink extends Sink {
     private HTTPServer server;
     private PushGateway pushGateway;
     private String registeredMetrics;
+    private ConfigReader configReader;
 
     @Override
     public Class[] getSupportedInputEventClasses() {
@@ -265,12 +309,13 @@ public class PrometheusSink extends Sink {
     @Override
     protected void init(StreamDefinition outputstreamDefinition, OptionHolder optionHolder, ConfigReader configReader,
                         SiddhiAppContext siddhiAppContext) {
-        if (!optionHolder.isOptionExists(PrometheusConstants.JOB_NAME)) {
-            throw new SiddhiAppCreationException("mandatory field \'job.name\' is not found in sink configuration");
-        }
-        if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_PUBLISH_MODE)) {
-            throw new SiddhiAppCreationException("mandatory field \'publish.mode\' is not found in sink configuration");
-        }
+//        if (!optionHolder.isOptionExists(PrometheusConstants.JOB_NAME)) {
+//            throw new SiddhiAppCreationException("mandatory field \'job.name\' is not found in sink configuration");
+//        }
+//        if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_PUBLISH_MODE)) {
+//            throw new SiddhiAppCreationException("mandatory field \'publish.mode\' is
+//              not found in sink configuration");
+//        }
         if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_TYPE)) {
             throw new SiddhiAppCreationException("mandatory field \'metric.type\' is not found in sink configuration");
         }
@@ -286,10 +331,15 @@ public class PrometheusSink extends Sink {
             }
         }
 
-        this.jobName = optionHolder.validateAndGetStaticValue(PrometheusConstants.JOB_NAME);
-        this.pushURL = optionHolder.validateAndGetStaticValue(PrometheusConstants.PUSH_URL, DEFAULT_PUSH_URL);
-        this.serverURL = optionHolder.validateAndGetStaticValue(PrometheusConstants.SERVER_URL, DEFAULT_SERVER_URL);
-        this.publishMode = optionHolder.validateAndGetStaticValue(PrometheusConstants.METRIC_PUBLISH_MODE);
+        this.configReader = configReader;
+        this.jobName = optionHolder.validateAndGetStaticValue(PrometheusConstants.JOB_NAME,
+                PrometheusUtil.jobName(configReader));
+        this.pushURL = optionHolder.validateAndGetStaticValue(PrometheusConstants.PUSH_URL,
+                PrometheusUtil.pushURL(configReader));
+        this.serverURL = optionHolder.validateAndGetStaticValue(PrometheusConstants.SERVER_URL,
+                PrometheusUtil.serverURL(configReader));
+        this.publishMode = optionHolder.validateAndGetStaticValue(PrometheusConstants.METRIC_PUBLISH_MODE,
+                PrometheusUtil.publishMode(configReader));
         this.metricType = PrometheusUtil.assignMetricType(optionHolder.validateAndGetStaticValue(METRIC_TYPE));
         this.metricHelp = optionHolder.validateAndGetStaticValue(PrometheusConstants.METRIC_HELP,
                 HELP_STRING + metricType + SPACE_STRING + metricName).trim();
@@ -302,7 +352,7 @@ public class PrometheusSink extends Sink {
         this.pushOperation = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.PUSH_DEFINITION, PrometheusConstants.PUSH_ADD_OPERATION).trim();
         this.groupingKey = PrometheusUtil.populateGroupingKey(optionHolder.validateAndGetStaticValue(
-                PrometheusConstants.GROUPING_KEY_DEFINITION, EMPTY_STRING).trim());
+                PrometheusConstants.GROUPING_KEY_DEFINITION, PrometheusUtil.groupinKey(configReader)).trim());
         this.valueAttribute = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.VALUE_ATTRIBUTE, VALUE_STRING).trim();
         try {

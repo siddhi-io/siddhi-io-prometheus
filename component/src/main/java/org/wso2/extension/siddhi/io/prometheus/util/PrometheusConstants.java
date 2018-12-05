@@ -41,14 +41,12 @@ public class PrometheusConstants {
     public static final String HELP_STRING = "help for ";
     public static final String SPACE_STRING = " ";
 
+    public static final String DEFAULT_JOB_NAME = "siddhiJob";
+    public static final String DEFAULT_PUBLISH_MODE = "server";
     public static final String DEFAULT_PUSH_URL = "http://localhost:9091";
     public static final String DEFAULT_SERVER_URL = "http://localhost:9080";
     public static final String DEFAULT_ERROR = "0.001";
-    public static final String PATH_SEPARATOR = "/";
-    public static final String NULL_VALUE = null;
-    public static final double ZERO = 0.0;
     public static final String VALUE_STRING = "value";
-    public static final String PORT_SEPARATOR = ":";
     public static final String METRIC_NAME_REGEX = "[a-zA-Z_:][a-zA-Z0-9_:]*";
 
     public static final String SERVER_PUBLISH_MODE = "server";
@@ -65,5 +63,11 @@ public class PrometheusConstants {
     public static final String MAP_ANNOTATION = "map";
     public static final String PAYLOAD_ANNOTATION = "payload";
 
+
+    public static final String JOB_NAME_CONFIGURATION = "jobName";
+    public static final String PUSH_URL_CONFIGURATION = "pushURL";
+    public static final String SERVER_URL_CONFIGURATION = "serverURL";
+    public static final String PUBLISH_MODE_CONFIGURATION = "publishMode";
+    public static final String GROUPING_KEY_CONFIGURATION = "groupingKey";
 
 }

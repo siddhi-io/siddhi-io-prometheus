@@ -21,6 +21,7 @@ package org.wso2.extension.siddhi.io.prometheus.util;
 
 import io.prometheus.client.Collector;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -150,5 +151,62 @@ public class PrometheusUtil {
             count++;
         }
         return labels;
+    }
+
+    /**
+     * user can give custom job name if user did not define them. Then system will read
+     * the default values which is in the deployment yaml.     *
+     * @param sinkConfigReader configuration reader for sink.
+     *
+     * @return default job name.
+     */
+    public static String jobName(ConfigReader sinkConfigReader) {
+        return sinkConfigReader.readConfig(PrometheusConstants.JOB_NAME_CONFIGURATION,
+                PrometheusConstants.DEFAULT_JOB_NAME);
+    }
+    /**
+     * user can give custom URL for Prometheus push gateway if user did not give them inside sink definition. Then
+     * system will read the default values which is in the deployment yaml.     *
+     * @param sinkConfigReader configuration reader for sink.
+     *
+     * @return default push gateway URL.
+     */
+    public static String pushURL(ConfigReader sinkConfigReader) {
+        return sinkConfigReader.readConfig(PrometheusConstants.PUSH_URL_CONFIGURATION,
+                PrometheusConstants.DEFAULT_PUSH_URL);
+    }
+    /**
+     * user can give custom server URL if user did not give them inside sink definition. Then system will read
+     * the default values which is in the deployment yaml.     *
+     * @param sinkConfigReader configuration reader for sink.
+     *
+     * @return default server URL.
+     */
+    public static String serverURL(ConfigReader sinkConfigReader) {
+        return sinkConfigReader.readConfig(PrometheusConstants.SERVER_URL_CONFIGURATION,
+                PrometheusConstants.DEFAULT_SERVER_URL);
+    }
+    /**
+     * user can give custom publish mode if the user did not give them inside sink definition then system read
+     * the default values which is in the deployment yaml.
+     *
+     * @param sinkConfigReader configuration reader for sink.
+     *
+     * @return default publish mode.
+     */
+    public static String publishMode(ConfigReader sinkConfigReader) {
+        return sinkConfigReader.readConfig(PrometheusConstants.PUBLISH_MODE_CONFIGURATION,
+                PrometheusConstants.DEFAULT_PUBLISH_MODE);
+    }
+    /**
+     * user can give custom grouping key in key-value pairs, if user did not give them inside sink definition.
+     * Then system will read the default values which is in the deployment yaml.     *
+     * @param sinkConfigReader configuration reader for sink.
+     *
+     * @return default grouping key.
+     */
+    public static String groupinKey(ConfigReader sinkConfigReader) {
+        return sinkConfigReader.readConfig(PrometheusConstants.GROUPING_KEY_CONFIGURATION,
+                PrometheusConstants.EMPTY_STRING);
     }
 }

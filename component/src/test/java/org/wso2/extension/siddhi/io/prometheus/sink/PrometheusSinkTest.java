@@ -33,6 +33,7 @@ import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 import org.wso2.siddhi.core.util.SiddhiTestHelper;
+import org.wso2.siddhi.core.util.config.InMemoryConfigManager;
 import org.wso2.siddhi.core.util.persistence.InMemoryPersistenceStore;
 
 import java.io.BufferedReader;
@@ -41,7 +42,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -56,19 +59,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  * honor_labels: true
  * static_configs:
  * - targets: ['localhost:9080']
- * <p>
+ *
  * - job_name: 'pushgateway'
  * honor_labels: true
  * static_configs:
  * - targets: ['localhost:9091']
+ *
+ * - job_name: 'configurationTest'
+ *   honor_labels: true
+ *   static_configs:
+ *   - targets: ['localhost:9096']
  */
 public class PrometheusSinkTest {
 
     private static final Logger log = Logger.getLogger(PrometheusSinkTest.class);
     private static String pushgatewayURL;
     private static String serverURL;
-    private static String buckets;
-    private static String quantiles;
     private static ExecutorService executorService;
     private AtomicInteger eventCount = new AtomicInteger(0);
     private AtomicBoolean eventArrived = new AtomicBoolean(false);
@@ -85,8 +91,6 @@ public class PrometheusSinkTest {
         pushgatewayURL = "http://" + host + ":" + pushPort;
         serverURL = "http://" + host + ":" + serverPort;
         prometheusServerURL = "http://" + host + ":" + prometheusPort + "/api/v1/query?query=";
-        buckets = "2, 4, 6, 8";
-        quantiles = "0.4,0.65,0.85";
         executorService = Executors.newFixedThreadPool(5);
         log.info("== Prometheus connection tests started ==");
     }
@@ -106,8 +110,7 @@ public class PrometheusSinkTest {
         eventArrived.set(false);
         createdEvents.clear();
     }
-
-    public void getAndValidateMetrics(String metricName) {
+    private void getAndValidateMetrics(String metricName) {
 
         String requestURL = prometheusServerURL + metricName;
         try {
@@ -149,7 +152,7 @@ public class PrometheusSinkTest {
     /**
      * test for Prometheus sink with keyvalue mapping.
      *
-     * @throws InterruptedException
+     * @throws InterruptedException interrupted exception
      */
     @Test(sequential = true)
     public void prometheusSinkTest() throws InterruptedException {
@@ -413,6 +416,75 @@ public class PrometheusSinkTest {
         getAndValidateMetrics("TestStream2");
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
             Assert.assertEquals(eventCount.get(), 4);
+        } else {
+            Assert.fail("Events does not match");
+        }
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test(sequential = true)
+    public void prometheusConfigurationTest() throws Exception {
+
+        log.info("----------------------------------------------------------------------------------");
+        log.info("Test to verify Prometheus sink with custom configuration.");
+        log.info("----------------------------------------------------------------------------------");
+
+        String serverPort = System.getenv("SERVER_CONFIG_PORT");
+        String host = System.getenv("HOST_NAME");
+        String url = "http://" + host + ":" + serverPort;
+        Map<String, String> serverConfig = new HashMap<>();
+        serverConfig.put("sink.prometheus.publishMode", "server");
+        serverConfig.put("sink.prometheus.serverURL", url);
+        serverConfig.put("sink.prometheus.groupingKey", "'name:company','product:APIM'");
+        InMemoryConfigManager configManager = new InMemoryConfigManager(serverConfig, null);
+        configManager.generateConfigReader("sink", "prometheus");
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setConfigManager(configManager);
+
+        String streamDefinition = "" +
+                "define stream InputStream (symbol String, volume int, price double);" +
+                "@sink(type='prometheus'," +
+                "metric.type='gauge'," +
+                "metric.help= 'configuration test'," +
+                "metric.name= 'metric_test'," +
+                "value.attribute= 'volume'," +
+                "@map(type = \'keyvalue\'))"
+                + "Define stream TestStream (symbol String, volume int, price double);";
+        String query = (
+                "@info(name = 'query') "
+                        + "from InputStream "
+                        + "select symbol, volume, price "
+                        + "insert into TestStream;"
+        );
+
+        StreamCallback streamCallback = new StreamCallback() {
+            @Override
+            public void receive(Event[] events) {
+                for (Event event : events) {
+                    eventCount.getAndIncrement();
+                    eventArrived.set(true);
+                }
+            }
+        };
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streamDefinition + query);
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("InputStream");
+        siddhiAppRuntime.addCallback("TestStream", streamCallback);
+        siddhiAppRuntime.start();
+        List<Object[]> inputEvents = new ArrayList<>();
+        Object[] inputEvent1 = new Object[]{"WSO2", 100, 78.8};
+        Object[] inputEvent2 = new Object[]{"IBM", 125, 65.32};
+        inputHandler.send(inputEvent1);
+        inputHandler.send(inputEvent2);
+        inputEvents.add(inputEvent1);
+        inputEvents.add(inputEvent2);
+        Assert.assertTrue(eventArrived.get());
+        Thread.sleep(1000);
+        getAndValidateMetrics("metric_test");
+
+        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
+            Assert.assertEquals(eventCount.get(), 2);
         } else {
             Assert.fail("Events does not match");
         }
