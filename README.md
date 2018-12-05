@@ -51,7 +51,21 @@ Find some useful links below:
 * Send your contributions as pull requests to the <a target="_blank" href="https://github.com/wso2-extensions/siddhi-io-prometheus">master branch</a>.
 
 ## Running Integration tests in docker containers (Optional)
- * Integration tests are still under development.
+ * The prometheus sink can be tested with the docker base integration test framework. The test framework initialize a docker container with required configuration before execute the test suit.
+    
+   To start integration tests,
+   
+     1. Install and run docker
+     
+     2. To run the integration tests,
+     
+         - navigate to the siddhi-io-prometheus/ directory and issue the following command.
+           ```
+           mvn verify -P local-prometheus
+           ```
+ * Prometheus target configurations can be modified at the directory for integration tests : 
+ 
+      siddhi-io-prometheus/component/src/test/resources/prometheus/prometheus.yml
      
 ## Contact us
  * Post your questions with the <a target="_blank" href="http://stackoverflow.com/search?q=siddhi">"Siddhi"</a> tag in <a target="_blank" href="http://stackoverflow.com/search?q=siddhi">Stackoverflow</a>.
