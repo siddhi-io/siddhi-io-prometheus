@@ -413,7 +413,7 @@ public class PrometheusSink extends Sink {
         String[] labels;
         double value = parseDouble(attributeMap.get(valueAttribute).toString());
         labels = PrometheusUtil.populateLabelArray(attributeMap, valueAttribute);
-        prometheusMetricBuilder.insertValues(value, labels, registeredMetrics);
+        prometheusMetricBuilder.insertValues(value, labels);
         CollectorRegistry registry = prometheusMetricBuilder.getRegistry();
 
         if ((PrometheusConstants.PUSHGATEWAY_PUBLISH_MODE).equals(publishMode)) {

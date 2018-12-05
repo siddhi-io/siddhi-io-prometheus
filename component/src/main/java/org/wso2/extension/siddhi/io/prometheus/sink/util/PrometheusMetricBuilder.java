@@ -123,7 +123,7 @@ public class PrometheusMetricBuilder {
     }
 
     //update values for metric labels
-    public void insertValues(double value, String[] labelValues, String registeredMetrics) {
+    public void insertValues(double value, String[] labelValues) {
         switch (metricType) {
             case COUNTER: {
                 ((Counter) metricsCollector).labels(labelValues).inc(value);

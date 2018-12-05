@@ -53,7 +53,7 @@ public class ValidationTestcase {
     }
 
 
-    public void startSiddhiApp(String streamDefinition) {
+    private void startSiddhiApp(String streamDefinition) {
         SiddhiManager siddhiManager = new SiddhiManager();
         String query = (
                 "@info(name = 'query') "

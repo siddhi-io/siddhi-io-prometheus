@@ -65,8 +65,6 @@ public class SinkTestWithDocker {
     private static final Logger log = Logger.getLogger(SinkTestWithDocker.class);
     private static String pushgatewayURL;
     private static String serverURL;
-    private static String buckets;
-    private static String quantiles;
     private static ExecutorService executorService;
     private AtomicInteger eventCount = new AtomicInteger(0);
     private AtomicBoolean eventArrived = new AtomicBoolean(false);
@@ -83,8 +81,6 @@ public class SinkTestWithDocker {
         pushgatewayURL = "http://" + host + ":" + pushPort;
         serverURL = "http://" + host + ":" + serverPort;
         prometheusServerURL = "http://" + host + ":" + prometheusPort + "/api/v1/query?query=";
-        buckets = "2, 4, 6, 8";
-        quantiles = "0.4,0.65,0.85";
         executorService = Executors.newFixedThreadPool(5);
         log.info("== Prometheus connection tests started ==");
     }

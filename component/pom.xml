@@ -232,7 +232,6 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
             <plugin>

@@ -23,7 +23,6 @@
 <suite name="Siddhi-Io-Prometheus-Test-Suite">
     <test name="Siddhi-io-prometheus-tests" enabled="true">
         <classes>
-            <class name="org.wso2.extension.siddhi.io.prometheus.sink.SinkTestWithDocker"/>
             <class name="org.wso2.extension.siddhi.io.prometheus.sink.ValidationTestcase"/>
             <class name="org.wso2.extension.siddhi.io.prometheus.sink.PrometheusSinkTest"/>
         </classes>
