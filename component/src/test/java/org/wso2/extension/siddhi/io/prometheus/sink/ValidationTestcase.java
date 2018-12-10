@@ -18,7 +18,6 @@
 package org.wso2.extension.siddhi.io.prometheus.sink;
 
 import org.apache.log4j.Logger;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -36,6 +35,7 @@ public class ValidationTestcase {
     private static String serverURL;
     private static String buckets;
     private static String quantiles;
+    private static final String ERROR_MESSAGE = "Error on \'(.*)\' @ Line: (.*). Position: (.*), near \'(.*)\'. ";
 
     @BeforeClass
     public static void startTest() {
@@ -73,7 +73,8 @@ public class ValidationTestcase {
      * @throws Exception Interrupted exception
      */
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Unsupported mapping")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE +
+                    "Unsupported mapping")
     public void prometheusValidationTest1() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -89,16 +90,11 @@ public class ValidationTestcase {
                         "metric.help= 'Metric definition test', " +
                         "@map(type = \'keyvalue\', @payload(mode = 'mode', value = 'value')))" +
                         "Define stream SinkTestStream (symbol String, value int);";
-        try {
-            startSiddhiApp(streamDefinition1);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition1);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Invalid publish mode : .*")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Invalid publish mode : .*")
     public void prometheusValidationTest2() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -116,17 +112,11 @@ public class ValidationTestcase {
                 "metric.help= 'Metric type definition test', " +
                 "@map(type = \'keyvalue\'))" +
                 "Define stream SinkTestStream (symbol String, value int, price double);";
-
-        try {
-            startSiddhiApp(streamDefinition2);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition2);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Metric type contains illegal value")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Metric type contains illegal value")
     public void prometheusValidationTest3() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -142,17 +132,11 @@ public class ValidationTestcase {
                 "metric.help= 'Metric type definition test', " +
                 "@map(type = \'keyvalue\'))" +
                 "Define stream SinkTestStream (symbol String, value int, price double);";
-
-        try {
-            startSiddhiApp(streamDefinition3);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition3);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Unsupported metric type for buckets")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Unsupported metric type for buckets")
     public void prometheusValidationTest4() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -168,16 +152,11 @@ public class ValidationTestcase {
                 "@map(type = \'keyvalue\'))" +
                 "Define stream SinkTestStream (symbol String, value int, price double);";
 
-        try {
-            startSiddhiApp(streamDefinition4);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition4);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Error in buckets/quantiles format. \n" +
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Error in buckets/quantiles format. \n" +
                     " please insert the numerical values as \"2,3,4,5\" format in sink definition.")
     public void prometheusValidationTest5() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -192,16 +171,11 @@ public class ValidationTestcase {
                 "metric.help= 'Metric type definition test', buckets= '2,a,b,3'," +
                 "@map(type = \'keyvalue\'))"
                 + "Define stream MetricTypeTestStream (symbol String, value int, price double);";
-        try {
-            startSiddhiApp(streamDefinition5);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition5);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "unsupported metric type for quantiles")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "unsupported metric type for quantiles")
     public void prometheusValidationTest6() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -216,16 +190,11 @@ public class ValidationTestcase {
                 "metric.help= 'Metric type definition test', quantiles= '" + quantiles + "'," +
                 "@map(type = \'keyvalue\'))" +
                 "Define stream MetricTypeTestStream (symbol String, value int, price double);";
-        try {
-            startSiddhiApp(streamDefinition6);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition6);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Invalid values for quantiles")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Invalid values for quantiles")
     public void prometheusValidationTest7() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -240,16 +209,11 @@ public class ValidationTestcase {
                 "metric.help= 'Metric type definition test', quantiles= '0.2,5,2,0.86'," +
                 "@map(type = \'keyvalue\'))"
                 + "Define stream MetricTypeTestStream (symbol String, value int, price double);";
-        try {
-            startSiddhiApp(streamDefinition7);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition7);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Invalid format of metric name: .*")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Invalid format of metric name: .*")
     public void prometheusValidationTest8() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -265,16 +229,12 @@ public class ValidationTestcase {
                 "metric.help= 'Summary definition test', metric.name= '" + metricName + "', " +
                 "quantiles = '" + quantiles + "',@map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, value int, price double);";
-        try {
-            startSiddhiApp(streamDefinition8);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition8);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "The value attribute (.*) is not found in stream definition.")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "The value attribute (.*) is not found " +
+                    "in stream definition.")
     public void prometheusValidationTest9() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -291,16 +251,11 @@ public class ValidationTestcase {
                 "metric.help= 'Summary definition test', metric.name= 'metric_name_test_value', " +
                 "quantiles = '" + quantiles + "',@map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, volume int, price double);";
-        try {
-            startSiddhiApp(streamDefinition9);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition9);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Invalid type for value attribute")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Invalid type for value attribute")
     public void prometheusValidationTest10() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -314,16 +269,11 @@ public class ValidationTestcase {
                 "metric.help= 'Summary definition test', metric.name= 'metric_name_test_summary', " +
                 "quantiles = '" + quantiles + "', @map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, value string, price double);";
-        try {
-            startSiddhiApp(streamDefinition10);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition10);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Invalid value for push operation : .*")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Invalid value for push operation : .*")
     public void prometheusValidationTest11() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -341,17 +291,11 @@ public class ValidationTestcase {
                 "quantiles = '" + quantiles + "', " +
                 "push.operation = '" + pushOperation + "',@map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, value int, price double);";
-
-        try {
-            startSiddhiApp(streamDefinition11);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
+        startSiddhiApp(streamDefinition11);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = "Grouping key is not in the expected format" +
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Grouping key is not in the expected format" +
                     " please insert them as 'key1:val1','key2:val2' format in prometheus sink.")
     public void prometheusValidationTest12() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -368,14 +312,7 @@ public class ValidationTestcase {
                 "metric.help= 'Counter definition test'," +
                 "grouping.key = '" + groupingKey + "',@map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, value int, price double);";
-
-        try {
-            startSiddhiApp(streamDefinition12);
-            Assert.fail("Exception expected");
-        } catch (SiddhiAppCreationException e) {
-            throw new SiddhiAppCreationException(e.getMessageWithOutContext());
-        }
-
+        startSiddhiApp(streamDefinition12);
     }
 }
 
