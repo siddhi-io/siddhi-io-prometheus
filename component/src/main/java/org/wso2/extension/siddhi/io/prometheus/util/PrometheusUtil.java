@@ -46,15 +46,16 @@ public class PrometheusUtil {
      * @param inputString string input from sink definition
      * @return value list as double array
      */
-    public static double[] convertToDoubleArray(String inputString) {
+    public static double[] convertToDoubleArray(String inputString, String streamID) {
         if (!PrometheusConstants.EMPTY_STRING.equals(inputString)) {
             List<String> stringList = Arrays.asList(inputString.split(PrometheusConstants.ELEMENT_SEPARATOR));
 
             try {
                 return stringList.stream().mapToDouble(Double::parseDouble).toArray();
             } catch (NumberFormatException e) {
-                throw new SiddhiAppCreationException("Error in buckets/quantiles format. \n" +
-                        " please insert the numerical values as \"2,3,4,5\" format in sink definition.");
+                throw new SiddhiAppCreationException("The buckets/quantiles field in prometheus sink associated " +
+                        "with the stream \'" + streamID + "\' is not in the expected format. " +
+                        "please insert the numerical values as \"2,3,4,5\".");
             }
         } else {
             return new double[0];
@@ -66,10 +67,12 @@ public class PrometheusUtil {
      *
      * @param quantiles quantile values as double array
      */
-    public static boolean validateQuantiles(double[] quantiles) {
+    public static boolean validateQuantiles(double[] quantiles, String streamID) {
         for (double value : quantiles) {
             if ((value < 0) || (value > 1.0)) {
-                throw new SiddhiAppCreationException("Invalid values for quantiles");
+                throw new SiddhiAppCreationException("The values assigned for quantiles in Prometheus sink associated" +
+                        " with stream \'" + streamID + "\' are invalid." +
+                        "Please insert values between 0 and 1.");
             }
         }
         return true;
@@ -81,7 +84,7 @@ public class PrometheusUtil {
      * @param metricTypeString value of metric type parameter from sink definition
      * @return Metric type from Prometheus Collector
      */
-    public static Collector.Type assignMetricType(String metricTypeString) {
+    public static Collector.Type assignMetricType(String metricTypeString, String streamID) {
         Collector.Type metricType;
         switch (metricTypeString.trim().toUpperCase(Locale.ENGLISH)) {
             case "COUNTER": {
@@ -101,7 +104,8 @@ public class PrometheusUtil {
                 break;
             }
             default: {
-                throw new SiddhiAppCreationException("Metric type contains illegal value");
+                throw new SiddhiAppCreationException("The \'metric.type\' field in Prometheus sink associated " +
+                        "with stream \'" + streamID + "\' contains illegal value");
             }
         }
         return metricType;
@@ -113,7 +117,7 @@ public class PrometheusUtil {
      * @param groupingKeyString grouping key parameter as string
      * @return key-value pairs of the grouping key as java string map
      */
-    public static Map<String, String> populateGroupingKey(String groupingKeyString) {
+    public static Map<String, String> populateGroupingKey(String groupingKeyString, String streamID) {
         Map<String, String> groupingKey = new HashMap<>();
         if (!PrometheusConstants.EMPTY_STRING.equals(groupingKeyString)) {
             String[] keyList = groupingKeyString.substring(1, groupingKeyString.length() - 1)
@@ -125,8 +129,9 @@ public class PrometheusUtil {
                     String value = entry[1];
                     groupingKey.put(key, value);
                 } else {
-                    throw new SiddhiAppCreationException("Grouping key is not in the expected format " +
-                            "please insert them as 'key1:val1','key2:val2' format in prometheus sink.");
+                    throw new SiddhiAppCreationException("The grouping key field in prometheus sink associated " +
+                            "with the stream \'" + streamID + "\' is not in the expected format. " +
+                            "please insert them as 'key1:val1','key2:val2'.");
                 }
             });
         }
