@@ -232,6 +232,8 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <argLine>${jcoverage.command}</argLine>
+                    <skip>${skip.surefire.test}</skip>
                 </configuration>
             </plugin>
             <plugin>

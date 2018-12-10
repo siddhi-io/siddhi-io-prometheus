@@ -311,8 +311,8 @@ public class PrometheusSink extends Sink {
     protected void init(StreamDefinition outputstreamDefinition, OptionHolder optionHolder, ConfigReader configReader,
                         SiddhiAppContext siddhiAppContext) {
         if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_TYPE)) {
-            throw new SiddhiAppCreationException("mandatory field \'metric.type\' is not found in stream definition : "
-                    + outputstreamDefinition.getId());
+            throw new SiddhiAppCreationException("The mandatory field \'metric.type\' is not found in Prometheus " +
+                    "sink associated with stream \'" + outputstreamDefinition.getId() + " \'");
         }
 
         //check for custom mapping
@@ -397,7 +397,7 @@ public class PrometheusSink extends Sink {
         if (!quantiles.isEmpty()) {
             if (metricType.equals(Collector.Type.COUNTER) ||
                     metricType.equals(Collector.Type.GAUGE) || metricType.equals(Collector.Type.HISTOGRAM)) {
-                throw new SiddhiAppCreationException("unsupported metric type for quantiles");
+                throw new SiddhiAppCreationException("Unsupported metric type for quantiles");
             }
         }
         prometheusMetricBuilder = new PrometheusMetricBuilder(metricName, metricHelp, metricType, attributes);
@@ -481,7 +481,7 @@ public class PrometheusSink extends Sink {
     public void disconnect() {
         if (server != null) {
             server.stop();
-            log.info("server stopped successfully at " + serverURL);
+            log.info("Server stopped successfully at " + serverURL);
         }
     }
 

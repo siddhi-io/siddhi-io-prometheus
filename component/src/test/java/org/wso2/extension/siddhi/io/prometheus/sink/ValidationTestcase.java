@@ -175,7 +175,7 @@ public class ValidationTestcase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "unsupported metric type for quantiles")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Unsupported metric type for quantiles")
     public void prometheusValidationTest6() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 

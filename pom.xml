@@ -160,6 +160,7 @@
         <prometheus.client.version>0.5.0</prometheus.client.version>
         <keyvalue.mapper.version>1.0.17</keyvalue.mapper.version>
         <tapestry-json.version>5.4.1.wso2v1</tapestry-json.version>
+        <skip.surefire.test>false</skip.surefire.test>
         <prometheus-test.port>9090</prometheus-test.port>
         <prometheus-pushgateway-test.port>9091</prometheus-pushgateway-test.port>
     </properties>
