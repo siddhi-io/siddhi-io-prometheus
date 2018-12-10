@@ -311,7 +311,8 @@ public class PrometheusSink extends Sink {
     protected void init(StreamDefinition outputstreamDefinition, OptionHolder optionHolder, ConfigReader configReader,
                         SiddhiAppContext siddhiAppContext) {
         if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_TYPE)) {
-            throw new SiddhiAppCreationException("mandatory field \'metric.type\' is not found in sink configuration");
+            throw new SiddhiAppCreationException("mandatory field \'metric.type\' is not found in stream definition : "
+                    + outputstreamDefinition.getId());
         }
 
         //check for custom mapping
