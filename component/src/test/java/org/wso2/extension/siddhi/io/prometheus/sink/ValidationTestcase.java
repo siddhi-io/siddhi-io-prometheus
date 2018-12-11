@@ -95,7 +95,8 @@ public class ValidationTestcase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Invalid publish mode : (.*) in stream \'(.*)\'.")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Invalid publish mode : (.*) in Prometheus sink " +
+                    "associated with stream \'(.*)\'.")
     public void prometheusValidationTest2() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -159,7 +160,7 @@ public class ValidationTestcase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "The buckets/quantiles field in prometheus sink " +
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "The buckets/quantiles field in Prometheus sink " +
                     "associated with the stream \'(.*)\' is not in the expected format. " +
                     "please insert the numerical values as \"2,3,4,5\".")
     public void prometheusValidationTest5() throws InterruptedException {
@@ -221,7 +222,7 @@ public class ValidationTestcase {
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
             expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Metric name \'(.*)\' does not match the regex " +
-                    "\"(.*)\" in stream \'(.*)\'."
+                    "\"(.*)\" in Prometheus sink associated with stream \'(.*)\'."
     )
     public void prometheusValidationTest8() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -243,7 +244,7 @@ public class ValidationTestcase {
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
             expectedExceptionsMessageRegExp = ERROR_MESSAGE + "The value attribute (.*) is not found " +
-                    "in stream \'(.*)\'")
+                    "in Prometheus sink associated with stream \'(.*)\'")
     public void prometheusValidationTest9() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -265,7 +266,7 @@ public class ValidationTestcase {
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
             expectedExceptionsMessageRegExp = ERROR_MESSAGE + "The field value attribute \'(.*)\'contains " +
-                    "unsupported type in stream \'(.*)\'")
+                    "unsupported type in Prometheus sink associated with stream \'(.*)\'")
     public void prometheusValidationTest10() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -283,8 +284,8 @@ public class ValidationTestcase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Invalid value for push operation : (.*) in " +
-                    "stream \'(.*)\'.")
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "Invalid value for push operation : (.*) in Prometheus" +
+                    " sink associated with stream \'(.*)\'.")
     public void prometheusValidationTest11() throws InterruptedException {
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -306,7 +307,7 @@ public class ValidationTestcase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
-            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "The grouping key field in prometheus sink associated " +
+            expectedExceptionsMessageRegExp = ERROR_MESSAGE + "The grouping key field in Prometheus sink associated " +
                     "with the stream \'(.*)\' is not in the expected format. " +
                     "please insert them as 'key1:val1','key2:val2'.")
     public void prometheusValidationTest12() throws InterruptedException {

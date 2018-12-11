@@ -361,26 +361,26 @@ public class PrometheusSink extends Sink {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            throw new SiddhiAppCreationException("Invalid value for \'quantile.error\' in stream \'" +
-                    streamID + "\'. Value must be between 0 and 1");
+            throw new SiddhiAppCreationException("Invalid value for \'quantile.error\' in Prometheus sink " +
+                    "associated with stream \'" + streamID + "\'. Value must be between 0 and 1");
         }
 
         if (!publishMode.equalsIgnoreCase(SERVER_PUBLISH_MODE) &&
                 !publishMode.equalsIgnoreCase(PUSHGATEWAY_PUBLISH_MODE)) {
-            throw new SiddhiAppCreationException("Invalid publish mode : " + publishMode + " in stream \'"
-                    + streamID + "\'.");
+            throw new SiddhiAppCreationException("Invalid publish mode : " + publishMode + " in Prometheus sink " +
+                    "associated with stream \'" + streamID + "\'.");
         }
 
         if (!metricName.matches(PrometheusConstants.METRIC_NAME_REGEX)) {
             throw new SiddhiAppCreationException("Metric name \'" + metricName + "\' does not match the regex " +
-                    "\"[a-zA-Z_:][a-zA-Z0-9_:]*\" in stream \'"
+                    "\"[a-zA-Z_:][a-zA-Z0-9_:]*\" in Prometheus sink associated with stream \'"
                     + streamID + "\'.");
         }
 
         if (!pushOperation.equalsIgnoreCase(PUSH_OPERATION) &&
                 !pushOperation.equalsIgnoreCase(PUSH_ADD_OPERATION)) {
             throw new SiddhiAppCreationException("Invalid value for push operation : " + pushOperation +
-                    " in stream \'" + streamID + "\'.");
+                    " in Prometheus sink associated with stream \'" + streamID + "\'.");
         }
 
         // checking for value attribute and its type in stream definintion
@@ -389,11 +389,11 @@ public class PrometheusSink extends Sink {
             if (valueType.equals(Attribute.Type.STRING) || valueType.equals(Attribute.Type.BOOL) ||
                     valueType.equals(Attribute.Type.OBJECT)) {
                 throw new SiddhiAppCreationException("The field value attribute \'" + valueAttribute + " \'contains " +
-                        "unsupported type in stream \'" + streamID + "\'");
+                        "unsupported type in Prometheus sink associated with stream \'" + streamID + "\'");
             }
         } catch (AttributeNotExistException exception) {
             throw new SiddhiAppCreationException("The value attribute \'" + valueAttribute + "\' is not found " +
-                    "in stream \'" + streamID + "\'");
+                    "in Prometheus sink associated with stream \'" + streamID + "\'");
         }
 
         // checking unsupported metric types for 'buckets'
@@ -444,7 +444,8 @@ public class PrometheusSink extends Sink {
                         //default will never be executed
                 }
             } catch (IOException e) {
-                log.error("Unable to establish connection at " + pushURL, new ConnectionUnavailableException(e));
+                log.error("Unable to establish connection for Prometheus sink associated with stream \'" +
+                        getStreamDefinition().getId() + "\' at " + pushURL, new ConnectionUnavailableException(e));
             }
         }
     }
@@ -469,8 +470,9 @@ public class PrometheusSink extends Sink {
                                 + pushURL);
                     } catch (IOException e) {
                         if (e.getMessage().equalsIgnoreCase("Connection refused (Connection refused)")) {
-                            log.error("The stream \'" + getStreamDefinition().getId() + "\' could not connect "
-                                            + "to Pushgateway. Prometheus pushgateway is not listening at " + target,
+                            log.error("The stream \'" + getStreamDefinition().getId() + "\' of Prometheus sink " +
+                                            "could not connect to Pushgateway." +
+                                            " Prometheus pushgateway is not listening at " + target,
                                     new ConnectionUnavailableException(e));
                         }
                     }
@@ -479,7 +481,8 @@ public class PrometheusSink extends Sink {
                     //default will never be executed
             }
         } catch (MalformedURLException e) {
-            throw new ConnectionUnavailableException("Error in URL format " + e);
+            throw new ConnectionUnavailableException("Error in URL format in Prometheus sink associated with stream \'"
+                    + getStreamDefinition().getId() + "\'. \n " + e);
         }
     }
 
@@ -488,7 +491,8 @@ public class PrometheusSink extends Sink {
             server = new HTTPServer(host, port);
         } catch (IOException e) {
             if (!(e instanceof BindException && e.getMessage().equals("Address already in use"))) {
-                log.error("Unable to establish connection at " + serverURL,
+                log.error("Unable to establish connection for Prometheus sink associated with stream \'" +
+                                getStreamDefinition().getId() + "\' at " + serverURL,
                         new ConnectionUnavailableException(e));
             }
         }

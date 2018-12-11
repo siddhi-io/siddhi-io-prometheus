@@ -53,7 +53,7 @@ public class PrometheusUtil {
             try {
                 return stringList.stream().mapToDouble(Double::parseDouble).toArray();
             } catch (NumberFormatException e) {
-                throw new SiddhiAppCreationException("The buckets/quantiles field in prometheus sink associated " +
+                throw new SiddhiAppCreationException("The buckets/quantiles field in Prometheus sink associated " +
                         "with the stream \'" + streamID + "\' is not in the expected format. " +
                         "please insert the numerical values as \"2,3,4,5\".");
             }
@@ -129,7 +129,7 @@ public class PrometheusUtil {
                     String value = entry[1];
                     groupingKey.put(key, value);
                 } else {
-                    throw new SiddhiAppCreationException("The grouping key field in prometheus sink associated " +
+                    throw new SiddhiAppCreationException("The grouping key field in Prometheus sink associated " +
                             "with the stream \'" + streamID + "\' is not in the expected format. " +
                             "please insert them as 'key1:val1','key2:val2'.");
                 }
