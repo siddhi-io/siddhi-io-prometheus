@@ -327,7 +327,6 @@ public class PrometheusSink extends Sink {
                 }
             }
         }
-
         this.configReader = configReader;
         this.jobName = optionHolder.validateAndGetStaticValue(PrometheusConstants.JOB_NAME,
                 PrometheusUtil.jobName(configReader));
