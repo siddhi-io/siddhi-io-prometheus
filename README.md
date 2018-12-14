@@ -32,6 +32,15 @@ Find some useful links below:
         <version>x.x.x</version>
      </dependency>
 ```
+## Jenkins Build Status
+
+---
+
+|  Branch | Build Status |
+| :------ |:------------ |
+| master  | [![Build Status](https://wso2.org/jenkins/job/siddhi/job/siddhi-io-prometheus/badge/icon)](https://wso2.org/jenkins/job/siddhi/job/siddhi-io-prometheus/) |
+
+---
 
 ## Features
 
