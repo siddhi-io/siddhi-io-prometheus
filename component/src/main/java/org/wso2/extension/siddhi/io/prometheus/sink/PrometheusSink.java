@@ -45,6 +45,7 @@ import org.wso2.siddhi.query.api.exception.AttributeNotExistException;
 
 import java.io.IOException;
 import java.net.BindException;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -294,6 +295,7 @@ public class PrometheusSink extends Sink {
     private PrometheusMetricBuilder prometheusMetricBuilder;
     private HTTPServer server;
     private PushGateway pushGateway;
+    private CollectorRegistry collectorRegistry;
     private String registeredMetrics;
     private ConfigReader configReader;
 
@@ -419,6 +421,16 @@ public class PrometheusSink extends Sink {
         if (PrometheusUtil.validateQuantiles(quantileValues, streamID)) {
             prometheusMetricBuilder.setQuantiles(quantileValues, quantileError);
         }
+        switch (publishMode) {
+            case PrometheusConstants.SERVER_PUBLISH_MODE:
+                collectorRegistry = prometheusMetricBuilder.setRegistry(serverURL);
+                break;
+            case PrometheusConstants.PUSHGATEWAY_PUBLISH_MODE:
+                collectorRegistry = prometheusMetricBuilder.setRegistry(pushURL);
+                break;
+            default:
+                //default will never be executed
+        }
     }
 
     @Override
@@ -452,7 +464,7 @@ public class PrometheusSink extends Sink {
     @Override
     public void connect() throws ConnectionUnavailableException {
         try {
-            prometheusMetricBuilder.registerMetric(valueAttribute, publishMode);
+            prometheusMetricBuilder.registerMetric(valueAttribute);
             URL target;
             switch (publishMode) {
                 case PrometheusConstants.SERVER_PUBLISH_MODE:
@@ -487,7 +499,8 @@ public class PrometheusSink extends Sink {
 
     private void initiateServer(String host, int port) {
         try {
-            server = new HTTPServer(host, port);
+            InetSocketAddress address = new InetSocketAddress(host, port);
+            server = new HTTPServer(address, collectorRegistry);
         } catch (IOException e) {
             if (!(e instanceof BindException && e.getMessage().equals("Address already in use"))) {
                 log.error("Unable to establish connection for Prometheus sink associated with stream \'" +

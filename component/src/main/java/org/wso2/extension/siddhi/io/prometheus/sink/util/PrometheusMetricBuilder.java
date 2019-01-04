@@ -26,8 +26,10 @@ import io.prometheus.client.Histogram;
 import io.prometheus.client.SimpleCollector;
 import io.prometheus.client.SimpleCollector.Builder;
 import io.prometheus.client.Summary;
-import org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 
@@ -67,13 +69,7 @@ public class PrometheusMetricBuilder {
         this.quantileError = quantileError;
     }
 
-    public void registerMetric(String valueAttribute, String buildMode) {
-        if (PrometheusConstants.SERVER_PUBLISH_MODE.equalsIgnoreCase(buildMode)) {
-            registry = CollectorRegistry.defaultRegistry;
-        }
-        if (PrometheusConstants.PUSHGATEWAY_PUBLISH_MODE.equalsIgnoreCase(buildMode)) {
-            registry = new CollectorRegistry();
-        }
+    public void registerMetric(String valueAttribute) {
         metricsCollector = buildMetric(valueAttribute).register(registry);
     }
 
@@ -143,5 +139,16 @@ public class PrometheusMetricBuilder {
             }
             default: //default will never be executed
         }
+    }
+
+    public CollectorRegistry setRegistry(String url) {
+        URL target;
+        try {
+            target = new URL(url);
+            registry = PrometheusRegistryHolder.retrieveRegistry(target.getHost(), target.getPort());
+        } catch (MalformedURLException e) {
+            throw new SiddhiAppCreationException("Error in URL " + e);
+        }
+        return registry;
     }
 }
