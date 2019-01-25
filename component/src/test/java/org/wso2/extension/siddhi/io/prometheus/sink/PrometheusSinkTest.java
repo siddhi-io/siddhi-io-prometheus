@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.extension.siddhi.io.prometheus.sink;
 
 import org.apache.log4j.Logger;
@@ -41,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,23 +54,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Test cases for prometheus sink in server and pushgateway publish mode.
+ * Test cases for prometheus sink in server and pushgateway publish modes.
  * Prometheus server and pushgateway must be up and running for the testcases to pass.
  * Targets must be configured inside the Prometheus configuration file (prometheus.yml) as,
  * - job_name: 'server'
  * honor_labels: true
  * static_configs:
  * - targets: ['localhost:9080']
- *
+ * <p>
  * - job_name: 'pushgateway'
  * honor_labels: true
  * static_configs:
  * - targets: ['localhost:9091']
- *
+ * <p>
  * - job_name: 'configurationTest'
- *   honor_labels: true
- *   static_configs:
- *   - targets: ['localhost:9096']
+ * honor_labels: true
+ * static_configs:
+ * - targets: ['localhost:9096']
  */
 public class PrometheusSinkTest {
 
@@ -92,7 +94,7 @@ public class PrometheusSinkTest {
         serverURL = "http://" + host + ":" + serverPort;
         prometheusServerURL = "http://" + host + ":" + prometheusPort + "/api/v1/query?query=";
         executorService = Executors.newFixedThreadPool(5);
-        log.info("== Prometheus connection tests started ==");
+        log.info("== Prometheus sink tests started ==");
     }
 
     @AfterClass
@@ -101,7 +103,7 @@ public class PrometheusSinkTest {
             executorService.shutdown();
         }
         Thread.sleep(100);
-        log.info("== Prometheus connection tests completed ==");
+        log.info("== Prometheus sink tests completed ==");
     }
 
     @BeforeMethod
@@ -110,6 +112,7 @@ public class PrometheusSinkTest {
         eventArrived.set(false);
         createdEvents.clear();
     }
+
     private void getAndValidateMetrics(String metricName) {
 
         String requestURL = prometheusServerURL + metricName;
@@ -125,7 +128,7 @@ public class PrometheusSinkTest {
             } else {
                 String inputLine;
                 BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
+                        new InputStreamReader(conn.getInputStream(), Charset.defaultCharset()));
                 while ((inputLine = reader.readLine()) != null) {
                     response.append(inputLine);
                 }
@@ -266,7 +269,7 @@ public class PrometheusSinkTest {
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
         Assert.assertTrue(eventArrived.get());
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         getAndValidateMetrics("testing_metrics");
 
         if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
@@ -580,6 +583,4 @@ public class PrometheusSinkTest {
         prometheusRecoveryApp.shutdown();
         Thread.sleep(100);
     }
-
-
 }

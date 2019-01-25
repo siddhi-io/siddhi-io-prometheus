@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -25,7 +25,7 @@ import io.prometheus.client.exporter.PushGateway;
 import org.apache.log4j.Logger;
 import org.wso2.extension.siddhi.io.prometheus.sink.util.PrometheusMetricBuilder;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants;
-import org.wso2.extension.siddhi.io.prometheus.util.PrometheusUtil;
+import org.wso2.extension.siddhi.io.prometheus.util.PrometheusSinkUtil;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
 import org.wso2.siddhi.annotation.Parameter;
@@ -64,7 +64,6 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.P
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.SERVER_PUBLISH_MODE;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.SPACE_STRING;
 import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.VALUE_STRING;
-
 import static java.lang.Double.parseDouble;
 
 /**
@@ -73,13 +72,13 @@ import static java.lang.Double.parseDouble;
 @Extension(
         name = "prometheus",
         namespace = "sink",
-        description = "The sink publishes events processed by WSO2 SP into Prometheus metrics and expose \n" +
-                "them to Prometheus server at the provided url. The created metrics can be published to \n" +
-                "Prometheus through 'server' or 'pushGateway' publishing modes according to user preference.\n" +
-                "The server mode exposes the metrics through an http server at the provided url and the \n" +
-                " pushGateway mode pushes the metrics to pushGateway which must be running at the \n" +
-                "provided url. The metric types that are supported by Prometheus sink are counter, gauge,\n" +
-                "histogram and summary. And the values and labels of the Prometheus metrics can be updated \n" +
+        description = "The sink publishes events processed by WSO2 SP into Prometheus metrics and exposes " +
+                "them to Prometheus server at the provided url. The created metrics can be published to " +
+                "Prometheus through 'server' or 'pushGateway' publishing modes depending on the preference of the " +
+                "user. The server mode exposes the metrics through an http server at the provided url and the " +
+                "pushGateway mode pushes the metrics to pushGateway which must be running at the " +
+                "provided url.\n The metric types that are supported by Prometheus sink are counter, gauge, " +
+                "histogram and summary. The values and labels of the Prometheus metrics can be updated " +
                 "through the events. ",
         parameters = {
                 @Parameter(
@@ -93,7 +92,7 @@ import static java.lang.Double.parseDouble;
                 @Parameter(
                         name = "publish.mode",
                         description = "This parameter specifies the mode of exposing metrics to Prometheus server." +
-                                "The mode can be either \'server\' or \'pushgateway\'.",
+                                "The possible publishing modes are \'server\' and \'pushgateway\'.",
                         defaultValue = "server",
                         optional = true,
                         type = {DataType.STRING}
@@ -109,44 +108,40 @@ import static java.lang.Double.parseDouble;
                 ),
                 @Parameter(
                         name = "server.url",
-                        description = "This parameter specifies the url where the http server will be initiated " +
-                                "to expose metrics. This url must be previously defined in prometheus " +
-                                "configuration file as a target. By default, the http server will be initiated at" +
-                                "\'http://localhost:9080\'",
+                        description = "This parameter specifies the url where the http server is initiated " +
+                                "to expose metrics for \'server\' publish mode. This url must be " +
+                                "previously defined in prometheus configuration file as a target.",
                         optional = true,
                         defaultValue = "http://localhost:9080",
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "metric.type",
-                        description = "The type of Prometheus metric that has to be created at the sink. " +
+                        description = "The type of Prometheus metric that has to be created at the sink.\n " +
                                 "The supported metric types are \'counter\', \'gauge\'," +
                                 " \'histogram\' and \'summary\'. ",
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "metric.help",
-                        description = "A brief description of the metric and its purpose." +
-                                " By default, the help string " +
-                                "will be a combination of the metric name and its type.",
+                        description = "A brief description of the metric and its purpose.",
                         optional = true,
-                        defaultValue = "metric name with metric type",
+                        defaultValue = "<metric_name_with_metric_type>",
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "metric.name",
-                        description = "This parameter specifies the user preferred name for the metric. By default, " +
-                                "metric name will be set according to the name of the stream. The metric name must " +
-                                "match the regex format [a-zA-Z_:][a-zA-Z0-9_:]* ",
+                        description = "This parameter specifies the user preferred name for the metric. The metric " +
+                                "name must match the regex format, i.e., [a-zA-Z_:][a-zA-Z0-9_:]*. ",
                         optional = true,
-                        defaultValue = "stream name",
+                        defaultValue = "<stream_name>",
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "buckets",
-                        description = "The user preferred bucket values for histogram metrics. The bucket values " +
-                                "must be in string format with each bucket value separated by a comma." +
-                                "Expected format of the parameter is as follows: \n" +
+                        description = "The bucket values preferred by the user for histogram metrics. The bucket " +
+                                "values must be in 'string' format with each bucket value separated by a comma." +
+                                "\nThe expected format of the parameter is as follows: \n" +
                                 "\"2,4,6,8\"",
                         optional = true,
                         defaultValue = "null",
@@ -155,8 +150,8 @@ import static java.lang.Double.parseDouble;
                 @Parameter(
                         name = "quantiles",
                         description = "The user preferred quantile values for summary metrics. The quantile values " +
-                                "must be in string format with each quantile value separated by a comma." +
-                                "Expected format of the parameter is as follows: \n" +
+                                "must be in 'string' format with each quantile value separated by a comma." +
+                                "\nThe expected format of the parameter is as follows: \n" +
                                 "\"0.5,0.75,0.95\"",
                         optional = true,
                         defaultValue = "null",
@@ -165,8 +160,7 @@ import static java.lang.Double.parseDouble;
                 @Parameter(
                         name = "quantile.error",
                         description = "The error tolerance value for calculating quantiles in summary metrics. " +
-                                "This must be a positive value less than 1." +
-                                " By default, the error tolerance will be 0.001.",
+                                "This must be a positive value though less than 1.",
                         optional = true,
                         defaultValue = "0.001",
                         type = {DataType.DOUBLE}
@@ -174,11 +168,10 @@ import static java.lang.Double.parseDouble;
                 @Parameter(
                         name = "value.attribute",
                         description = "The name of the attribute in stream definition which specifies the metric " +
-                                "value. The defined value attribute must be included inside the stream attributes. \n" +
-                                "The value of the value attribute that published through events will increase the" +
-                                " metric value for counter and gauge metric types. And for histogram and " +
-                                "summary metric types, the values will be observed." +
-                                " By default, the value attribute is specified as \'value\' ",
+                                "value. The defined value attribute must be included inside the stream attributes." +
+                                " The value of the 'value' attribute that is published through events, increase the" +
+                                " metric value for the counter and gauge metric types. For histogram and " +
+                                "summary metric types, the values are observed.",
                         optional = true,
                         defaultValue = "value",
                         type = {DataType.STRING}
@@ -189,8 +182,7 @@ import static java.lang.Double.parseDouble;
                                 "The available push operations are \'push\' and \'pushadd\'. " +
                                 "The operations differ according to the existing metrics in pushGateway where " +
                                 "\'push\' operation replaces the existing metrics and \'pushadd\' operation " +
-                                "only updates the newly created metrics. BY default, the push operation is " +
-                                "assigned to  \'pushadd\'.",
+                                "only updates the newly created metrics.",
                         optional = true,
                         defaultValue = "pushadd",
                         type = {DataType.STRING}
@@ -199,34 +191,34 @@ import static java.lang.Double.parseDouble;
                         name = "grouping.key",
                         description = "This parameter specifies the grouping key of created metrics in key-value " +
                                 "pairs. Grouping key is used only in pushGateway mode in order to distinguish the " +
-                                "metrics from already existing metrics. The expected format of the grouping key" +
-                                " is as follows: " +
+                                "metrics from already existing metrics. \nThe expected format of the grouping key" +
+                                " is as follows:\n " +
                                 "\"'key1:value1','key2:value2'\"",
                         optional = true,
-                        defaultValue = "null",
+                        defaultValue = "<empty_string>",
                         type = {DataType.STRING}
                 )
         },
         examples = {
                 @Example(
                         syntax =
-                                "@sink(type='prometheus',job='fooOrderCount', server.url ='http://localhost:9080',\n " +
-                                        "publish.mode='server', metric.type='counter', \n" +
+                                "@sink(type='prometheus',job='fooOrderCount', server.url ='http://localhost:9080', " +
+                                        "publish.mode='server', metric.type='counter', " +
                                         "metric.help= 'Number of foo orders', @map(type='keyvalue'))\n" +
                                         "define stream FooCountStream (Name String, quantity int, value int);\n",
-                        description = " In the above example, the Prometheus-sink will create a counter metric " +
-                                "with the Stream name and defined attributes as labels. \n The metric will be exposed" +
+                        description = " In the above example, the Prometheus-sink creates a counter metric " +
+                                "with the stream name and defined attributes as labels. The metric is exposed" +
                                 " through an http server at the target url."
                 ),
                 @Example(
                         syntax =
-                                "@sink(type='prometheus',job='inventoryLevel', push.url='http://localhost:9080',\n " +
-                                        "publish.mode='pushGateway', metric.type='gauge',\n" +
+                                "@sink(type='prometheus',job='inventoryLevel', push.url='http://localhost:9080', " +
+                                        "publish.mode='pushGateway', metric.type='gauge'," +
                                         " metric.help= 'Current level of inventory', @map(type='keyvalue'))\n" +
                                         "define stream InventoryLevelStream (Name String, value int);\n",
-                        description = " In the above example, the Prometheus-sink will create a gauge metric " +
-                                "with the Stream name and defined attributes as labels.\n" +
-                                "The metric will be pushed to Prometheus pushGateway at the target url."
+                        description = " In the above example, the Prometheus-sink creates a gauge metric " +
+                                "with the stream name and defined attributes as labels." +
+                                "The metric is pushed to Prometheus pushGateway at the target url."
                 )
         },
         systemParameter = {
@@ -267,7 +259,7 @@ import static java.lang.Double.parseDouble;
                                 "pairs. Grouping key is used only in pushGateway mode in order to distinguish the " +
                                 "metrics from already existing metrics under same job. " +
                                 "The expected format of the grouping key is as follows: " +
-                                "\"'key1:value1','key2:value2'\"",
+                                "\"'key1:value1','key2:value2'\" .",
                         defaultValue = "null",
                         possibleParameters = "Any key value pairs in the supported format"
                 )
@@ -317,7 +309,6 @@ public class PrometheusSink extends Sink {
             throw new SiddhiAppCreationException("The mandatory field \'metric.type\' is not found in Prometheus " +
                     "sink associated with stream \'" + streamID + " \'");
         }
-
         //check for custom mapping
         List<Annotation> annotations = outputstreamDefinition.getAnnotations();
         for (Annotation annotation : annotations) {
@@ -331,28 +322,29 @@ public class PrometheusSink extends Sink {
         }
         this.configReader = configReader;
         this.jobName = optionHolder.validateAndGetStaticValue(PrometheusConstants.JOB_NAME,
-                PrometheusUtil.jobName(configReader));
+                PrometheusSinkUtil.jobName(configReader));
         this.pushURL = optionHolder.validateAndGetStaticValue(PrometheusConstants.PUSH_URL,
-                PrometheusUtil.pushURL(configReader));
+                PrometheusSinkUtil.pushURL(configReader));
         this.serverURL = optionHolder.validateAndGetStaticValue(PrometheusConstants.SERVER_URL,
-                PrometheusUtil.serverURL(configReader));
+                PrometheusSinkUtil.serverURL(configReader));
         this.publishMode = optionHolder.validateAndGetStaticValue(PrometheusConstants.METRIC_PUBLISH_MODE,
-                PrometheusUtil.publishMode(configReader));
-        this.metricType = PrometheusUtil.assignMetricType(optionHolder.validateAndGetStaticValue(METRIC_TYPE),
-                streamID);
-        this.metricHelp = optionHolder.validateAndGetStaticValue(PrometheusConstants.METRIC_HELP,
-                HELP_STRING + metricType + SPACE_STRING + metricName).trim();
+                PrometheusSinkUtil.publishMode(configReader));
         this.buckets = optionHolder.validateAndGetStaticValue(PrometheusConstants.BUCKET_DEFINITION, EMPTY_STRING);
         this.quantiles = optionHolder.validateAndGetStaticValue(PrometheusConstants.QUANTILES_DEFINITION, EMPTY_STRING);
         this.attributes = outputstreamDefinition.getAttributeList()
                 .stream().map(Attribute::getName).collect(Collectors.toList());
         this.metricName = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.METRIC_NAME, streamID.trim());
+        this.metricType = PrometheusSinkUtil.assignMetricType(optionHolder.validateAndGetStaticValue(METRIC_TYPE),
+                streamID);
+        this.metricHelp = optionHolder.validateAndGetStaticValue(PrometheusConstants.METRIC_HELP,
+                HELP_STRING + PrometheusSinkUtil.getMetricTypeString(metricType) + SPACE_STRING +
+                        metricName).trim();
         this.pushOperation = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.PUSH_DEFINITION, PrometheusConstants.PUSH_ADD_OPERATION).trim();
-        this.groupingKey = PrometheusUtil.populateGroupingKey(optionHolder.validateAndGetStaticValue(
-                PrometheusConstants.GROUPING_KEY_DEFINITION, PrometheusUtil.groupinKey(configReader)).trim(),
-                outputstreamDefinition.getId());
+        this.groupingKey = PrometheusSinkUtil.populateGroupingKey(optionHolder.validateAndGetStaticValue(
+                PrometheusConstants.GROUPING_KEY_DEFINITION, PrometheusSinkUtil.groupinKey(configReader)).trim(),
+                streamID);
         this.valueAttribute = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.VALUE_ATTRIBUTE, VALUE_STRING).trim();
         try {
@@ -416,9 +408,9 @@ public class PrometheusSink extends Sink {
             }
         }
         prometheusMetricBuilder = new PrometheusMetricBuilder(metricName, metricHelp, metricType, attributes);
-        prometheusMetricBuilder.setHistogramBuckets(PrometheusUtil.convertToDoubleArray(buckets.trim(), streamID));
-        double[] quantileValues = PrometheusUtil.convertToDoubleArray(quantiles.trim(), streamID);
-        if (PrometheusUtil.validateQuantiles(quantileValues, streamID)) {
+        prometheusMetricBuilder.setHistogramBuckets(PrometheusSinkUtil.convertToDoubleArray(buckets.trim(), streamID));
+        double[] quantileValues = PrometheusSinkUtil.convertToDoubleArray(quantiles.trim(), streamID);
+        if (PrometheusSinkUtil.validateQuantiles(quantileValues, streamID)) {
             prometheusMetricBuilder.setQuantiles(quantileValues, quantileError);
         }
         switch (publishMode) {
@@ -429,7 +421,7 @@ public class PrometheusSink extends Sink {
                 collectorRegistry = prometheusMetricBuilder.setRegistry(pushURL);
                 break;
             default:
-                //default will never be executed
+                //default execution is not needed
         }
     }
 
@@ -438,25 +430,24 @@ public class PrometheusSink extends Sink {
         Map<String, Object> attributeMap = (Map<String, Object>) payload;
         String[] labels;
         double value = parseDouble(attributeMap.get(valueAttribute).toString());
-        labels = PrometheusUtil.populateLabelArray(attributeMap, valueAttribute);
+        labels = PrometheusSinkUtil.populateLabelArray(attributeMap, valueAttribute);
         prometheusMetricBuilder.insertValues(value, labels);
-        CollectorRegistry registry = prometheusMetricBuilder.getRegistry();
-
         if ((PrometheusConstants.PUSHGATEWAY_PUBLISH_MODE).equals(publishMode)) {
             try {
                 switch (pushOperation) {
                     case PrometheusConstants.PUSH_OPERATION:
-                        pushGateway.push(registry, jobName, groupingKey);
+                        pushGateway.push(collectorRegistry, jobName, groupingKey);
                         break;
                     case PrometheusConstants.PUSH_ADD_OPERATION:
-                        pushGateway.pushAdd(registry, jobName, groupingKey);
+                        pushGateway.pushAdd(collectorRegistry, jobName, groupingKey);
                         break;
                     default:
                         //default will never be executed
                 }
             } catch (IOException e) {
-                log.error("Unable to establish connection for Prometheus sink associated with stream \'" +
-                        getStreamDefinition().getId() + "\' at " + pushURL, new ConnectionUnavailableException(e));
+                log.error("Unable to establish connection for Prometheus sink associated with " +
+                                "stream \'" + getStreamDefinition().getId() + "\' at " + pushURL,
+                        new ConnectionUnavailableException(e));
             }
         }
     }
@@ -464,7 +455,6 @@ public class PrometheusSink extends Sink {
     @Override
     public void connect() throws ConnectionUnavailableException {
         try {
-            prometheusMetricBuilder.registerMetric(valueAttribute);
             URL target;
             switch (publishMode) {
                 case PrometheusConstants.SERVER_PUBLISH_MODE:
@@ -476,7 +466,7 @@ public class PrometheusSink extends Sink {
                     target = new URL(pushURL);
                     pushGateway = new PushGateway(target);
                     try {
-                        pushGateway.pushAdd(prometheusMetricBuilder.getRegistry(), jobName, groupingKey);
+                        pushGateway.pushAdd(collectorRegistry, jobName, groupingKey);
                         log.info(getStreamDefinition().getId() + " has successfully connected to pushGateway at "
                                 + pushURL);
                     } catch (IOException e) {
@@ -491,6 +481,7 @@ public class PrometheusSink extends Sink {
                 default:
                     //default will never be executed
             }
+            prometheusMetricBuilder.registerMetric(valueAttribute);
         } catch (MalformedURLException e) {
             throw new ConnectionUnavailableException("Error in URL format in Prometheus sink associated with stream \'"
                     + getStreamDefinition().getId() + "\'. \n " + e);
@@ -520,9 +511,8 @@ public class PrometheusSink extends Sink {
 
     @Override
     public void destroy() {
-        CollectorRegistry registry = prometheusMetricBuilder.getRegistry();
-        if (registry != null) {
-            registry.clear();
+        if (collectorRegistry != null) {
+            collectorRegistry.clear();
         }
     }
 

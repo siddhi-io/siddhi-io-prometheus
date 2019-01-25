@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-~ Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+~ Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 ~
 ~ WSO2 Inc. licenses this file to you under the Apache License,
 ~ Version 2.0 (the "License"); you may not use this file except
@@ -77,6 +77,14 @@
             <version>${tapestry-json.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.transport.http</groupId>
+            <artifactId>org.wso2.transport.http.netty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.messaging</groupId>
+            <artifactId>org.wso2.carbon.messaging</artifactId>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -147,7 +155,7 @@
                                                     <port>9090</port>
                                                 </ports>
                                             </tcp>
-                                            <time>600000</time>
+                                            <time>6000</time>
                                         </wait>
                                     </run>
                                 </image>
@@ -166,7 +174,7 @@
                                                     <port>9091</port>
                                                 </ports>
                                             </tcp>
-                                            <time>600000</time>
+                                            <time>6000</time>
                                         </wait>
                                     </run>
                                 </image>
@@ -205,7 +213,6 @@
                             </suiteXmlFiles>
                         </configuration>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>

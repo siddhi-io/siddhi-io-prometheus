@@ -3,7 +3,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <!--
-  ~ Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
   ~ WSO2 Inc. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
@@ -23,7 +23,9 @@
 <suite name="Siddhi-IO-Prometheus-Test-Suite">
     <test name="Siddhi-io-prometheus-tests" enabled="true">
         <classes>
-            <class name="org.wso2.extension.siddhi.io.prometheus.sink.ValidationTestcase"/>
+            <class name="org.wso2.extension.siddhi.io.prometheus.sink.SinkValidationTestcase"/>
+            <class name="org.wso2.extension.siddhi.io.prometheus.source.SourceValidationTestcase"/>
+            <class name="org.wso2.extension.siddhi.io.prometheus.source.PrometheusSourceTest"/>
         </classes>
     </test>
     <test name="Prometheus sink run tests" enabled="false">
