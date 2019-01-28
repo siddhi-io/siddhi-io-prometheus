@@ -397,13 +397,15 @@ public class PrometheusSource extends Source {
         List<Header> headerList = PrometheusSourceUtil.getHeaders(headers, streamName);
         this.prometheusScraper = new PrometheusScraper(targetURL, scheme, scrapeTimeoutInSeconds, headerList,
                 sourceEventListener, streamName);
-        if ((!PrometheusSourceUtil.checkEmptyString(userName) || !PrometheusSourceUtil.checkEmptyString(password))) {
-            if ((PrometheusSourceUtil.checkEmptyString(userName) || PrometheusSourceUtil.checkEmptyString(password))) {
+        if ((!PrometheusSourceUtil.checkEmptyString(userName) && !PrometheusSourceUtil.checkEmptyString(password))) {
+            prometheusScraper.setAuthorizationCredentials(userName, password);
+        } else {
+            // check if only one parameter in either username or password is provided, then throw exception
+            if (!(PrometheusSourceUtil.checkEmptyString(userName) && PrometheusSourceUtil.checkEmptyString(password))) {
                 throw new SiddhiAppCreationException("Please provide user name and password in " +
                         PrometheusConstants.PROMETHEUS_SOURCE + " associated with the stream " + streamName + " in " +
                         "Siddhi app " + siddhiAppContext.getName());
             }
-            prometheusScraper.setAuthorizationCredentials(userName, password);
         }
 
         if (PrometheusConstants.HTTPS_SCHEME.equalsIgnoreCase(scheme) &&
