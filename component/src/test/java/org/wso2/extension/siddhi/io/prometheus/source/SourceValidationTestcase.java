@@ -23,10 +23,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants;
-import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.stream.input.InputHandler;
 
 /**
  * Test cases for invalid source definitions.
@@ -50,7 +48,7 @@ public class SourceValidationTestcase {
     }
 
 
-    private void startSiddhiApp(String streamDefinition) {
+    private void createSiddhiApp(String streamDefinition) {
         SiddhiManager siddhiManager = new SiddhiManager();
         String siddhiApp = "@App:name('TestSiddhiApp')";
         String outputStream = " @sink(type='log', prefix='test')" +
@@ -62,10 +60,7 @@ public class SourceValidationTestcase {
                         + "select * "
                         + "insert into OutputStream;"
         );
-        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(siddhiApp + streamDefinition +
-                outputStream + query);
-        InputHandler inputStream = siddhiAppRuntime.getInputHandler("SourceTestStream");
-        siddhiAppRuntime.start();
+        siddhiManager.createSiddhiAppRuntime(siddhiApp + streamDefinition + outputStream + query);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -87,7 +82,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -110,7 +105,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -132,7 +127,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -155,7 +150,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -179,7 +174,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -204,7 +199,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -228,7 +223,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -250,7 +245,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -276,7 +271,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -298,7 +293,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value double);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -322,7 +317,7 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -345,6 +340,6 @@ public class SourceValidationTestcase {
                 "@map(type = 'keyvalue'))" +
                 "Define stream SourceTestStream (metric_name String, metric_type String, help String, name String," +
                 " age String, subtype String, le String, value string);";
-        startSiddhiApp(sourceStream);
+        createSiddhiApp(sourceStream);
     }
 }

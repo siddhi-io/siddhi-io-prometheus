@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 
@@ -53,7 +52,7 @@ public class SinkValidationTestcase {
     }
 
 
-    private void startSiddhiApp(String streamDefinition) {
+    private void createSiddhiApp(String streamDefinition) {
         SiddhiManager siddhiManager = new SiddhiManager();
         String query = (
                 "@info(name = 'query') "
@@ -61,8 +60,7 @@ public class SinkValidationTestcase {
                         + "select symbol, value "
                         + "insert into SinkTestStream;"
         );
-        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streamDefinition + query);
-        siddhiAppRuntime.start();
+        siddhiManager.createSiddhiAppRuntime(streamDefinition + query);
     }
 
 
@@ -87,7 +85,7 @@ public class SinkValidationTestcase {
                         "metric.help= 'Metric definition test', " +
                         "@map(type = \'keyvalue\', @payload(mode = 'mode', value = 'value')))" +
                         "Define stream SinkTestStream (symbol String, value int);";
-        startSiddhiApp(streamDefinition1);
+        createSiddhiApp(streamDefinition1);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -108,7 +106,7 @@ public class SinkValidationTestcase {
                 "metric.help= 'Metric type definition test', " +
                 "@map(type = \'keyvalue\'))" +
                 "Define stream SinkTestStream (symbol String, value int, price double);";
-        startSiddhiApp(streamDefinition2);
+        createSiddhiApp(streamDefinition2);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -128,7 +126,7 @@ public class SinkValidationTestcase {
                 "metric.help= 'Metric type definition test', " +
                 "@map(type = \'keyvalue\'))" +
                 "Define stream SinkTestStream (symbol String, value int, price double);";
-        startSiddhiApp(streamDefinition3);
+        createSiddhiApp(streamDefinition3);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -148,7 +146,7 @@ public class SinkValidationTestcase {
                 "@map(type = \'keyvalue\'))" +
                 "Define stream SinkTestStream (symbol String, value int, price double);";
 
-        startSiddhiApp(streamDefinition4);
+        createSiddhiApp(streamDefinition4);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -167,7 +165,7 @@ public class SinkValidationTestcase {
                 "metric.help= 'Metric type definition test', buckets= '2,a,b,3'," +
                 "@map(type = \'keyvalue\'))"
                 + "Define stream MetricTypeTestStream (symbol String, value int, price double);";
-        startSiddhiApp(streamDefinition5);
+        createSiddhiApp(streamDefinition5);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -186,7 +184,7 @@ public class SinkValidationTestcase {
                 "metric.help= 'Metric type definition test', quantiles= '" + quantiles + "'," +
                 "@map(type = \'keyvalue\'))" +
                 "Define stream MetricTypeTestStream (symbol String, value int, price double);";
-        startSiddhiApp(streamDefinition6);
+        createSiddhiApp(streamDefinition6);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -206,7 +204,7 @@ public class SinkValidationTestcase {
                 "metric.help= 'Metric type definition test', quantiles= '0.2,5,2,0.86'," +
                 "@map(type = \'keyvalue\'))"
                 + "Define stream MetricTypeTestStream (symbol String, value int, price double);";
-        startSiddhiApp(streamDefinition7);
+        createSiddhiApp(streamDefinition7);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -226,7 +224,7 @@ public class SinkValidationTestcase {
                 "metric.help= 'Summary definition test', metric.name= '" + metricName + "', " +
                 "quantiles = '" + quantiles + "',@map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, value int, price double);";
-        startSiddhiApp(streamDefinition8);
+        createSiddhiApp(streamDefinition8);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -247,7 +245,7 @@ public class SinkValidationTestcase {
                 "metric.help= 'Summary definition test', metric.name= 'metric_name_test_value', " +
                 "quantiles = '" + quantiles + "',@map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, volume int, price double);";
-        startSiddhiApp(streamDefinition9);
+        createSiddhiApp(streamDefinition9);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -265,7 +263,7 @@ public class SinkValidationTestcase {
                 "metric.help= 'Summary definition test', metric.name= 'metric_name_test_summary', " +
                 "quantiles = '" + quantiles + "', @map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, value string, price double);";
-        startSiddhiApp(streamDefinition10);
+        createSiddhiApp(streamDefinition10);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -286,7 +284,7 @@ public class SinkValidationTestcase {
                 "quantiles = '" + quantiles + "', " +
                 "push.operation = '" + pushOperation + "',@map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, value int, price double);";
-        startSiddhiApp(streamDefinition11);
+        createSiddhiApp(streamDefinition11);
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class,
@@ -307,7 +305,7 @@ public class SinkValidationTestcase {
                 "metric.help= 'Counter definition test'," +
                 "grouping.key = '" + groupingKey + "',@map(type = 'keyvalue'))" +
                 "Define stream SummaryTestStream (symbol String, value int, price double);";
-        startSiddhiApp(streamDefinition12);
+        createSiddhiApp(streamDefinition12);
     }
 }
 
