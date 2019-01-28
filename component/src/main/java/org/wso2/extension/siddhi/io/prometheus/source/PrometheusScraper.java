@@ -82,7 +82,6 @@ public class PrometheusScraper implements Runnable {
     private CompletionCallback completionCallback;
     private PrometheusMetricAnalyser metricAnalyser;
     private HttpWsConnectorFactory httpConnectorFactory = new DefaultHttpWsConnectorFactory();
-    private HTTPCarbonMessage httpRequest;
 
     PrometheusScraper(String targetURL, String scheme, long scrapeTimeout,
                       List<Header> headers, SourceEventListener sourceEventListener, String streamName) {
@@ -136,16 +135,15 @@ public class PrometheusScraper implements Runnable {
 
     private void retrieveMetricSamples() throws ConnectionUnavailableException {
         List<String> responseMetrics = sendRequest();
-        String errorMessage = null;
         if (responseMetrics == null) {
-            errorMessage = "Error occurred while retrieving metrics at " + targetURL + ". Error : Response is null.";
+            log.error("Error occurred while retrieving metrics at " + targetURL + ". Error : Response is null.",
+                    new SiddhiAppRuntimeException("Error occurred while retrieving metrics at " + targetURL + ". " +
+                            "Error : Response is null."));
         } else {
             if (responseMetrics.isEmpty()) {
-                errorMessage = "The target at " + targetURL + " returns an empty response";
+                log.error("The target at " + targetURL + " returns an empty response",
+                        new SiddhiAppRuntimeException("The target at " + targetURL + " returns an empty response"));
             }
-        }
-        if (errorMessage != null) {
-            log.error(errorMessage, new SiddhiAppRuntimeException(errorMessage));
         }
         if (!responseMetrics.equals(metricSamples)) {
             metricSamples = responseMetrics;

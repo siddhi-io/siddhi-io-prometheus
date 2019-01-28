@@ -246,5 +246,4 @@ class PrometheusMetricAnalyser {
     List<String> getLastValidSamples() {
         return this.lastValidSample;
     }
-
 }

@@ -54,5 +54,4 @@ public class PrometheusHTTPClientListener implements HttpConnectorListener {
     HTTPCarbonMessage getHttpResponseMessage() {
         return httpMessage;
     }
-
 }

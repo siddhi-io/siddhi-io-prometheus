@@ -523,8 +523,6 @@ public class PrometheusSource extends Source {
     @Override
     public void restoreState(Map<String, Object> map) {
         prometheusScraper.setLastValidResponse((List<String>) map.get(PrometheusConstants.LAST_RETRIEVED_SAMPLES));
-
     }
-
 }
 
