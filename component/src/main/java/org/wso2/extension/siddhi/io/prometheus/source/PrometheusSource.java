@@ -18,6 +18,7 @@
 
 package org.wso2.extension.siddhi.io.prometheus.source;
 
+import org.apache.log4j.Logger;
 import org.wso2.carbon.messaging.Header;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusSourceUtil;
@@ -29,7 +30,6 @@ import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import org.wso2.siddhi.core.stream.input.source.Source;
 import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
 import org.wso2.siddhi.core.util.config.ConfigReader;
@@ -338,6 +338,7 @@ public class PrometheusSource extends Source {
     private long scrapeIntervalInSeconds;
 
     private PrometheusScraper prometheusScraper;
+    private static final Logger log = Logger.getLogger(PrometheusSource.class);
 
     @Override
     public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
@@ -373,7 +374,7 @@ public class PrometheusSource extends Source {
             }
         } catch (MalformedURLException e) {
             throw new SiddhiAppCreationException("The Prometheus source associated with stream " + streamName +
-                    " contains an invalid value \'" + targetURL + "\' for target URL" , e);
+                    " contains an invalid value \'" + targetURL + "\' for target URL", e);
         }
         scrapeIntervalInSeconds = validateAndSetNumericValue(optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.SCRAPE_INTERVAL, configReader.readConfig(
@@ -410,7 +411,7 @@ public class PrometheusSource extends Source {
 
         if (PrometheusConstants.HTTPS_SCHEME.equalsIgnoreCase(scheme) &&
                 ((PrometheusSourceUtil.checkEmptyString(clientStoreFile)) ||
-                (PrometheusSourceUtil.checkEmptyString(clientStorePassword)))) {
+                        (PrometheusSourceUtil.checkEmptyString(clientStorePassword)))) {
 
             throw new SiddhiAppCreationException("Client trustStore file path or password are empty while " +
                     "default scheme is 'https'. Please provide client " +
@@ -481,9 +482,6 @@ public class PrometheusSource extends Source {
             if (error.getClass().equals(ConnectionUnavailableException.class)) {
                 connectionCallback.onError(new ConnectionUnavailableException(
                         "Connection to the target is lost.", error));
-            } else {
-                destroy();
-                throw new SiddhiAppRuntimeException("Failed while retrieving and analysing the metrics.", error);
             }
         };
         prometheusScraper.setCompletionCallback(completionCallback);
@@ -494,6 +492,9 @@ public class PrometheusSource extends Source {
     public void disconnect() {
         executorService.shutdown();
         prometheusScraper.pause();
+        if (log.isDebugEnabled()) {
+            log.debug("Paused sending HTTP requests to the URL and disconnected the connection channel.");
+        }
         prometheusScraper.clearConnectorFactory();
     }
 

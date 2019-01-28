@@ -131,21 +131,27 @@ public class PrometheusScraper implements Runnable {
         }
         httpClientConnector = httpConnectorFactory.createHttpClientConnector(new HashMap<>(),
                 senderConfiguration);
+        if (log.isDebugEnabled()) {
+            log.debug("Created HTTP connection Channel.");
+        }
     }
 
     private void retrieveMetricSamples() throws ConnectionUnavailableException {
         List<String> responseMetrics = sendRequest();
         if (responseMetrics == null) {
-            log.error("Error occurred while retrieving metrics at " + targetURL + ". Error : Response is null.",
-                    new SiddhiAppRuntimeException("Error occurred while retrieving metrics at " + targetURL + ". " +
-                            "Error : Response is null."));
+            log.error("Error occurred while retrieving metrics at " + targetURL + ". Error : Response is null.");
+            throw new SiddhiAppRuntimeException("Error occurred while retrieving metrics at " + targetURL + ". " +
+                    "Error : Response is null.");
         } else {
             if (responseMetrics.isEmpty()) {
-                log.error("The target at " + targetURL + " returns an empty response",
-                        new SiddhiAppRuntimeException("The target at " + targetURL + " returns an empty response"));
+                log.error("The target at " + targetURL + " returns an empty response");
+                throw new SiddhiAppRuntimeException("The target at " + targetURL + " returns an empty response");
             }
         }
         if (!responseMetrics.equals(metricSamples)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Retrieved metrics from HTTP endpoint.");
+            }
             metricSamples = responseMetrics;
             metricAnalyser.analyseMetrics(metricSamples, targetURL, streamName);
             this.lastValidSamples = metricAnalyser.getLastValidSamples();
@@ -165,6 +171,9 @@ public class PrometheusScraper implements Runnable {
         HttpResponseFuture httpResponseFuture = httpClientConnector.send(carbonMessage);
         PrometheusHTTPClientListener httpListener = new PrometheusHTTPClientListener(latch);
         httpResponseFuture.setHttpConnectorListener(httpListener);
+        if (log.isDebugEnabled()) {
+            log.debug("HTTP request is sent to the target URL.");
+        }
         BufferedReader bufferedReader = null;
         try {
             if (latch.await(scrapeTimeout + 10, TimeUnit.SECONDS)) {
@@ -226,6 +235,8 @@ public class PrometheusScraper implements Runnable {
                 retrieveMetricSamples();
             } catch (ConnectionUnavailableException e) {
                 completionCallback.handle(e);
+            } catch (SiddhiAppRuntimeException e) {
+                log.error("Exception thrown while retrieving and analysing metrics", e);
             }
         }
     }

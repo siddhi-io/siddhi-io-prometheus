@@ -73,7 +73,7 @@ class PrometheusMetricAnalyser {
             String error = "The specified metric cannot be found inside the http response from the " + targetURL +
                     " of " + PrometheusConstants.PROMETHEUS_SOURCE + " associated with stream \'" + streamID +
                     "\'.";
-            log.error(error, new SiddhiAppRuntimeException(error));
+            throw new SiddhiAppRuntimeException(error);
         }
         assignHelpString(metricSamples, index);
         if (!checkMetricType(metricSamples, index)) {
@@ -81,7 +81,7 @@ class PrometheusMetricAnalyser {
                     "matching with the specified metric type \'" + MetricType.getMetricTypeString(metricType) +
                     "\' in the " + PrometheusConstants.PROMETHEUS_SOURCE + " associated with stream \'" +
                     streamID + "\'. ";
-            log.error(error, new SiddhiAppRuntimeException(error));
+            throw new SiddhiAppRuntimeException(error);
         }
         List<String> retrievedMetrics = metricSamples.stream().filter(
                 response -> response.startsWith(metricName)).collect(Collectors.toList());
@@ -125,11 +125,14 @@ class PrometheusMetricAnalyser {
                         " \'" + targetURL + "\' is not matching with the specified metric in the " +
                         PrometheusConstants.PROMETHEUS_SOURCE + " associated with stream \'" + streamID +
                         "\'. ";
-                log.error(error, new SiddhiAppRuntimeException(error));
+                throw new SiddhiAppRuntimeException(error);
             }
         }
         lastValidSample.clear();
         lastValidSample.addAll(filteredMetrics);
+        if (log.isDebugEnabled()) {
+            log.debug("The specified metrics is found inside the HTTP response.");
+        }
         generateMaps(filteredMetrics);
     }
 

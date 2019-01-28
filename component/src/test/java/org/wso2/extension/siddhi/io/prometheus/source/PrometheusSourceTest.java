@@ -556,6 +556,66 @@ public class PrometheusSourceTest {
         Assert.assertEquals(24, eventCount.get());
         siddhiAppRuntime.shutdown();
     }
+
+    @Test(sequential = true)
+    public void prometheusSourceTest5() throws InterruptedException {
+
+        initializeMetrics(Integer.parseInt(serverPort));
+        SiddhiManager siddhiManager = new SiddhiManager();
+        log.info("----------------------------------------------------------------------------------");
+        log.info("Prometheus Source test to check unavailable metrics.");
+        log.info("----------------------------------------------------------------------------------");
+        String metricType = "counter";
+        String siddhiApp = "@App:name('TestSiddhiApp1')";
+        String sourceStream = "@source(type='prometheus'," +
+                "target.url=\'" + targetURL + "\', " +
+                "scheme = 'http'," +
+                "scrape.interval = '1'," +
+                "scrape.timeout = '5'," +
+                "metric.type='" + metricType + "'," +
+                "metric.name='counters_test'," +
+                "@map(type = 'keyvalue'))" +
+                "Define stream SourceMapTestStream (metric_name String, metric_type String," +
+                " help String, symbol String, price String, subtype String, value int);";
+        String outputStream1 = " @sink(type='log')" +
+                "define stream OutputStream (metric_name String, metric_type String, help String," +
+                " symbol String, price String, subtype String, value int);";
+        String query1 = (
+                "@info(name = 'query1') "
+                        + "from SourceMapTestStream\n" +
+                        "select *\n" +
+                        "insert into OutputStream;"
+        );
+
+        StreamCallback streamCallback = new StreamCallback() {
+            @Override
+            public void receive(Event[] events) {
+                for (Event event : events) {
+                    eventCount.getAndIncrement();
+                    eventArrived.set(true);
+                    receivedEvents.add(event.getData());
+                }
+            }
+        };
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(siddhiApp + sourceStream +
+                outputStream1 + query1);
+        siddhiAppRuntime.addCallback("OutputStream", streamCallback);
+        StreamCallback insertionStreamCallback = new StreamCallback() {
+            @Override
+            public void receive(Event[] events) {
+                for (Event event : events) {
+                    eventArrived.set(true);
+
+                }
+            }
+        };
+        siddhiAppRuntime.addCallback("SourceMapTestStream", insertionStreamCallback);
+        Thread.sleep(2000);
+        siddhiAppRuntime.start();
+        Assert.assertFalse(eventArrived.get());
+        Assert.assertEquals(eventCount.get(), 0);
+        siddhiAppRuntime.shutdown();
+    }
 }
 
 
