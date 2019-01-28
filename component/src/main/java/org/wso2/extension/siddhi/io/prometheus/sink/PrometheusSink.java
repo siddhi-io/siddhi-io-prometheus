@@ -320,15 +320,14 @@ public class PrometheusSink extends Sink {
                 }
             }
         }
-        this.configReader = configReader;
         this.jobName = optionHolder.validateAndGetStaticValue(PrometheusConstants.JOB_NAME,
-                PrometheusSinkUtil.jobName(configReader));
+                PrometheusSinkUtil.configureJobName(configReader));
         this.pushURL = optionHolder.validateAndGetStaticValue(PrometheusConstants.PUSH_URL,
-                PrometheusSinkUtil.pushURL(configReader));
+                PrometheusSinkUtil.configurePushURL(configReader));
         this.serverURL = optionHolder.validateAndGetStaticValue(PrometheusConstants.SERVER_URL,
-                PrometheusSinkUtil.serverURL(configReader));
+                PrometheusSinkUtil.configureServerURL(configReader));
         this.publishMode = optionHolder.validateAndGetStaticValue(PrometheusConstants.METRIC_PUBLISH_MODE,
-                PrometheusSinkUtil.publishMode(configReader));
+                PrometheusSinkUtil.configurePublishMode(configReader));
         this.buckets = optionHolder.validateAndGetStaticValue(PrometheusConstants.BUCKET_DEFINITION, EMPTY_STRING);
         this.quantiles = optionHolder.validateAndGetStaticValue(PrometheusConstants.QUANTILES_DEFINITION, EMPTY_STRING);
         this.attributes = outputstreamDefinition.getAttributeList()
@@ -343,7 +342,7 @@ public class PrometheusSink extends Sink {
         this.pushOperation = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.PUSH_DEFINITION, PrometheusConstants.PUSH_ADD_OPERATION).trim();
         this.groupingKey = PrometheusSinkUtil.populateGroupingKey(optionHolder.validateAndGetStaticValue(
-                PrometheusConstants.GROUPING_KEY_DEFINITION, PrometheusSinkUtil.groupinKey(configReader)).trim(),
+              PrometheusConstants.GROUPING_KEY_DEFINITION, PrometheusSinkUtil.configureGroupinKey(configReader)).trim(),
                 streamID);
         this.valueAttribute = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.VALUE_ATTRIBUTE, VALUE_STRING).trim();
@@ -446,8 +445,9 @@ public class PrometheusSink extends Sink {
                 }
             } catch (IOException e) {
                 log.error("Unable to establish connection for Prometheus sink associated with " +
-                                "stream \'" + getStreamDefinition().getId() + "\' at " + pushURL,
-                        new ConnectionUnavailableException(e));
+                                "stream \'" + getStreamDefinition().getId() + "\' at " + pushURL);
+                throw new ConnectionUnavailableException("Unable to establish connection for Prometheus sink associated with " +
+                        "stream \'" + getStreamDefinition().getId() + "\' at " + pushURL, e);
             }
         }
     }
@@ -473,8 +473,10 @@ public class PrometheusSink extends Sink {
                         if (e.getMessage().equalsIgnoreCase("Connection refused (Connection refused)")) {
                             log.error("The stream \'" + getStreamDefinition().getId() + "\' of Prometheus sink " +
                                             "could not connect to Pushgateway." +
-                                            " Prometheus pushgateway is not listening at " + target,
-                                    new ConnectionUnavailableException(e));
+                                            " Prometheus pushgateway is not listening at " + target);
+                            throw new ConnectionUnavailableException("The stream \'" + getStreamDefinition().getId() +
+                                    "\' of Prometheus sink could not connect to Pushgateway." +
+                                    " Prometheus pushgateway is not listening at " + target, e);
                         }
                     }
                     break;
@@ -488,15 +490,16 @@ public class PrometheusSink extends Sink {
         }
     }
 
-    private void initiateServer(String host, int port) {
+    private void initiateServer(String host, int port) throws ConnectionUnavailableException {
         try {
             InetSocketAddress address = new InetSocketAddress(host, port);
             server = new HTTPServer(address, collectorRegistry);
         } catch (IOException e) {
             if (!(e instanceof BindException && e.getMessage().equals("Address already in use"))) {
                 log.error("Unable to establish connection for Prometheus sink associated with stream \'" +
-                                getStreamDefinition().getId() + "\' at " + serverURL,
-                        new ConnectionUnavailableException(e));
+                                getStreamDefinition().getId() + "\' at " + serverURL);
+                throw new ConnectionUnavailableException("Unable to establish connection for Prometheus sink " +
+                        "associated with stream \'" + getStreamDefinition().getId() + "\' at " + serverURL, e);
             }
         }
     }

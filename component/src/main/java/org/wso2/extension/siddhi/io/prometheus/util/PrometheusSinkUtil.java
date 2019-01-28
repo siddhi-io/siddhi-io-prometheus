@@ -168,7 +168,7 @@ public class PrometheusSinkUtil {
      * @param sinkConfigReader configuration reader for sink.
      * @return default job name.
      */
-    public static String jobName(ConfigReader sinkConfigReader) {
+    public static String configureJobName(ConfigReader sinkConfigReader) {
         return sinkConfigReader.readConfig(PrometheusConstants.JOB_NAME_CONFIGURATION,
                 PrometheusConstants.DEFAULT_JOB_NAME);
     }
@@ -180,7 +180,7 @@ public class PrometheusSinkUtil {
      * @param sinkConfigReader configuration reader for sink.
      * @return default push gateway URL.
      */
-    public static String pushURL(ConfigReader sinkConfigReader) {
+    public static String configurePushURL(ConfigReader sinkConfigReader) {
         return sinkConfigReader.readConfig(PrometheusConstants.PUSH_URL_CONFIGURATION,
                 PrometheusConstants.DEFAULT_PUSH_URL);
     }
@@ -192,7 +192,7 @@ public class PrometheusSinkUtil {
      * @param sinkConfigReader configuration reader for sink.
      * @return default server URL.
      */
-    public static String serverURL(ConfigReader sinkConfigReader) {
+    public static String configureServerURL(ConfigReader sinkConfigReader) {
         return sinkConfigReader.readConfig(PrometheusConstants.SERVER_URL_CONFIGURATION,
                 PrometheusConstants.DEFAULT_SERVER_URL);
     }
@@ -204,7 +204,7 @@ public class PrometheusSinkUtil {
      * @param sinkConfigReader configuration reader for sink.
      * @return default publish mode.
      */
-    public static String publishMode(ConfigReader sinkConfigReader) {
+    public static String configurePublishMode(ConfigReader sinkConfigReader) {
         return sinkConfigReader.readConfig(PrometheusConstants.PUBLISH_MODE_CONFIGURATION,
                 PrometheusConstants.DEFAULT_PUBLISH_MODE);
     }
@@ -216,7 +216,7 @@ public class PrometheusSinkUtil {
      * @param sinkConfigReader configuration reader for sink.
      * @return default grouping key.
      */
-    public static String groupinKey(ConfigReader sinkConfigReader) {
+    public static String configureGroupinKey(ConfigReader sinkConfigReader) {
         return sinkConfigReader.readConfig(PrometheusConstants.GROUPING_KEY_CONFIGURATION,
                 PrometheusConstants.EMPTY_STRING);
     }
