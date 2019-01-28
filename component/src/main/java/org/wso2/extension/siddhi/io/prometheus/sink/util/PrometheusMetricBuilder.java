@@ -141,13 +141,14 @@ public class PrometheusMetricBuilder {
         }
     }
 
-    public CollectorRegistry setRegistry(String url) {
+    public CollectorRegistry setRegistry(String url, String streamID) {
         URL target;
         try {
             target = new URL(url);
             registry = PrometheusRegistryHolder.retrieveRegistry(target.getHost(), target.getPort());
         } catch (MalformedURLException e) {
-            throw new SiddhiAppCreationException("Error in URL " + e);
+            throw new SiddhiAppCreationException("Error in the URL format of Prometheus sink associated with stream \'"
+                    + streamID + "\'. \n ", e);
         }
         return registry;
     }

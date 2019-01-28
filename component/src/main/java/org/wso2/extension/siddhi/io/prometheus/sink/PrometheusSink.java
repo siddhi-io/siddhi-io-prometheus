@@ -414,10 +414,10 @@ public class PrometheusSink extends Sink {
         }
         switch (publishMode) {
             case PrometheusConstants.SERVER_PUBLISH_MODE:
-                collectorRegistry = prometheusMetricBuilder.setRegistry(serverURL);
+                collectorRegistry = prometheusMetricBuilder.setRegistry(serverURL, streamID);
                 break;
             case PrometheusConstants.PUSHGATEWAY_PUBLISH_MODE:
-                collectorRegistry = prometheusMetricBuilder.setRegistry(pushURL);
+                collectorRegistry = prometheusMetricBuilder.setRegistry(pushURL, streamID);
                 break;
             default:
                 //default execution is not needed
@@ -486,7 +486,7 @@ public class PrometheusSink extends Sink {
             prometheusMetricBuilder.registerMetric(valueAttribute);
         } catch (MalformedURLException e) {
             throw new ConnectionUnavailableException("Error in URL format in Prometheus sink associated with stream \'"
-                    + getStreamDefinition().getId() + "\'. \n " + e);
+                    + getStreamDefinition().getId() + "\'. \n ", e);
         }
     }
 
