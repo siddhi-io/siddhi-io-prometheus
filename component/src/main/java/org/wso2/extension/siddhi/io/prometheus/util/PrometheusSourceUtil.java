@@ -43,8 +43,7 @@ public class PrometheusSourceUtil {
 
     public static Map<String, String> getURLProperties(String target, String scheme) throws MalformedURLException {
         URL targetURL = new URL(target);
-        Map<String, String> httpURLProperties;
-        httpURLProperties = new HashMap<>();
+        Map<String, String> httpURLProperties = new HashMap<>();
         httpURLProperties.put(Constants.TO, targetURL.getFile());
         String protocol = targetURL.getProtocol();
         httpURLProperties.put(Constants.PROTOCOL, protocol);

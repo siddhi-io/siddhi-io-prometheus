@@ -446,8 +446,8 @@ public class PrometheusSink extends Sink {
             } catch (IOException e) {
                 log.error("Unable to establish connection for Prometheus sink associated with " +
                                 "stream \'" + getStreamDefinition().getId() + "\' at " + pushURL);
-                throw new ConnectionUnavailableException("Unable to establish connection for Prometheus sink associated with " +
-                        "stream \'" + getStreamDefinition().getId() + "\' at " + pushURL, e);
+                throw new ConnectionUnavailableException("Unable to establish connection for Prometheus sink " +
+                        "associated with stream \'" + getStreamDefinition().getId() + "\' at " + pushURL, e);
             }
         }
     }

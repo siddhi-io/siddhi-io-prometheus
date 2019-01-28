@@ -23,6 +23,9 @@ package org.wso2.extension.siddhi.io.prometheus.util;
  */
 public class PrometheusConstants {
 
+    private PrometheusConstants() {
+    }
+
     //Constants for Prometheus-sink
     public static final String JOB_NAME = "job";
     public static final String PUSH_URL = "push.url";
