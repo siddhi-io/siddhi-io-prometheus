@@ -188,4 +188,10 @@
         <org.wso2.carbon.messaging.version>3.0.2</org.wso2.carbon.messaging.version>
         <io.netty.version>4.1.16.Final</io.netty.version>
     </properties>
+    <scm>
+        <connection>scm:git:https://github.com/wso2-extensions/siddhi-io-prometheus.git</connection>
+        <url>https://github.com/wso2-extensions/siddhi-io-prometheus.git</url>
+        <developerConnection>scm:git:https://github.com/wso2-extensions/siddhi-io-prometheus.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 </project>
