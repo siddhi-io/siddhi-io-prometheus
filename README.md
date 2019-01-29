@@ -32,7 +32,7 @@ Find some useful links below:
 
 ```
      <dependency>
-        <groupId>org.wso2.extension.siddhi.io.</groupId>
+        <groupId>org.wso2.extension.siddhi.io.prometheus</groupId>
         <artifactId>siddhi-io-prometheus</artifactId>
         <version>x.x.x</version>
      </dependency>
