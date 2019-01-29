@@ -185,7 +185,7 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @Example(
                         syntax = "@source(type= 'prometheus', target.url= 'http://localhost:9080/metrics', " +
                                 "metric.type= 'counter', metric.name= 'sweet_production_counter', @map(type= " +
-                                "‘keyvalue’))\n" +
+                                "'keyvalue'))\n" +
                                 "define stream FooStream1(metric_name string, metric_type string, help string, " +
                                 "subtype string, name string, quantity string, value double);\n",
                         description = "In this example, the prometheus source makes an http request to the " +
@@ -204,7 +204,7 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @Example(
                         syntax = "@source(type= 'prometheus', target.url= 'http://localhost:9080/metrics', " +
                                 "metric.type= 'summary', metric.name= 'sweet_production_summary', @map(type= " +
-                                "‘keyvalue’))\n define stream FooStream2(metric_name string, metric_type string, help" +
+                                "'keyvalue'))\n define stream FooStream2(metric_name string, metric_type string, help" +
                                 " string, subtype string, name string, quantity string, quantile string, value " +
                                 "double);\n",
                         description = "In this example, the prometheus source makes an http request to the " +
@@ -224,7 +224,7 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @Example(
                         syntax = "@source(type= 'prometheus', target.url= 'http://localhost:9080/metrics', " +
                                 "metric.type= 'histogram', metric.name= 'sweet_production_histogram', @map(type= " +
-                                "‘keyvalue’))\n" +
+                                "'keyvalue'))\n" +
                                 "define stream FooStream3(metric_name string, metric_type string, help string, " +
                                 "subtype string, name string, quantity string, le string, value double);\n",
                         description = "In this example, the prometheus source will make an http request to the " +
