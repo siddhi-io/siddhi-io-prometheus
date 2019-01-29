@@ -16,13 +16,11 @@
 ~ specific language governing permissions and limitations
 ~ under the License.
 -->
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.wso2.extension.siddhi.io.prometheus</groupId>
         <artifactId>siddhi-io-prometheus-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>siddhi-io-prometheus</artifactId>
@@ -234,7 +232,7 @@
                         <PUSHGATEWAY_PORT>9091</PUSHGATEWAY_PORT>
                         <SERVER_PORT>9080</SERVER_PORT>
                         <HOST_NAME>localhost</HOST_NAME>
-                        <SERVER_CONFIG_PORT>9096</SERVER_CONFIG_PORT>>
+                        <SERVER_CONFIG_PORT>9096</SERVER_CONFIG_PORT>&gt;
                     </environmentVariables>
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
