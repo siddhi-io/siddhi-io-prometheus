@@ -6,17 +6,22 @@
      <changefreq>daily</changefreq>
     </url>
     <url>
+     <loc>https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.1/</loc>
+     <lastmod>2019-01-29</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
      <loc>https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.0/</loc>
      <lastmod>2019-01-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://wso2-extensions.github.io/siddhi-io-prometheus/api/.md/</loc>
+     <loc>https://wso2-extensions.github.io/siddhi-io-prometheus/api/latest/</loc>
      <lastmod>2019-01-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://wso2-extensions.github.io/siddhi-io-prometheus/api/latest/</loc>
+     <loc>https://wso2-extensions.github.io/siddhi-io-prometheus/api/.md/</loc>
      <lastmod>2019-01-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
