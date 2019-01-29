@@ -106,6 +106,27 @@
                 <version>${keyvalue.mapper.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.messaging</groupId>
+                <artifactId>org.wso2.carbon.messaging</artifactId>
+                <version>${org.wso2.carbon.messaging.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.transport.http</groupId>
+                <artifactId>org.wso2.transport.http.netty</artifactId>
+                <version>${org.wso2.transport.http.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.transport.http</groupId>
+                <artifactId>org.wso2.transport.http.netty.feature</artifactId>
+                <version>${org.wso2.transport.http.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${io.netty.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
@@ -163,5 +184,8 @@
         <skip.surefire.test>false</skip.surefire.test>
         <prometheus-test.port>9090</prometheus-test.port>
         <prometheus-pushgateway-test.port>9091</prometheus-pushgateway-test.port>
+        <org.wso2.transport.http.version>6.0.163</org.wso2.transport.http.version>
+        <org.wso2.carbon.messaging.version>3.0.2</org.wso2.carbon.messaging.version>
+        <io.netty.version>4.1.16.Final</io.netty.version>
     </properties>
 </project>

@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.extension.siddhi.io.prometheus.sink;
 
 import org.apache.log4j.Logger;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -116,7 +118,7 @@ public class SinkTestWithDocker {
             } else {
                 String inputLine;
                 BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
+                        new InputStreamReader(conn.getInputStream(), Charset.defaultCharset()));
                 while ((inputLine = reader.readLine()) != null) {
                     response.append(inputLine);
                 }

@@ -23,7 +23,9 @@
 <suite name="Siddhi-IO-Prometheus-Test-Suite">
     <test name="Siddhi-io-prometheus-tests" enabled="true">
         <classes>
-            <class name="org.wso2.extension.siddhi.io.prometheus.sink.ValidationTestcase"/>
+            <class name="org.wso2.extension.siddhi.io.prometheus.sink.SinkValidationTestcase"/>
+            <class name="org.wso2.extension.siddhi.io.prometheus.source.SourceValidationTestcase"/>
+            <class name="org.wso2.extension.siddhi.io.prometheus.source.PrometheusSourceTest"/>
         </classes>
     </test>
     <test name="Prometheus sink run tests" enabled="false">
