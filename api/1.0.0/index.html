@@ -1,0 +1,991 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Siddhi IO Extension for Prometheus">
+      
+      
+        <link rel="canonical" href="https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.0/">
+      
+      
+        <meta name="author" content="WSO2">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../images/favicon.ico">
+      <meta name="generator" content="mkdocs-0.17.4, mkdocs-material-2.9.2">
+    
+    
+      
+        <title>1.0.0 - Siddhi-IO-Prometheus</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.ba0fd1a6.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.6079476c.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#009688">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#api-docs-v100" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://wso2-extensions.github.io/siddhi-io-prometheus/" title="Siddhi-IO-Prometheus" class="md-header-nav__button md-logo">
+          
+            <img src="../../images/siddhi-logo-w.svg" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                Siddhi-IO-Prometheus
+              </span>
+              <span class="md-header-nav__topic">
+                1.0.0
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/wso2-extensions/siddhi-io-prometheus/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      Siddhi-IO-Prometheus
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <span class="md-nav__button md-logo">
+      
+        <img src="../../images/siddhi-logo-w.svg" width="48" height="48">
+      
+    </span>
+    Siddhi-IO-Prometheus
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/wso2-extensions/siddhi-io-prometheus/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      Siddhi-IO-Prometheus
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Welcome to WSO2 Siddhi IO Prometheus" class="md-nav__link">
+      Welcome to WSO2 Siddhi IO Prometheus
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      API Docs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        API Docs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        1.0.0
+      </label>
+    
+    <a href="./" title="1.0.0" class="md-nav__link md-nav__link--active">
+      1.0.0
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sink" title="Sink" class="md-nav__link">
+    Sink
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prometheus-sink" title="prometheus (Sink)" class="md-nav__link">
+    prometheus (Sink)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source" title="Source" class="md-nav__link">
+    Source
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prometheus-source" title="prometheus (Source)" class="md-nav__link">
+    prometheus (Source)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../.md/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../latest/" title="latest" class="md-nav__link">
+      latest
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../about/license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sink" title="Sink" class="md-nav__link">
+    Sink
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prometheus-sink" title="prometheus (Sink)" class="md-nav__link">
+    prometheus (Sink)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source" title="Source" class="md-nav__link">
+    Source
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prometheus-source" title="prometheus (Source)" class="md-nav__link">
+    prometheus (Source)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/wso2-extensions/siddhi-io-prometheus/edit/master/docs/api/1.0.0.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="api-docs-v100">API Docs - v1.0.0<a class="headerlink" href="#api-docs-v100" title="Permanent link">&para;</a></h1>
+<h2 id="sink">Sink<a class="headerlink" href="#sink" title="Permanent link">&para;</a></h2>
+<h3 id="prometheus-sink">prometheus <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink">(Sink)</a></em><a class="headerlink" href="#prometheus-sink" title="Permanent link">&para;</a></h3>
+<p style="word-wrap: break-word">The sink publishes events processed by WSO2 SP into Prometheus metrics and exposes them to Prometheus server at the provided url. The created metrics can be published to Prometheus through 'server' or 'pushGateway' publishing modes depending on the preference of the user. The server mode exposes the metrics through an http server at the provided url and the pushGateway mode pushes the metrics to pushGateway which must be running at the provided url.<br>&nbsp;The metric types that are supported by Prometheus sink are counter, gauge, histogram and summary. The values and labels of the Prometheus metrics can be updated through the events. </p>
+
+<p><span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
+<div class="codehilite"><pre><span></span>@sink(type=&quot;prometheus&quot;, job=&quot;&lt;STRING&gt;&quot;, publish.mode=&quot;&lt;STRING&gt;&quot;, push.url=&quot;&lt;STRING&gt;&quot;, server.url=&quot;&lt;STRING&gt;&quot;, metric.type=&quot;&lt;STRING&gt;&quot;, metric.help=&quot;&lt;STRING&gt;&quot;, metric.name=&quot;&lt;STRING&gt;&quot;, buckets=&quot;&lt;STRING&gt;&quot;, quantiles=&quot;&lt;STRING&gt;&quot;, quantile.error=&quot;&lt;DOUBLE&gt;&quot;, value.attribute=&quot;&lt;STRING&gt;&quot;, push.operation=&quot;&lt;STRING&gt;&quot;, grouping.key=&quot;&lt;STRING&gt;&quot;, @map(...)))
+</pre></div>
+
+
+<p><span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">job</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies the job name of the metric. The name must be the same job name as defined in the prometheus configuration file.</td>
+        <td style="vertical-align: top">siddhiJob</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">publish.mode</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies the mode of exposing metrics to Prometheus server.The possible publishing modes are 'server' and 'pushgateway'.</td>
+        <td style="vertical-align: top">server</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">push.url</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies the target url of the Prometheus pushGateway where the pushGateway must be listening. This url should be previously defined in prometheus configuration file as a target.</td>
+        <td style="vertical-align: top">http://localhost:9091</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">server.url</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies the url where the http server is initiated to expose metrics for 'server' publish mode. This url must be previously defined in prometheus configuration file as a target.</td>
+        <td style="vertical-align: top">http://localhost:9080</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">metric.type</td>
+        <td style="vertical-align: top; word-wrap: break-word">The type of Prometheus metric that has to be created at the sink.<br>&nbsp;The supported metric types are 'counter', 'gauge', 'histogram' and 'summary'. </td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">metric.help</td>
+        <td style="vertical-align: top; word-wrap: break-word">A brief description of the metric and its purpose.</td>
+        <td style="vertical-align: top"><metric_name_with_metric_type></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">metric.name</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies the user preferred name for the metric. The metric name must match the regex format, i.e., [a-zA-Z_:][a-zA-Z0-9_:]*. </td>
+        <td style="vertical-align: top"><stream_name></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">buckets</td>
+        <td style="vertical-align: top; word-wrap: break-word">The bucket values preferred by the user for histogram metrics. The bucket values must be in 'string' format with each bucket value separated by a comma.<br>The expected format of the parameter is as follows: <br>"2,4,6,8"</td>
+        <td style="vertical-align: top">null</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">quantiles</td>
+        <td style="vertical-align: top; word-wrap: break-word">The user preferred quantile values for summary metrics. The quantile values must be in 'string' format with each quantile value separated by a comma.<br>The expected format of the parameter is as follows: <br>"0.5,0.75,0.95"</td>
+        <td style="vertical-align: top">null</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">quantile.error</td>
+        <td style="vertical-align: top; word-wrap: break-word">The error tolerance value for calculating quantiles in summary metrics. This must be a positive value though less than 1.</td>
+        <td style="vertical-align: top">0.001</td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">value.attribute</td>
+        <td style="vertical-align: top; word-wrap: break-word">The name of the attribute in stream definition which specifies the metric value. The defined value attribute must be included inside the stream attributes. The value of the 'value' attribute that is published through events, increase the metric value for the counter and gauge metric types. For histogram and summary metric types, the values are observed.</td>
+        <td style="vertical-align: top">value</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">push.operation</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter defines the mode for pushing metrics to pushGateway The available push operations are 'push' and 'pushadd'. The operations differ according to the existing metrics in pushGateway where 'push' operation replaces the existing metrics and 'pushadd' operation only updates the newly created metrics.</td>
+        <td style="vertical-align: top">pushadd</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">grouping.key</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies the grouping key of created metrics in key-value pairs. Grouping key is used only in pushGateway mode in order to distinguish the metrics from already existing metrics. <br>The expected format of the grouping key is as follows:<br>&nbsp;"'key1:value1','key2:value2'"</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table></p>
+<p><span id="system-parameters" class="md-typeset" style="display: block; font-weight: bold;">System Parameters</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Parameters</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">jobName</td>
+        <td style="vertical-align: top; word-wrap: break-word">This is the property that specifies the default job name for the metric. The name must be the same job name as defined in the prometheus configuration file.</td>
+        <td style="vertical-align: top">siddhiJob</td>
+        <td style="vertical-align: top">Any string</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">publishMode</td>
+        <td style="vertical-align: top; word-wrap: break-word">The default publish mode for the Prometheus sink for exposing metrics to Prometheus server. The mode can be either 'server' or 'pushgateway'. </td>
+        <td style="vertical-align: top">server</td>
+        <td style="vertical-align: top">server or pushgateway</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">serverURL</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property configures the url where the http server will be initiated to expose metrics. This url must be previously defined in prometheus configuration file as a target to be identified by Prometheus. By default, the http server will be initiated at 'http://localhost:9080'</td>
+        <td style="vertical-align: top">http://localhost:9080</td>
+        <td style="vertical-align: top">Any valid URL</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">pushURL</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property configures the target url of Prometheus pushGateway where the pushGateway must be listening. This url should be previously defined in prometheus configuration file as a target to be identified by Prometheus.</td>
+        <td style="vertical-align: top">http://localhost:9091</td>
+        <td style="vertical-align: top">Any valid URL</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">groupingKey</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property configures the grouping key of created metrics in key-value pairs. Grouping key is used only in pushGateway mode in order to distinguish the metrics from already existing metrics under same job. The expected format of the grouping key is as follows: "'key1:value1','key2:value2'" .</td>
+        <td style="vertical-align: top">null</td>
+        <td style="vertical-align: top">Any key value pairs in the supported format</td>
+    </tr>
+</table></p>
+<p><span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span></p>
+<div class="codehilite"><pre><span></span>@sink(type=&#39;prometheus&#39;,job=&#39;fooOrderCount&#39;, server.url =&#39;http://localhost:9080&#39;, publish.mode=&#39;server&#39;, metric.type=&#39;counter&#39;, metric.help= &#39;Number of foo orders&#39;, @map(type=&#39;keyvalue&#39;))
+define stream FooCountStream (Name String, quantity int, value int);
+</pre></div>
+
+
+<p style="word-wrap: break-word"> In the above example, the Prometheus-sink creates a counter metric with the stream name and defined attributes as labels. The metric is exposed through an http server at the target url.</p>
+
+<p><span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span></p>
+<div class="codehilite"><pre><span></span>@sink(type=&#39;prometheus&#39;,job=&#39;inventoryLevel&#39;, push.url=&#39;http://localhost:9080&#39;, publish.mode=&#39;pushGateway&#39;, metric.type=&#39;gauge&#39;, metric.help= &#39;Current level of inventory&#39;, @map(type=&#39;keyvalue&#39;))
+define stream InventoryLevelStream (Name String, value int);
+</pre></div>
+
+
+<p style="word-wrap: break-word"> In the above example, the Prometheus-sink creates a gauge metric with the stream name and defined attributes as labels.The metric is pushed to Prometheus pushGateway at the target url.</p>
+
+<h2 id="source">Source<a class="headerlink" href="#source" title="Permanent link">&para;</a></h2>
+<h3 id="prometheus-source">prometheus <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source">(Source)</a></em><a class="headerlink" href="#prometheus-source" title="Permanent link">&para;</a></h3>
+<p style="word-wrap: break-word">The source consumes Prometheus metrics which are exported from the specified url as Siddhi events, by making http requests to the url. According to the source configuration, it analyses metrics from the text response and sends them as Siddhi events through key-value mapping.The user can retrieve metrics of types including, counter, gauge, histogram and summary. Since the source retrieves the metrics from a text response of the target, it is advised to use 'string' as the attribute type for the attributes that correspond to Prometheus metric labels. Further, the Prometheus metric value is passed through the event as 'value'. Therefore, it is advisable to have an attribute with the name 'value' in the stream. <br>The supported types for the attribute, 'value' are INT, LONG, FLOAT and DOUBLE.</p>
+
+<p><span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
+<div class="codehilite"><pre><span></span>@source(type=&quot;prometheus&quot;, target.url=&quot;&lt;STRING&gt;&quot;, scrape.interval=&quot;&lt;INT&gt;&quot;, scrape.timeout=&quot;&lt;INT&gt;&quot;, scheme=&quot;&lt;STRING&gt;&quot;, metric.name=&quot;&lt;STRING&gt;&quot;, metric.type=&quot;&lt;STRING&gt;&quot;, username=&quot;&lt;STRING&gt;&quot;, password=&quot;&lt;STRING&gt;&quot;, client.truststore.file=&quot;&lt;STRING&gt;&quot;, client.truststore.password=&quot;&lt;STRING&gt;&quot;, headers=&quot;&lt;STRING&gt;&quot;, job=&quot;&lt;STRING&gt;&quot;, instance=&quot;&lt;STRING&gt;&quot;, grouping.key=&quot;&lt;STRING&gt;&quot;, @map(...)))
+</pre></div>
+
+
+<p><span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">target.url</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property specifies the target url where the Prometheus metrics are exported in text format.</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">scrape.interval</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property specifies the time interval in seconds within which the source should make an HTTP request to the  provided target url.</td>
+        <td style="vertical-align: top">60</td>
+        <td style="vertical-align: top">INT</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">scrape.timeout</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property is the time duration in seconds for a scrape request to get timed-out if the server at the url does not respond.</td>
+        <td style="vertical-align: top">10</td>
+        <td style="vertical-align: top">INT</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">scheme</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property specifies the scheme of the target URL.<br>&nbsp;The supported schemes are 'HTTP' and 'HTTPS'.</td>
+        <td style="vertical-align: top">HTTP</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">metric.name</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property specifies the name of the metrics that are to be fetched. The metric name must match the regex format, i.e., [a-zA-Z_:][a-zA-Z0-9_:]* .</td>
+        <td style="vertical-align: top">Stream name</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">metric.type</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property specifies the type of the Prometheus metric that is required to be fetched. <br>&nbsp;The supported metric types are 'counter', 'gauge'," 'histogram' and 'summary'. </td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">username</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property specifies the username that has to be added in the authorization header of the HTTP request, if basic authentication is enabled at the target. It is required to specify both username and password to enable basic authentication. If one of the parameter is not given by user then an error is logged in the console.</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">password</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property specifies the password that has to be added in the authorization header of the request, if the basic authentication is enabled at the target. It is required to specify both the username and password to enable basic authentication. If one of the parameter is not given by user, then an error is logged in the console.</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">client.truststore.file</td>
+        <td style="vertical-align: top; word-wrap: break-word">The file path to the location of the truststore to which the client needs to send https requests through 'https' protocol.</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">client.truststore.password</td>
+        <td style="vertical-align: top; word-wrap: break-word"> The password for client-truststore to send https requests. A custom password can be specified if required. </td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">headers</td>
+        <td style="vertical-align: top; word-wrap: break-word">Headers that should be included as HTTP request headers in the request. <br>The format of the supported input is as follows, <br>"'header1:value1','header2:value2'"</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">job</td>
+        <td style="vertical-align: top; word-wrap: break-word"> This property defines the job name of the exported Prometheus metrics that has to be fetched.</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">instance</td>
+        <td style="vertical-align: top; word-wrap: break-word">This property defines the instance of the exported Prometheus metrics that has to be fetched.</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">grouping.key</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies the grouping key of the required metrics in key-value pairs. Grouping key is used if the metrics are exported by Prometheus pushGateway in order to distinguish the metrics from already existing metrics.<br>&nbsp;The expected format of the grouping key is as follows: <br>"'key1:value1','key2:value2'"</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table></p>
+<p><span id="system-parameters" class="md-typeset" style="display: block; font-weight: bold;">System Parameters</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Parameters</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">scrapeInterval</td>
+        <td style="vertical-align: top; word-wrap: break-word">The default time interval in seconds for the Prometheus source to make HTTP requests to the target URL.</td>
+        <td style="vertical-align: top">60</td>
+        <td style="vertical-align: top">Any integer value</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">scrapeTimeout</td>
+        <td style="vertical-align: top; word-wrap: break-word">This default time duration (in seconds) for an HTTP request to time-out if the server at the URL does not respond. </td>
+        <td style="vertical-align: top">10</td>
+        <td style="vertical-align: top">Any integer value</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">scheme</td>
+        <td style="vertical-align: top; word-wrap: break-word">The scheme of the target for Prometheus source to make HTTP requests. The supported schemes are HTTP and HTTPS.</td>
+        <td style="vertical-align: top">HTTP</td>
+        <td style="vertical-align: top">HTTP or HTTPS</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">username</td>
+        <td style="vertical-align: top; word-wrap: break-word">The username that has to be added in the authorization header of the HTTP request, if basic authentication is enabled at the target. It is required to specify both username and password to enable basic authentication. If one of the parameter is not given by user then an error is logged in the console.</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">Any string</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">password</td>
+        <td style="vertical-align: top; word-wrap: break-word">The password that has to be added in the authorization header of the HTTP request, if basic authentication is enabled at the target. It is required to specify both username and password to enable basic authentication. If one of the parameter is not given by user then an error is logged in the console.</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">Any string</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">trustStoreFile</td>
+        <td style="vertical-align: top; word-wrap: break-word">The default file path to the location of truststore that the client needs to send for HTTPS requests through 'HTTPS' protocol.</td>
+        <td style="vertical-align: top">${carbon.home}/resources/security/client-truststore.jks</td>
+        <td style="vertical-align: top">Any valid path for the truststore file</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">trustStorePassword</td>
+        <td style="vertical-align: top; word-wrap: break-word">The default password for the client-truststore to send HTTPS requests.</td>
+        <td style="vertical-align: top">wso2carbon</td>
+        <td style="vertical-align: top">Any string</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">headers</td>
+        <td style="vertical-align: top; word-wrap: break-word">The headers that should be included as HTTP request headers in the scrape request. <br>The format of the supported input is as follows, <br>"'header1:value1','header2:value2'"</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">Any valid http headers</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">job</td>
+        <td style="vertical-align: top; word-wrap: break-word"> The default job name of the exported Prometheus metrics that has to be fetched.</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">Any valid job name</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">instance</td>
+        <td style="vertical-align: top; word-wrap: break-word">The default instance of the exported Prometheus metrics that has to be fetched.</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">Any valid instance name</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">groupingKey</td>
+        <td style="vertical-align: top; word-wrap: break-word">The default grouping key of the required Prometheus metrics in key-value pairs. Grouping key is used if the metrics are exported by Prometheus pushGateway in order to distinguish the metrics from already existing metrics. <br>The expected format of the grouping key is as follows: <br>"'key1:value1','key2:value2'"</td>
+        <td style="vertical-align: top"><empty_string></td>
+        <td style="vertical-align: top">Any valid grouping key pairs</td>
+    </tr>
+</table></p>
+<p><span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span></p>
+<div class="codehilite"><pre><span></span>@source(type= &#39;prometheus&#39;, target.url= &#39;http://localhost:9080/metrics&#39;, metric.type= &#39;counter&#39;, metric.name= &#39;sweet_production_counter&#39;, @map(type= &#39;keyvalue&#39;))
+define stream FooStream1(metric_name string, metric_type string, help string, subtype string, name string, quantity string, value double);
+</pre></div>
+
+
+<p style="word-wrap: break-word">In this example, the prometheus source makes an http request to the 'target.url' and analyse the response. From the analysed response, the source retrieves the Prometheus counter metrics with the name, 'sweet_production_counter' and converts the filtered metrics into Siddhi events using the key-value mapper.<br>The generated maps will have keys and values as follows: <br>&nbsp;&nbsp;metric_name  -&gt; sweet_production_counter<br>&nbsp;&nbsp;metric_type  -&gt; counter<br>&nbsp;&nbsp;help  -&gt; &lt;help_string_of_metric&gt;<br>&nbsp;&nbsp;subtype  -&gt; null<br>&nbsp;&nbsp;name -&gt; &lt;value_of_label_name&gt;<br>&nbsp;&nbsp;quantity -&gt; &lt;value_of_label_quantity&gt;<br>&nbsp;&nbsp;value -&gt; &lt;value_of_metric&gt;<br></p>
+
+<p><span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span></p>
+<div class="codehilite"><pre><span></span>@source(type= &#39;prometheus&#39;, target.url= &#39;http://localhost:9080/metrics&#39;, metric.type= &#39;summary&#39;, metric.name= &#39;sweet_production_summary&#39;, @map(type= &#39;keyvalue&#39;))
+ define stream FooStream2(metric_name string, metric_type string, help string, subtype string, name string, quantity string, quantile string, value double);
+</pre></div>
+
+
+<p style="word-wrap: break-word">In this example, the prometheus source makes an http request to the 'target.url' and analyses the response. From the analysed response, the source retrieves the Prometheus summary metrics with the name, 'sweet_production_summary' and converts the filtered metrics into Siddhi events using the key-value mapper.<br>The generated maps have keys and values as follows: <br>&nbsp;&nbsp;metric_name  -&gt; sweet_production_summary<br>&nbsp;&nbsp;metric_type  -&gt; summary<br>&nbsp;&nbsp;help  -&gt; &lt;help_string_of_metric&gt;<br>&nbsp;&nbsp;subtype  -&gt; &lt;'sum'/'count'/'null'&gt;<br>&nbsp;&nbsp;name -&gt; &lt;value_of_label_name&gt;<br>&nbsp;&nbsp;quantity -&gt; &lt;value_of_label_quantity&gt;<br>&nbsp;&nbsp;quantile  -&gt; &lt;value of the quantile&gt;<br>&nbsp;&nbsp;value -&gt; &lt;value_of_metric&gt;<br></p>
+
+<p><span id="example-3" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 3</span></p>
+<div class="codehilite"><pre><span></span>@source(type= &#39;prometheus&#39;, target.url= &#39;http://localhost:9080/metrics&#39;, metric.type= &#39;histogram&#39;, metric.name= &#39;sweet_production_histogram&#39;, @map(type= &#39;keyvalue&#39;))
+define stream FooStream3(metric_name string, metric_type string, help string, subtype string, name string, quantity string, le string, value double);
+</pre></div>
+
+
+<p style="word-wrap: break-word">In this example, the prometheus source will make an http request to the 'target.url' and analyse the response. From the analysed response, the source retrieves the Prometheus histogram metrics with name 'sweet_production_histogram' and converts the filtered metrics into Siddhi events using the key-value mapper.<br>The generated maps will have keys and values as follows, <br>&nbsp;&nbsp;metric_name  -&gt; sweet_production_histogram<br>&nbsp;&nbsp;metric_type  -&gt; histogram<br>&nbsp;&nbsp;help  -&gt; &lt;help_string_of_metric&gt;<br>&nbsp;&nbsp;subtype  -&gt; &lt;'sum'/'count'/'bucket'&gt;<br>&nbsp;&nbsp;name -&gt; &lt;value_of_label_name&gt;<br>&nbsp;&nbsp;quantity -&gt; &lt;value_of_label_quantity&gt;<br>&nbsp;&nbsp;le  -&gt; &lt;value of the bucket&gt;<br>&nbsp;&nbsp;value -&gt; &lt;value_of_metric&gt;<br></p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../.." title="Welcome to WSO2 Siddhi IO Prometheus" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Welcome to WSO2 Siddhi IO Prometheus
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../.md/" title="" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2011 - 2018 WSO2
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/wso2/prometheus" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://www.linkedin.com/groups/13553064" class="md-footer-social__link fa fa-linkedin"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.a59e2a89.js"></script>
+      
+      <script>app.initialize({version:"0.17.4",url:{base:"../.."}})</script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+    
+    
+      
+        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-103065-28","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
+      
+    
+  </body>
+</html>
