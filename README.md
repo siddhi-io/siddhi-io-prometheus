@@ -1,4 +1,4 @@
-??Siddhi-io-prometheus
+Siddhi-io-prometheus
 ======================================
 
 The **siddhi-io-prometheus extension** is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a>. The Prometheus-sink publishes Siddhi events as Prometheus metrics and expose them to Prometheus 
