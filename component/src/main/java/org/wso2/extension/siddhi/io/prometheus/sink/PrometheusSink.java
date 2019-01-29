@@ -72,7 +72,7 @@ import static java.lang.Double.parseDouble;
 @Extension(
         name = "prometheus",
         namespace = "sink",
-        description = "The sink publishes events processed by WSO2 SP into Prometheus metrics and exposes " +
+        description = "The sink publishes events processed by Siddhi into Prometheus metrics and exposes " +
                 "them to Prometheus server at the provided url. The created metrics can be published to " +
                 "Prometheus through 'server' or 'pushGateway' publishing modes depending on the preference of the " +
                 "user. The server mode exposes the metrics through an http server at the provided url and the " +
