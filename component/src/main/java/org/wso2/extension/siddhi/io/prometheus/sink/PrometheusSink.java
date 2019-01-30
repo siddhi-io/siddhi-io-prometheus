@@ -72,54 +72,54 @@ import static java.lang.Double.parseDouble;
 @Extension(
         name = "prometheus",
         namespace = "sink",
-        description = "The sink publishes events processed by Siddhi into Prometheus metrics and exposes " +
-                "them to Prometheus server at the provided url. The created metrics can be published to " +
-                "Prometheus through 'server' or 'pushGateway' publishing modes depending on the preference of the " +
-                "user. The server mode exposes the metrics through an http server at the provided url and the " +
-                "pushGateway mode pushes the metrics to pushGateway which must be running at the " +
-                "provided url.\n The metric types that are supported by Prometheus sink are counter, gauge, " +
-                "histogram and summary. The values and labels of the Prometheus metrics can be updated " +
-                "through the events. ",
+        description = "This sink publishes events processed by Siddhi into Prometheus metrics and exposes " +
+                "them to the Prometheus server at the specified URL. The created metrics can be published to " +
+                "Prometheus via 'server' or 'pushGateway', depending on your preference.\n " +
+                "The metric types that are supported by the Prometheus sink are 'counter', 'gauge', 'histogram', " +
+                "and 'summary'. The values and labels of the Prometheus metrics can be updated through the events. ",
         parameters = {
                 @Parameter(
                         name = "job",
-                        description = "This parameter specifies the job name of the metric. The name must be " +
-                                "the same job name as defined in the prometheus configuration file.",
+                        description = "This parameter specifies the job name of the metric. This must be " +
+                                "the same job name that is defined in the Prometheus configuration file.",
                         defaultValue = "siddhiJob",
                         optional = true,
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "publish.mode",
-                        description = "This parameter specifies the mode of exposing metrics to Prometheus server." +
-                                "The possible publishing modes are \'server\' and \'pushgateway\'.",
+                        description = "The mode in which the metrics need to be exposed to the Prometheus server." +
+                                "The possible publishing modes are \'server\' and \'pushgateway\'.The server mode " +
+                                "exposes the metrics through an HTTP server at the specified URL, and the " +
+                                "'pushGateway' mode pushes the metrics to the pushGateway that needs to be running at" +
+                                " the specified URL.",
                         defaultValue = "server",
                         optional = true,
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "push.url",
-                        description = "This parameter specifies the target url of the Prometheus pushGateway " +
-                                "where the pushGateway must be listening. This url should be previously " +
-                                "defined in prometheus configuration file as a target.",
+                        description = "This parameter specifies the target URL of the Prometheus pushGateway. This " +
+                                "is the URL at which the pushGateway must be listening. This URL needs to be " +
+                                "defined in the Prometheus configuration file as a target before it can be used here.",
                         optional = true,
                         defaultValue = "http://localhost:9091",
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "server.url",
-                        description = "This parameter specifies the url where the http server is initiated " +
-                                "to expose metrics for \'server\' publish mode. This url must be " +
-                                "previously defined in prometheus configuration file as a target.",
+                        description = "This parameter specifies the URL where the HTTP server is initiated " +
+                                "to expose metrics in the \'server\' publish mode. This URL needs to be defined in" +
+                                " the Prometheus configuration file as a target before it can be used here.",
                         optional = true,
                         defaultValue = "http://localhost:9080",
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "metric.type",
-                        description = "The type of Prometheus metric that has to be created at the sink.\n " +
-                                "The supported metric types are \'counter\', \'gauge\'," +
-                                " \'histogram\' and \'summary\'. ",
+                        description = "The type of Prometheus metric that needs to be created at the sink.\n " +
+                                "The supported metric types are \'counter\', \'gauge\',c\'histogram\' and " +
+                                "\'summary\'. ",
                         type = {DataType.STRING}
                 ),
                 @Parameter(
@@ -131,8 +131,8 @@ import static java.lang.Double.parseDouble;
                 ),
                 @Parameter(
                         name = "metric.name",
-                        description = "This parameter specifies the user preferred name for the metric. The metric " +
-                                "name must match the regex format, i.e., [a-zA-Z_:][a-zA-Z0-9_:]*. ",
+                        description = "This parameter allows you to assign a preferred name for the metric." +
+                                " The metric name must match the regex format, i.e., [a-zA-Z_:][a-zA-Z0-9_:]*. ",
                         optional = true,
                         defaultValue = "<stream_name>",
                         type = {DataType.STRING}
@@ -140,8 +140,8 @@ import static java.lang.Double.parseDouble;
                 @Parameter(
                         name = "buckets",
                         description = "The bucket values preferred by the user for histogram metrics. The bucket " +
-                                "values must be in 'string' format with each bucket value separated by a comma." +
-                                "\nThe expected format of the parameter is as follows: \n" +
+                                "values must be in the 'string' format with each bucket value separated by a comma " +
+                                "as shown in the example below.\n" +
                                 "\"2,4,6,8\"",
                         optional = true,
                         defaultValue = "null",
@@ -149,9 +149,9 @@ import static java.lang.Double.parseDouble;
                 ),
                 @Parameter(
                         name = "quantiles",
-                        description = "The user preferred quantile values for summary metrics. The quantile values " +
-                                "must be in 'string' format with each quantile value separated by a comma." +
-                                "\nThe expected format of the parameter is as follows: \n" +
+                        description = "This parameter allows you to specify quantile values for summary metrics " +
+                                "as preferred. The quantile values must be in the 'string' format with each " +
+                                "quantile value separated by a comma as shown in the example below.\n" +
                                 "\"0.5,0.75,0.95\"",
                         optional = true,
                         defaultValue = "null",
@@ -160,28 +160,28 @@ import static java.lang.Double.parseDouble;
                 @Parameter(
                         name = "quantile.error",
                         description = "The error tolerance value for calculating quantiles in summary metrics. " +
-                                "This must be a positive value though less than 1.",
+                                "This must be a positive value, but less than 1.",
                         optional = true,
                         defaultValue = "0.001",
                         type = {DataType.DOUBLE}
                 ),
                 @Parameter(
                         name = "value.attribute",
-                        description = "The name of the attribute in stream definition which specifies the metric " +
-                                "value. The defined value attribute must be included inside the stream attributes." +
-                                " The value of the 'value' attribute that is published through events, increase the" +
-                                " metric value for the counter and gauge metric types. For histogram and " +
-                                "summary metric types, the values are observed.",
+                        description = "The name of the attribute in the stream definition that specifies the metric " +
+                                "value. The defined 'value' attribute must be included in the stream definition." +
+                                " The system increases the metric value for the counter and gauge metric types by " +
+                                "the value of the 'value attribute. The system observes the value of the 'value' " +
+                                "attribute for the calculations of 'summary' and 'histogram' metric types.",
                         optional = true,
                         defaultValue = "value",
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "push.operation",
-                        description = "This parameter defines the mode for pushing metrics to pushGateway " +
+                        description = "This parameter defines the mode for pushing metrics to the pushGateway. " +
                                 "The available push operations are \'push\' and \'pushadd\'. " +
                                 "The operations differ according to the existing metrics in pushGateway where " +
-                                "\'push\' operation replaces the existing metrics and \'pushadd\' operation " +
+                                "\'push\' operation replaces the existing metrics, and \'pushadd\' operation " +
                                 "only updates the newly created metrics.",
                         optional = true,
                         defaultValue = "pushadd",
@@ -190,8 +190,8 @@ import static java.lang.Double.parseDouble;
                 @Parameter(
                         name = "grouping.key",
                         description = "This parameter specifies the grouping key of created metrics in key-value " +
-                                "pairs. Grouping key is used only in pushGateway mode in order to distinguish the " +
-                                "metrics from already existing metrics. \nThe expected format of the grouping key" +
+                                "pairs. The grouping key is used only in pushGateway mode in order to distinguish " +
+                                "the metrics from already existing metrics. \nThe expected format of the grouping key" +
                                 " is as follows:\n " +
                                 "\"'key1:value1','key2:value2'\"",
                         optional = true,
@@ -208,7 +208,7 @@ import static java.lang.Double.parseDouble;
                                         "define stream FooCountStream (Name String, quantity int, value int);\n",
                         description = " In the above example, the Prometheus-sink creates a counter metric " +
                                 "with the stream name and defined attributes as labels. The metric is exposed" +
-                                " through an http server at the target url."
+                                " through an HTTP server at the target URL."
                 ),
                 @Example(
                         syntax =
@@ -218,46 +218,48 @@ import static java.lang.Double.parseDouble;
                                         "define stream InventoryLevelStream (Name String, value int);\n",
                         description = " In the above example, the Prometheus-sink creates a gauge metric " +
                                 "with the stream name and defined attributes as labels." +
-                                "The metric is pushed to Prometheus pushGateway at the target url."
+                                "The metric is pushed to the Prometheus pushGateway at the target URL."
                 )
         },
         systemParameter = {
                 @SystemParameter(
                         name = "jobName",
-                        description = "This is the property that specifies the default job name for the metric. " +
-                                "The name must be the same job name as defined in the prometheus configuration file.",
+                        description = "This property specifies the default job name for the metric. " +
+                                "This job name must be the same as the job name defined in the Prometheus " +
+                                "configuration file.",
                         defaultValue = "siddhiJob",
                         possibleParameters = "Any string"
                 ),
                 @SystemParameter(
                         name = "publishMode",
-                        description = "The default publish mode for the Prometheus sink for exposing metrics to" +
+                        description = "The default publish mode for the Prometheus sink for exposing metrics to the" +
                                 " Prometheus server. The mode can be either \'server\' or \'pushgateway\'. ",
                         defaultValue = "server",
                         possibleParameters = "server or pushgateway"
                 ),
                 @SystemParameter(
                         name = "serverURL",
-                        description = "This property configures the url where the http server will be initiated " +
-                                "to expose metrics. This url must be previously defined in prometheus " +
-                                "configuration file as a target to be identified by Prometheus. By default, " +
-                                "the http server will be initiated at \'http://localhost:9080\'",
+                        description = "This property configures the URL where the HTTP server is initiated " +
+                                "to expose metrics. This URL needs to be defined in the Prometheus configuration " +
+                                "file as a target to be identified by Prometheus before it can be used here. " +
+                                "By default, the HTTP server is initiated at \'http://localhost:9080\'.",
                         defaultValue = "http://localhost:9080",
                         possibleParameters = "Any valid URL"
                 ),
                 @SystemParameter(
                         name = "pushURL",
-                        description = "This property configures the target url of Prometheus pushGateway " +
-                                "where the pushGateway must be listening. This url should be previously " +
-                                "defined in prometheus configuration file as a target to be identified by Prometheus.",
+                        description = "This property configures the target URL of the Prometheus pushGateway " +
+                                "(where the pushGateway needs to listen). This URL needs to be defined in the " +
+                                "Prometheus configuration file as a target to be identified by Prometheus before it " +
+                                "can be used here.",
                         defaultValue = "http://localhost:9091",
                         possibleParameters = "Any valid URL"
                 ),
                 @SystemParameter(
                         name = "groupingKey",
                         description = "This property configures the grouping key of created metrics in key-value " +
-                                "pairs. Grouping key is used only in pushGateway mode in order to distinguish the " +
-                                "metrics from already existing metrics under same job. " +
+                                "pairs. Grouping key is used only in pushGateway mode in order to distinguish these " +
+                                "metrics from already existing metrics under the same job. " +
                                 "The expected format of the grouping key is as follows: " +
                                 "\"'key1:value1','key2:value2'\" .",
                         defaultValue = "null",

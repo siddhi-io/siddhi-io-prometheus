@@ -54,24 +54,24 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
 @Extension(
         name = "prometheus",
         namespace = "source",
-        description = "The source consumes Prometheus metrics which are exported from the specified url as " +
-                "Siddhi events, by making http requests to the url. According to the source configuration, it " +
-                "analyses metrics from the text response and sends them as Siddhi events through key-value mapping." +
-                "The user can retrieve metrics of types including, counter, gauge, histogram and summary. Since the" +
-                " source retrieves the metrics from a text response of the target, it is advised to use \'string\' " +
-                "as the attribute type for the attributes that correspond to Prometheus metric labels. Further, the" +
-                " Prometheus metric value is passed through the event as 'value'. Therefore, it is advisable to " +
-                "have an attribute with the name 'value' in the stream. \nThe supported types for the attribute, " +
-                "'value' are INT, LONG, FLOAT and DOUBLE.",
+        description = "This source consumes Prometheus metrics that are exported from a specified URL as " +
+                "Siddhi events by sending HTTP requests to the URL. Based on the source configuration, it " +
+                "analyzes metrics from the text response and sends them as Siddhi events through key-value mapping." +
+                "The user can retrieve metrics of the 'including', 'counter', 'gauge', 'histogram', and 'summary' " +
+                "types. The source retrieves the metrics from a text response of the target. Therefore, it is " +
+                "you need to use \'string\' as the attribute type for the attributes that correspond with the " +
+                "Prometheus metric labels. Further, the Prometheus metric value is passed through the event as " +
+                "'value'. This requires you to include an attribute named 'value' in the stream definition. \n" +
+                "The supported types for the 'value' attribute are 'INT', 'LONG', 'FLOAT', and 'DOUBLE'.",
         parameters = {
                 @Parameter(name = "target.url",
-                        description = "This property specifies the target url where the Prometheus metrics are " +
-                                "exported in text format.",
+                        description = "This property specifies the target URL to which the Prometheus metrics are " +
+                                "exported in the 'TEXT' format.",
                         type = DataType.STRING),
                 @Parameter(
                         name = "scrape.interval",
                         description = "This property specifies the time interval in seconds within which the source " +
-                                "should make an HTTP request to the  provided target url.",
+                                "should send an HTTP request to the specified target URL.",
                         defaultValue = "60",
                         optional = true,
                         type = {DataType.INT}
@@ -79,7 +79,7 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @Parameter(
                         name = "scrape.timeout",
                         description = "This property is the time duration in seconds for a scrape request to get " +
-                                "timed-out if the server at the url does not respond.",
+                                "timed-out if the server at the URL does not respond.",
                         defaultValue = "10",
                         optional = true,
                         type = {DataType.INT}
@@ -95,7 +95,7 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @Parameter(
                         name = "metric.name",
                         description = "This property specifies the name of the metrics that are to be fetched. The " +
-                                "metric name must match the regex format, i.e., [a-zA-Z_:][a-zA-Z0-9_:]* .",
+                                "metric name must match the regex format, i.e., '[a-zA-Z_:][a-zA-Z0-9_:]* '.",
                         defaultValue = "Stream name",
                         optional = true,
                         type = {DataType.STRING}
@@ -104,26 +104,27 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                         name = "metric.type",
                         description = "This property specifies the type of the Prometheus metric that is required " +
                                 "to be fetched. \n The supported metric types are \'counter\', \'gauge\'," +
-                                "\" \'histogram\' and \'summary\'. ",
+                                "\" \'histogram\', and \'summary\'. ",
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "username",
-                        description = "This property specifies the username that has to be added in the authorization" +
-                                " header of the HTTP request, if basic authentication is enabled at the target. It " +
-                                "is required to specify both username and password to enable basic authentication. " +
-                                "If one of the parameter is not given by user then an error is logged in the console.",
+                        description = "This property specifies the username that needs to be added in the " +
+                                "authorization header of the HTTP request if basic authentication is enabled at the" +
+                                " target. It is required to specify both the username and the password to enable " +
+                                "basic authentication. If you do not provide a value for one or both of these " +
+                                "parameters, an error is logged in the console.",
                         defaultValue = "<empty_string>",
                         optional = true,
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "password",
-                        description = "This property specifies the password that has to be added in the authorization" +
-                                " header of the request, if the basic authentication is enabled at the target. It " +
-                                "is required to specify both the username and password to enable basic authentication" +
-                                ". If one of the parameter is not given by user, then an error is " +
-                                "logged in the console.",
+                        description = "This property specifies the password that needs to be added in the " +
+                                "authorization header of the HTTP request if basic authentication is enabled at the" +
+                                " target. It is required to specify both the username and the password to enable " +
+                                "basic authentication. If you do not provide a value for one or both of these " +
+                                "parameters, an error is logged in the console.",
                         defaultValue = "<empty_string>",
                         optional = true,
                         type = {DataType.STRING}
@@ -131,22 +132,22 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @Parameter(
                         name = "client.truststore.file",
                         description = "The file path to the location of the truststore to which the client needs to " +
-                                "send https requests through 'https' protocol.",
+                                "send HTTPS requests via the 'HTTPS' protocol.",
                         defaultValue = "<empty_string>",
                         optional = true,
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "client.truststore.password",
-                        description = " The password for client-truststore to send https requests. A custom password " +
-                                "can be specified if required. ",
+                        description = " The password for the client-truststore. This is required to send HTTPS " +
+                                "requests. A custom password can be specified if required. ",
                         defaultValue = "<empty_string>",
                         optional = true,
                         type = {DataType.STRING}
                 ),
                 @Parameter(
                         name = "headers",
-                        description = "Headers that should be included as HTTP request headers in the request. " +
+                        description = "Headers that need to be included as HTTP request headers in the request. " +
                                 "\nThe format of the supported input is as follows, \n" +
                                 "\"\'header1:value1\',\'header2:value2\'\"",
                         defaultValue = "<empty_string>",
@@ -156,7 +157,7 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @Parameter(
                         name = "job",
                         description = " This property defines the job name of the exported Prometheus metrics " +
-                                "that has to be fetched.",
+                                "that needs to be fetched.",
                         defaultValue = "<empty_string>",
                         optional = true,
                         type = {DataType.STRING}
@@ -164,7 +165,7 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @Parameter(
                         name = "instance",
                         description = "This property defines the instance of the exported Prometheus metrics " +
-                                "that has to be fetched.",
+                                "that needs to be fetched.",
                         defaultValue = "<empty_string>",
                         optional = true,
                         type = {DataType.STRING}
@@ -172,8 +173,9 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @Parameter(
                         name = "grouping.key",
                         description = "This parameter specifies the grouping key of the required metrics in " +
-                                "key-value pairs. Grouping key is used if the metrics are exported by Prometheus" +
-                                " pushGateway in order to distinguish the metrics from already existing metrics.\n " +
+                                "key-value pairs. The grouping key is used if the metrics are exported by Prometheus" +
+                                " 'pushGateway' in order to distinguish those metrics from already existing " +
+                                "metrics.\n " +
                                 "The expected format of the grouping key is as follows: \n" +
                                 "\"\'key1:value1\',\'key2:value2\'\"",
                         defaultValue = "<empty_string>",
@@ -188,11 +190,11 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                                 "'keyvalue'))\n" +
                                 "define stream FooStream1(metric_name string, metric_type string, help string, " +
                                 "subtype string, name string, quantity string, value double);\n",
-                        description = "In this example, the prometheus source makes an http request to the " +
-                                "\'target.url\' and analyse the response. From the analysed response, the source " +
-                                "retrieves the Prometheus counter metrics with the name, 'sweet_production_counter' " +
+                        description = "In this example, the Prometheus source sends an HTTP request to the " +
+                                "\'target.url\' and analyzes the response. From the analyzed response, the source " +
+                                "retrieves the Prometheus counter metrics with the 'sweet_production_counter' name" +
                                 "and converts the filtered metrics into Siddhi events using the key-value mapper." +
-                                "\nThe generated maps will have keys and values as follows: \n" +
+                                "\nThe generated maps have keys and values as follows: \n" +
                                 "  metric_name  -> sweet_production_counter\n" +
                                 "  metric_type  -> counter\n" +
                                 "  help  -> <help_string_of_metric>\n" +
@@ -207,9 +209,9 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                                 "'keyvalue'))\n define stream FooStream2(metric_name string, metric_type string, help" +
                                 " string, subtype string, name string, quantity string, quantile string, value " +
                                 "double);\n",
-                        description = "In this example, the prometheus source makes an http request to the " +
-                                "\'target.url\' and analyses the response. From the analysed response, the source " +
-                                "retrieves the Prometheus summary metrics with the name, 'sweet_production_summary' " +
+                        description = "In this example, the Prometheus source sends an HTTP request to the " +
+                                "\'target.url\' and analyzes the response. From the analysed response, the source " +
+                                "retrieves the Prometheus summary metrics with the 'sweet_production_summary' name" +
                                 "and converts the filtered metrics into Siddhi events using the key-value mapper." +
                                 "\nThe generated maps have keys and values as follows: \n" +
                                 "  metric_name  -> sweet_production_summary\n" +
@@ -227,11 +229,12 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                                 "'keyvalue'))\n" +
                                 "define stream FooStream3(metric_name string, metric_type string, help string, " +
                                 "subtype string, name string, quantity string, le string, value double);\n",
-                        description = "In this example, the prometheus source will make an http request to the " +
-                                "\'target.url\' and analyse the response. From the analysed response, the source " +
-                                "retrieves the Prometheus histogram metrics with name 'sweet_production_histogram' " +
-                                "and converts the filtered metrics into Siddhi events using the key-value mapper." +
-                                "\nThe generated maps will have keys and values as follows, \n" +
+                        description = "In this example, the prometheus source sends an HTTP request to the " +
+                                "\'target.url\' and analyzes the response. From the analyzed response, the source " +
+                                "retrieves the Prometheus histogram metrics with the 'sweet_production_histogram' " +
+                                "name and converts the filtered metrics into Siddhi events using the key-value " +
+                                "mapper." +
+                                "\nThe generated maps have keys and values as follows, \n" +
                                 "  metric_name  -> sweet_production_histogram\n" +
                                 "  metric_type  -> histogram\n" +
                                 "  help  -> <help_string_of_metric>\n" +
@@ -245,59 +248,62 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
         systemParameter = {
                 @SystemParameter(
                         name = "scrapeInterval",
-                        description = "The default time interval in seconds for the Prometheus source to make HTTP " +
+                        description = "The default time interval in seconds for the Prometheus source to send HTTP " +
                                 "requests to the target URL.",
                         defaultValue = "60",
                         possibleParameters = "Any integer value"
                 ),
                 @SystemParameter(
                         name = "scrapeTimeout",
-                        description = "This default time duration (in seconds) for an HTTP request to time-out if the" +
+                        description = "The default time duration (in seconds) for an HTTP request to time-out if the" +
                                 " server at the URL does not respond. ",
                         defaultValue = "10",
                         possibleParameters = "Any integer value"
                 ),
                 @SystemParameter(
                         name = "scheme",
-                        description = "The scheme of the target for Prometheus source to make HTTP requests." +
-                                " The supported schemes are HTTP and HTTPS.",
+                        description = "The scheme of the target for the Prometheus source to send HTTP requests." +
+                                " The supported schemes are 'HTTP' and 'HTTPS'.",
                         defaultValue = "HTTP",
                         possibleParameters = "HTTP or HTTPS"
                 ),
                 @SystemParameter(
                         name = "username",
-                        description = "The username that has to be added in the authorization header of the HTTP " +
-                                "request, if basic authentication is enabled at the target. It is required to " +
-                                "specify both username and password to enable basic authentication. If one of " +
-                                "the parameter is not given by user then an error is logged in the console.",
+                        description = "The username that needs to be added in the authorization header of the HTTP " +
+                                "request if basic authentication is enabled at the target. It is required to " +
+                                "specify both the username and password to enable basic authentication. If you do" +
+                                " not specify a value for one or both of these parameters, an error is logged in " +
+                                "the console.",
                         defaultValue = "<empty_string>",
                         possibleParameters = "Any string"
                 ),
                 @SystemParameter(
                         name = "password",
-                        description = "The password that has to be added in the authorization header of the HTTP " +
-                                "request, if basic authentication is enabled at the target. It is required to " +
-                                "specify both username and password to enable basic authentication. If one of" +
-                                " the parameter is not given by user then an error is logged in the console.",
+                        description = "The password that needs to be added in the authorization header of the HTTP " +
+                                "request if basic authentication is enabled at the target. It is required to " +
+                                "specify both the username and password to enable basic authentication. If you do" +
+                                " not specify a value for one or both of these parameters, an error is logged in " +
+                                "the console.",
                         defaultValue = "<empty_string>",
                         possibleParameters = "Any string"
                 ),
                 @SystemParameter(
                         name = "trustStoreFile",
-                        description = "The default file path to the location of truststore that the client needs " +
-                                "to send for HTTPS requests through 'HTTPS' protocol.",
+                        description = "The default file path to the location of truststore that the client needs to" +
+                                " access in order to send HTTPS requests through 'HTTPS' protocol.",
                         defaultValue = "${carbon.home}/resources/security/client-truststore.jks",
                         possibleParameters = "Any valid path for the truststore file"
                 ),
                 @SystemParameter(
                         name = "trustStorePassword",
-                        description = "The default password for the client-truststore to send HTTPS requests.",
+                        description = "The default password for the client-truststore that the client needs to access" +
+                                " in order to send HTTPS requests through 'HTTPS' protocol.",
                         defaultValue = "wso2carbon",
                         possibleParameters = "Any string"
                 ),
                 @SystemParameter(
                         name = "headers",
-                        description = "The headers that should be included as HTTP request headers in the scrape " +
+                        description = "The headers that need to be included as HTTP request headers in the scrape " +
                                 "request. \nThe format of the supported input is as follows, \n" +
                                 "\"\'header1:value1\',\'header2:value2\'\"",
                         defaultValue = "<empty_string>",
@@ -306,22 +312,22 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
                 @SystemParameter(
                         name = "job",
                         description = " The default job name of the exported Prometheus metrics " +
-                                "that has to be fetched.",
+                                "that needs to be fetched.",
                         defaultValue = "<empty_string>",
                         possibleParameters = "Any valid job name"
                 ),
                 @SystemParameter(
                         name = "instance",
                         description = "The default instance of the exported Prometheus metrics " +
-                                "that has to be fetched.",
+                                "that needs to be fetched.",
                         defaultValue = "<empty_string>",
                         possibleParameters = "Any valid instance name"
                 ),
                 @SystemParameter(
                         name = "groupingKey",
                         description = "The default grouping key of the required Prometheus metrics in key-value " +
-                                "pairs. Grouping key is used if the metrics are exported by Prometheus pushGateway " +
-                                "in order to distinguish the metrics from already existing metrics. " +
+                                "pairs. The grouping key is used if the metrics are exported by the Prometheus" +
+                                " pushGateway in order to distinguish these metrics from already existing metrics. " +
                                 "\nThe expected format of the grouping key is as follows: \n" +
                                 "\"\'key1:value1\',\'key2:value2\'\"",
                         defaultValue = "<empty_string>",
