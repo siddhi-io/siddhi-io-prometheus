@@ -9,6 +9,14 @@ Siddhi events.
 
 * Prometheus server instance should be started.
 * Prometheus Pushgateway should be started. (optional)
+* Download and copy the prometheus client jars to the {WSO2SPHome}/lib directory as follows.
+    * Download the following jars from <a target="_blank" href="https://mvnrepository.com/artifact/io.prometheus">
+    https://mvnrepository.com/artifact/io.prometheus</a>
+        * simpleclient_common-*.jar
+        * simpleclient-*.jar
+        * simpleclient_httpserver-*.jar
+        * simpleclient_pushgateway-*.jar
+    * Copy the downloaded jars into {WSO2SPHome}/lib directory.
 
 Find some useful links below:
 * <a target="_blank" href="https://github.com/wso2-extensions/siddhi-io-prometheus">Source code</a>
@@ -17,7 +25,7 @@ Find some useful links below:
 
 ## Latest API Docs
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.2">1.0.2</a>.
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.3">1.0.3</a>.
 
 ## How to use
 
@@ -50,8 +58,8 @@ Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/si
 
 ## Features
 
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.2/#prometheus-sink">prometheus</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink">(Sink)</a>*<br><div style="padding-left: 1em;"><p>This sink publishes events processed by Siddhi into Prometheus metrics and exposes them to the Prometheus server at the specified URL. The created metrics can be published to Prometheus via 'server' or 'pushGateway', depending on your preference.<br>&nbsp;The metric types that are supported by the Prometheus sink are 'counter', 'gauge', 'histogram', and 'summary'. The values and labels of the Prometheus metrics can be updated through the events. </p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.2/#prometheus-source">prometheus</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source">(Source)</a>*<br><div style="padding-left: 1em;"><p>This source consumes Prometheus metrics that are exported from a specified URL as Siddhi events by sending HTTP requests to the URL. Based on the source configuration, it analyzes metrics from the text response and sends them as Siddhi events through key-value mapping.The user can retrieve metrics of the 'including', 'counter', 'gauge', 'histogram', and 'summary' types. The source retrieves the metrics from a text response of the target. Therefore, it is you need to use 'string' as the attribute type for the attributes that correspond with the Prometheus metric labels. Further, the Prometheus metric value is passed through the event as 'value'. This requires you to include an attribute named 'value' in the stream definition. <br>The supported types for the 'value' attribute are 'INT', 'LONG', 'FLOAT', and 'DOUBLE'.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.3/#prometheus-sink">prometheus</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink">(Sink)</a>*<br><div style="padding-left: 1em;"><p>This sink publishes events processed by Siddhi into Prometheus metrics and exposes them to the Prometheus server at the specified URL. The created metrics can be published to Prometheus via 'server' or 'pushGateway', depending on your preference.<br>&nbsp;The metric types that are supported by the Prometheus sink are 'counter', 'gauge', 'histogram', and 'summary'. The values and labels of the Prometheus metrics can be updated through the events. </p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-io-prometheus/api/1.0.3/#prometheus-source">prometheus</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source">(Source)</a>*<br><div style="padding-left: 1em;"><p>This source consumes Prometheus metrics that are exported from a specified URL as Siddhi events by sending HTTP requests to the URL. Based on the source configuration, it analyzes metrics from the text response and sends them as Siddhi events through key-value mapping.The user can retrieve metrics of the 'including', 'counter', 'gauge', 'histogram', and 'summary' types. The source retrieves the metrics from a text response of the target. Therefore, it is you need to use 'string' as the attribute type for the attributes that correspond with the Prometheus metric labels. Further, the Prometheus metric value is passed through the event as 'value'. This requires you to include an attribute named 'value' in the stream definition. <br>The supported types for the 'value' attribute are 'INT', 'LONG', 'FLOAT', and 'DOUBLE'.</p></div>
 
 ## How to contribute
 * Report issues at <a target="_blank" href="https://github.com/wso2-extensions/siddhi-io-prometheus/issues">GitHub Issue Tracker</a>.
