@@ -9,6 +9,14 @@ Siddhi events.
 
 * Prometheus server instance should be started.
 * Prometheus Pushgateway should be started. (optional)
+* Download and copy the prometheus client jars to the {WSO2SPHome}/lib directory as follows.
+    * Download the following jars from <a target="_blank" href="https://mvnrepository.com/artifact/io.prometheus">
+    https://mvnrepository.com/artifact/io.prometheus</a>
+        * simpleclient_common-*.jar
+        * simpleclient-*.jar
+        * simpleclient_httpserver-*.jar
+        * simpleclient_pushgateway-*.jar
+    * Copy the downloaded jars into {WSO2SPHome}/lib directory.
 
 Find some useful links below:
 * <a target="_blank" href="https://github.com/wso2-extensions/siddhi-io-prometheus">Source code</a>
