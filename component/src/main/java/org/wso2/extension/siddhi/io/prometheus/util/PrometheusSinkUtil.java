@@ -20,8 +20,8 @@ package org.wso2.extension.siddhi.io.prometheus.util;
 
 
 import io.prometheus.client.Collector;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.util.config.ConfigReader;
 
 import java.util.Arrays;
 import java.util.HashMap;

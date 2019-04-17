@@ -18,8 +18,8 @@
 
 package org.wso2.extension.siddhi.io.prometheus.source;
 
+import io.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 
 import java.util.Locale;
 

@@ -22,26 +22,29 @@ import io.prometheus.client.Collector;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.HTTPServer;
 import io.prometheus.client.exporter.PushGateway;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.SystemParameter;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiAppContext;
+import io.siddhi.core.exception.ConnectionUnavailableException;
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.stream.ServiceDeploymentInfo;
+import io.siddhi.core.stream.output.sink.Sink;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.core.util.transport.DynamicOptions;
+import io.siddhi.core.util.transport.OptionHolder;
+import io.siddhi.query.api.annotation.Annotation;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.definition.StreamDefinition;
+import io.siddhi.query.api.exception.AttributeNotExistException;
 import org.apache.log4j.Logger;
 import org.wso2.extension.siddhi.io.prometheus.sink.util.PrometheusMetricBuilder;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusSinkUtil;
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.SystemParameter;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.stream.output.sink.Sink;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.core.util.transport.DynamicOptions;
-import org.wso2.siddhi.core.util.transport.OptionHolder;
-import org.wso2.siddhi.query.api.annotation.Annotation;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.definition.StreamDefinition;
-import org.wso2.siddhi.query.api.exception.AttributeNotExistException;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -268,7 +271,7 @@ import static java.lang.Double.parseDouble;
         }
 )
 
-public class PrometheusSink extends Sink {
+public class PrometheusSink extends Sink<PrometheusSink.PrometheusSinkState> {
     private static final Logger log = Logger.getLogger(PrometheusSink.class);
 
     private String jobName;
@@ -299,20 +302,26 @@ public class PrometheusSink extends Sink {
     }
 
     @Override
+    protected ServiceDeploymentInfo exposeServiceDeploymentInfo() {
+
+        return null;
+    }
+
+    @Override
     public String[] getSupportedDynamicOptions() {
         return new String[0];
     }
 
     @Override
-    protected void init(StreamDefinition outputstreamDefinition, OptionHolder optionHolder, ConfigReader configReader,
-                        SiddhiAppContext siddhiAppContext) {
-        String streamID = outputstreamDefinition.getId();
+    protected StateFactory<PrometheusSinkState> init(StreamDefinition outputStreamDefinition, OptionHolder optionHolder,
+                                                     ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
+        String streamID = outputStreamDefinition.getId();
         if (!optionHolder.isOptionExists(PrometheusConstants.METRIC_TYPE)) {
             throw new SiddhiAppCreationException("The mandatory field \'metric.type\' is not found in Prometheus " +
                     "sink associated with stream \'" + streamID + " \'");
         }
         //check for custom mapping
-        List<Annotation> annotations = outputstreamDefinition.getAnnotations();
+        List<Annotation> annotations = outputStreamDefinition.getAnnotations();
         for (Annotation annotation : annotations) {
             List<Annotation> mapAnnotation = annotation.getAnnotations(PrometheusConstants.MAP_ANNOTATION);
             for (Annotation annotationMap : mapAnnotation) {
@@ -332,7 +341,7 @@ public class PrometheusSink extends Sink {
                 PrometheusSinkUtil.configurePublishMode(configReader));
         this.buckets = optionHolder.validateAndGetStaticValue(PrometheusConstants.BUCKET_DEFINITION, EMPTY_STRING);
         this.quantiles = optionHolder.validateAndGetStaticValue(PrometheusConstants.QUANTILES_DEFINITION, EMPTY_STRING);
-        this.attributes = outputstreamDefinition.getAttributeList()
+        this.attributes = outputStreamDefinition.getAttributeList()
                 .stream().map(Attribute::getName).collect(Collectors.toList());
         this.metricName = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.METRIC_NAME, streamID.trim());
@@ -344,7 +353,8 @@ public class PrometheusSink extends Sink {
         this.pushOperation = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.PUSH_DEFINITION, PrometheusConstants.PUSH_ADD_OPERATION).trim();
         this.groupingKey = PrometheusSinkUtil.populateGroupingKey(optionHolder.validateAndGetStaticValue(
-              PrometheusConstants.GROUPING_KEY_DEFINITION, PrometheusSinkUtil.configureGroupinKey(configReader)).trim(),
+                PrometheusConstants.GROUPING_KEY_DEFINITION,
+                PrometheusSinkUtil.configureGroupinKey(configReader)).trim(),
                 streamID);
         this.valueAttribute = optionHolder.validateAndGetStaticValue(
                 PrometheusConstants.VALUE_ATTRIBUTE, VALUE_STRING).trim();
@@ -379,7 +389,7 @@ public class PrometheusSink extends Sink {
 
         // checking for value attribute and its type in stream definintion
         try {
-            Attribute.Type valueType = outputstreamDefinition.getAttributeType(valueAttribute);
+            Attribute.Type valueType = outputStreamDefinition.getAttributeType(valueAttribute);
             if (valueType.equals(Attribute.Type.STRING) || valueType.equals(Attribute.Type.BOOL) ||
                     valueType.equals(Attribute.Type.OBJECT)) {
                 throw new SiddhiAppCreationException("The field value attribute \'" + valueAttribute + " \'contains " +
@@ -424,10 +434,12 @@ public class PrometheusSink extends Sink {
             default:
                 //default execution is not needed
         }
+        return () -> new PrometheusSinkState();
     }
 
     @Override
-    public void publish(Object payload, DynamicOptions dynamicOptions) throws ConnectionUnavailableException {
+    public void publish(Object payload, DynamicOptions dynamicOptions, PrometheusSinkState state)
+            throws ConnectionUnavailableException {
         Map<String, Object> attributeMap = (Map<String, Object>) payload;
         String[] labels;
         double value = parseDouble(attributeMap.get(valueAttribute).toString());
@@ -447,7 +459,7 @@ public class PrometheusSink extends Sink {
                 }
             } catch (IOException e) {
                 log.error("Unable to establish connection for Prometheus sink associated with " +
-                                "stream \'" + getStreamDefinition().getId() + "\' at " + pushURL);
+                        "stream \'" + getStreamDefinition().getId() + "\' at " + pushURL);
                 throw new ConnectionUnavailableException("Unable to establish connection for Prometheus sink " +
                         "associated with stream \'" + getStreamDefinition().getId() + "\' at " + pushURL, e);
             }
@@ -521,21 +533,6 @@ public class PrometheusSink extends Sink {
         }
     }
 
-    @Override
-    public Map<String, Object> currentState() {
-        Map<String, Object> currentMetrics = new HashMap<>();
-        currentMetrics.put(PrometheusConstants.REGISTERED_METRICS, assignRegisteredMetrics());
-        return currentMetrics;
-    }
-
-    @Override
-    public void restoreState(Map<String, Object> map) {
-        Object currentMetricSample = map.get(PrometheusConstants.REGISTERED_METRICS);
-        if (!currentMetricSample.equals(EMPTY_STRING)) {
-            registeredMetrics = currentMetricSample.toString();
-        }
-    }
-
     private String assignRegisteredMetrics() {
         Enumeration<Collector.MetricFamilySamples> registeredMetricSamples = prometheusMetricBuilder.
                 getRegistry().metricFamilySamples();
@@ -547,6 +544,29 @@ public class PrometheusSink extends Sink {
             }
         }
         return "";
+    }
+
+    class PrometheusSinkState extends State {
+
+        @Override
+        public boolean canDestroy() {
+            return false;
+        }
+
+        @Override
+        public Map<String, Object> snapshot() {
+            Map<String, Object> currentMetrics = new HashMap<>();
+            currentMetrics.put(PrometheusConstants.REGISTERED_METRICS, assignRegisteredMetrics());
+            return currentMetrics;
+        }
+
+        @Override
+        public void restore(Map<String, Object> map) {
+            Object currentMetricSample = map.get(PrometheusConstants.REGISTERED_METRICS);
+            if (!currentMetricSample.equals(EMPTY_STRING)) {
+                registeredMetrics = currentMetricSample.toString();
+            }
+        }
     }
 }
 

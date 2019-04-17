@@ -18,24 +18,27 @@
 
 package org.wso2.extension.siddhi.io.prometheus.source;
 
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.SystemParameter;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiAppContext;
+import io.siddhi.core.exception.ConnectionUnavailableException;
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.stream.ServiceDeploymentInfo;
+import io.siddhi.core.stream.input.source.Source;
+import io.siddhi.core.stream.input.source.SourceEventListener;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.core.util.transport.OptionHolder;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.exception.AttributeNotExistException;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.messaging.Header;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusSourceUtil;
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.SystemParameter;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.stream.input.source.Source;
-import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.core.util.transport.OptionHolder;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.AttributeNotExistException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -336,7 +339,7 @@ import static org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants.E
         }
 )
 
-public class PrometheusSource extends Source {
+public class PrometheusSource extends Source<PrometheusSource.PrometheusSourceState> {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private String targetURL;
     private String streamName;
@@ -347,13 +350,14 @@ public class PrometheusSource extends Source {
     private static final Logger log = Logger.getLogger(PrometheusSource.class);
 
     @Override
-    public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
-                     String[] requestedTransportPropertyNames, ConfigReader configReader,
-                     SiddhiAppContext siddhiAppContext) {
+    public StateFactory<PrometheusSourceState> init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
+                                                    String[] requestedTransportPropertyNames, ConfigReader configReader,
+                                                    SiddhiAppContext siddhiAppContext) {
         streamName = sourceEventListener.getStreamDefinition().getId();
         initPrometheusScraper(optionHolder, configReader, sourceEventListener, siddhiAppContext);
         configureMetricAnalyser(optionHolder, configReader, siddhiAppContext);
         prometheusScraper.createConnectionChannel();
+        return () -> new PrometheusSourceState();
     }
 
     private void initPrometheusScraper(OptionHolder optionHolder, ConfigReader configReader,
@@ -477,12 +481,19 @@ public class PrometheusSource extends Source {
     }
 
     @Override
+    protected ServiceDeploymentInfo exposeServiceDeploymentInfo() {
+
+        return null;
+    }
+
+    @Override
     public Class[] getOutputEventClasses() {
         return new Class[]{Map.class};
     }
 
     @Override
-    public void connect(ConnectionCallback connectionCallback) throws ConnectionUnavailableException {
+    public void connect(ConnectionCallback connectionCallback, PrometheusSourceState state)
+            throws ConnectionUnavailableException {
         PrometheusScraper.CompletionCallback completionCallback = (Throwable error) ->
         {
             if (error.getClass().equals(ConnectionUnavailableException.class)) {
@@ -520,16 +531,24 @@ public class PrometheusSource extends Source {
         prometheusScraper.resume();
     }
 
-    @Override
-    public Map<String, Object> currentState() {
-        Map<String, Object> currentState = new HashMap<>();
-        currentState.put(PrometheusConstants.LAST_RETRIEVED_SAMPLES, prometheusScraper.getLastValidResponse());
-        return currentState;
-    }
+    class PrometheusSourceState extends State {
 
-    @Override
-    public void restoreState(Map<String, Object> map) {
-        prometheusScraper.setLastValidResponse((List<String>) map.get(PrometheusConstants.LAST_RETRIEVED_SAMPLES));
+        @Override
+        public boolean canDestroy() {
+            return false;
+        }
+
+        @Override
+        public Map<String, Object> snapshot() {
+            Map<String, Object> currentState = new HashMap<>();
+            currentState.put(PrometheusConstants.LAST_RETRIEVED_SAMPLES, prometheusScraper.getLastValidResponse());
+            return currentState;
+        }
+
+        @Override
+        public void restore(Map<String, Object> map) {
+            prometheusScraper.setLastValidResponse((List<String>) map.get(PrometheusConstants.LAST_RETRIEVED_SAMPLES));
+        }
     }
 }
 
