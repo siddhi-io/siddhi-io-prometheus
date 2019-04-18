@@ -26,7 +26,7 @@ import io.prometheus.client.Histogram;
 import io.prometheus.client.SimpleCollector;
 import io.prometheus.client.SimpleCollector.Builder;
 import io.prometheus.client.Summary;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.exception.SiddhiAppCreationException;
 
 import java.net.MalformedURLException;
 import java.net.URL;

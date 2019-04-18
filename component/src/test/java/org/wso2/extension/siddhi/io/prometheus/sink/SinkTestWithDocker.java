@@ -18,6 +18,15 @@
 
 package org.wso2.extension.siddhi.io.prometheus.sink;
 
+import io.siddhi.core.SiddhiAppRuntime;
+import io.siddhi.core.SiddhiManager;
+import io.siddhi.core.event.Event;
+import io.siddhi.core.exception.CannotRestoreSiddhiAppStateException;
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.stream.input.InputHandler;
+import io.siddhi.core.stream.output.StreamCallback;
+import io.siddhi.core.util.SiddhiTestHelper;
+import io.siddhi.core.util.persistence.InMemoryPersistenceStore;
 import org.apache.log4j.Logger;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
@@ -26,15 +35,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.wso2.siddhi.core.SiddhiAppRuntime;
-import org.wso2.siddhi.core.SiddhiManager;
-import org.wso2.siddhi.core.event.Event;
-import org.wso2.siddhi.core.exception.CannotRestoreSiddhiAppStateException;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.stream.input.InputHandler;
-import org.wso2.siddhi.core.stream.output.StreamCallback;
-import org.wso2.siddhi.core.util.SiddhiTestHelper;
-import org.wso2.siddhi.core.util.persistence.InMemoryPersistenceStore;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -18,13 +18,13 @@
 
 package org.wso2.extension.siddhi.io.prometheus.source;
 
+import io.siddhi.core.SiddhiManager;
+import io.siddhi.core.exception.SiddhiAppCreationException;
 import org.apache.log4j.Logger;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.io.prometheus.util.PrometheusConstants;
-import org.wso2.siddhi.core.SiddhiManager;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 
 /**
  * Test cases for invalid source definitions.

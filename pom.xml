@@ -30,27 +30,27 @@
     </modules>
     <groupId>org.wso2.extension.siddhi.io.prometheus</groupId>
     <artifactId>siddhi-io-prometheus-parent</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <name>Siddhi IO Prometheus Extension Parent</name>
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.wso2.siddhi</groupId>
+                <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-core</artifactId>
                 <version>${siddhi.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.siddhi</groupId>
+                <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-query-api</artifactId>
                 <version>${siddhi.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.siddhi</groupId>
+                <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-annotations</artifactId>
                 <version>${siddhi.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.siddhi</groupId>
+                <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-query-compiler</artifactId>
                 <version>${siddhi.version}</version>
             </dependency>
@@ -152,7 +152,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.wso2.siddhi</groupId>
+                <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-doc-gen</artifactId>
                 <version>${siddhi.version}</version>
                 <executions>
@@ -166,18 +166,18 @@
         </plugins>
     </build>
     <properties>
-        <siddhi.version>4.2.31</siddhi.version>
-        <siddhi.import.version.range>[4.2.28,5.0.0)</siddhi.import.version.range>
+        <siddhi.version>5.0.0</siddhi.version>
+        <siddhi.import.version.range>[5.0.0,6.0.0)</siddhi.import.version.range>
         <prometheus.client.version.range>[0.5.0,)</prometheus.client.version.range>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <carbon.transport.version>4.4.15</carbon.transport.version>
-        <siddhi.map.json.version>4.0.15</siddhi.map.json.version>
-        <siddhi.map.xml.version>4.0.11</siddhi.map.xml.version>
+        <siddhi.map.json.version>5.0.1</siddhi.map.json.version>
+        <siddhi.map.xml.version>5.0.0</siddhi.map.xml.version>
         <jacoco.plugin.version>0.7.9</jacoco.plugin.version>
         <carbon.feature.plugin.version>3.0.0</carbon.feature.plugin.version>
         <testng.version>6.11</testng.version>
         <prometheus.client.version>0.5.0</prometheus.client.version>
-        <keyvalue.mapper.version>1.0.17</keyvalue.mapper.version>
+        <keyvalue.mapper.version>2.0.0</keyvalue.mapper.version>
         <tapestry-json.version>5.4.1.wso2v1</tapestry-json.version>
         <skip.surefire.test>false</skip.surefire.test>
         <prometheus-test.port>9090</prometheus-test.port>

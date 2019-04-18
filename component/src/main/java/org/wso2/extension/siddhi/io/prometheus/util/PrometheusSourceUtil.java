@@ -18,9 +18,9 @@
 
 package org.wso2.extension.siddhi.io.prometheus.util;
 
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.util.config.ConfigReader;
 import org.wso2.carbon.messaging.Header;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.transport.http.netty.common.Constants;
 import org.wso2.transport.http.netty.config.SenderConfiguration;
 
