@@ -28,7 +28,7 @@
     <modules>
         <module>component</module>
     </modules>
-    <groupId>org.wso2.extension.siddhi.io.prometheus</groupId>
+    <groupId>io.siddhi.extension.io.prometheus</groupId>
     <artifactId>siddhi-io-prometheus-parent</artifactId>
     <version>2.0.1-SNAPSHOT</version>
     <name>Siddhi IO Prometheus Extension Parent</name>
@@ -99,7 +99,7 @@
                 <version>${prometheus.client.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.extension.siddhi.map.keyvalue</groupId>
+                <groupId>io.siddhi.extension.map.keyvalue</groupId>
                 <artifactId>siddhi-map-keyvalue</artifactId>
                 <version>${keyvalue.mapper.version}</version>
                 <scope>test</scope>
@@ -171,13 +171,13 @@
         <prometheus.client.version.range>[0.5.0,)</prometheus.client.version.range>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <carbon.transport.version>4.4.15</carbon.transport.version>
-        <siddhi.map.json.version>5.0.1</siddhi.map.json.version>
-        <siddhi.map.xml.version>5.0.0</siddhi.map.xml.version>
+        <siddhi.map.json.version>5.0.2</siddhi.map.json.version>
+        <siddhi.map.xml.version>5.0.2</siddhi.map.xml.version>
         <jacoco.plugin.version>0.7.9</jacoco.plugin.version>
         <carbon.feature.plugin.version>3.0.0</carbon.feature.plugin.version>
         <testng.version>6.11</testng.version>
         <prometheus.client.version>0.5.0</prometheus.client.version>
-        <keyvalue.mapper.version>2.0.0</keyvalue.mapper.version>
+        <keyvalue.mapper.version>2.0.1</keyvalue.mapper.version>
         <tapestry-json.version>5.4.1.wso2v1</tapestry-json.version>
         <skip.surefire.test>false</skip.surefire.test>
         <prometheus-test.port>9090</prometheus-test.port>
