@@ -1,8 +1,11 @@
 # API Docs - v2.0.1
 
+!!! Info "Tested Siddhi Core version: *<a target="_blank" href="http://siddhi.io/en/v5.0/docs/query-guide/">5.0.0</a>*"
+    It could also support other Siddhi Core minor versions.
+
 ## Sink
 
-### prometheus *<a target="_blank" href="http://siddhi.io/documentation/siddhi-5.x/query-guide-5.x/#sink">(Sink)</a>*
+### prometheus *<a target="_blank" href="https://siddhi.io/en/v5.0/docs/#sink">(Sink)</a>*
 
 <p style="word-wrap: break-word">This sink publishes events processed by Siddhi into Prometheus metrics and exposes them to the Prometheus server at the specified URL. The created metrics can be published to Prometheus via 'server' or 'pushGateway', depending on your preference.<br>&nbsp;The metric types that are supported by the Prometheus sink are 'counter', 'gauge', 'histogram', and 'summary'. The values and labels of the Prometheus metrics can be updated through the events. </p>
 
@@ -186,7 +189,7 @@ define stream InventoryLevelStream (Name String, value int);
 
 ## Source
 
-### prometheus *<a target="_blank" href="http://siddhi.io/documentation/siddhi-5.x/query-guide-5.x/#source">(Source)</a>*
+### prometheus *<a target="_blank" href="https://siddhi.io/en/v5.0/docs/#source">(Source)</a>*
 
 <p style="word-wrap: break-word">This source consumes Prometheus metrics that are exported from a specified URL as Siddhi events by sending HTTP requests to the URL. Based on the source configuration, it analyzes metrics from the text response and sends them as Siddhi events through key-value mapping.The user can retrieve metrics of the 'including', 'counter', 'gauge', 'histogram', and 'summary' types. The source retrieves the metrics from a text response of the target. Therefore, it is you need to use 'string' as the attribute type for the attributes that correspond with the Prometheus metric labels. Further, the Prometheus metric value is passed through the event as 'value'. This requires you to include an attribute named 'value' in the stream definition. <br>The supported types for the 'value' attribute are 'INT', 'LONG', 'FLOAT', and 'DOUBLE'.</p>
 
