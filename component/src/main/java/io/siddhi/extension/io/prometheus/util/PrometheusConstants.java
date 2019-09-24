@@ -118,6 +118,7 @@ public class PrometheusConstants {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String HTTP_CONTENT_TYPE = "Content-Type";
     public static final String HTTP_METHOD = "HTTP_METHOD";
+    public static final String HTTP_REQUEST_URL = "REQUEST_URL";
 
     //Map keys and values for Prometheus-source
     public static final String MAP_NAME = "metric_name";

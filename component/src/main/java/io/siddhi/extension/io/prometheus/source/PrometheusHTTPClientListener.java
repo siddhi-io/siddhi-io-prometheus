@@ -19,8 +19,8 @@
 package io.siddhi.extension.io.prometheus.source;
 
 import org.wso2.transport.http.netty.contract.HttpConnectorListener;
-import org.wso2.transport.http.netty.message.HTTPCarbonMessage;
 import org.wso2.transport.http.netty.message.Http2PushPromise;
+import org.wso2.transport.http.netty.message.HttpCarbonMessage;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -29,14 +29,14 @@ import java.util.concurrent.CountDownLatch;
  */
 public class PrometheusHTTPClientListener implements HttpConnectorListener {
     private final CountDownLatch latch;
-    private HTTPCarbonMessage httpMessage;
+    private HttpCarbonMessage httpMessage;
 
     PrometheusHTTPClientListener(CountDownLatch latch) {
         this.latch = latch;
     }
 
     @Override
-    public void onMessage(HTTPCarbonMessage httpMessage) {
+    public void onMessage(HttpCarbonMessage httpMessage) {
         this.httpMessage = httpMessage;
         latch.countDown();
     }
@@ -51,7 +51,7 @@ public class PrometheusHTTPClientListener implements HttpConnectorListener {
 
     }
 
-    HTTPCarbonMessage getHttpResponseMessage() {
+    HttpCarbonMessage getHttpResponseMessage() {
         return httpMessage;
     }
 }
