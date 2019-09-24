@@ -33,13 +33,13 @@ import io.siddhi.extension.io.prometheus.util.PrometheusSourceUtil;
 import io.siddhi.query.api.definition.Attribute;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.messaging.Header;
-import org.wso2.transport.http.netty.common.Constants;
-import org.wso2.transport.http.netty.config.SenderConfiguration;
+import org.wso2.transport.http.netty.contract.Constants;
 import org.wso2.transport.http.netty.contract.HttpClientConnector;
 import org.wso2.transport.http.netty.contract.HttpResponseFuture;
 import org.wso2.transport.http.netty.contract.HttpWsConnectorFactory;
+import org.wso2.transport.http.netty.contract.config.SenderConfiguration;
 import org.wso2.transport.http.netty.contractimpl.DefaultHttpWsConnectorFactory;
-import org.wso2.transport.http.netty.message.HTTPCarbonMessage;
+import org.wso2.transport.http.netty.message.HttpCarbonMessage;
 import org.wso2.transport.http.netty.message.HttpMessageDataStreamer;
 
 import java.io.BufferedReader;
@@ -167,7 +167,7 @@ public class PrometheusScraper implements Runnable {
     private List<String> sendRequest() throws ConnectionUnavailableException {
         List<String> responsePayload = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(1);
-        HTTPCarbonMessage carbonMessage = generateCarbonMessage();
+        HttpCarbonMessage carbonMessage = generateCarbonMessage();
         HttpResponseFuture httpResponseFuture = httpClientConnector.send(carbonMessage);
         PrometheusHTTPClientListener httpListener = new PrometheusHTTPClientListener(latch);
         httpResponseFuture.setHttpConnectorListener(httpListener);
@@ -177,7 +177,7 @@ public class PrometheusScraper implements Runnable {
         BufferedReader bufferedReader = null;
         try {
             if (latch.await(scrapeTimeout + 10, TimeUnit.SECONDS)) {
-                HTTPCarbonMessage response = httpListener.getHttpResponseMessage();
+                HttpCarbonMessage response = httpListener.getHttpResponseMessage();
                 bufferedReader = new BufferedReader(new InputStreamReader(
                         new HttpMessageDataStreamer(response).getInputStream(), Charset.defaultCharset()));
                 int statusCode = response.getNettyHttpResponse().status().code();
@@ -205,16 +205,16 @@ public class PrometheusScraper implements Runnable {
         return responsePayload;
     }
 
-    private HTTPCarbonMessage generateCarbonMessage() {
+    private HttpCarbonMessage generateCarbonMessage() {
         HttpMethod httpReqMethod = new HttpMethod(PrometheusConstants.DEFAULT_HTTP_METHOD);
-        HTTPCarbonMessage carbonMessage = new HTTPCarbonMessage(new DefaultHttpRequest(HttpVersion.HTTP_1_1,
+        HttpCarbonMessage carbonMessage = new HttpCarbonMessage(new DefaultHttpRequest(HttpVersion.HTTP_1_1,
                 httpReqMethod, EMPTY_STRING));
         carbonMessage.setProperty(Constants.PROTOCOL, urlProperties.get(Constants.PROTOCOL));
         carbonMessage.setProperty(Constants.TO, urlProperties.get(Constants.TO));
         carbonMessage.setProperty(Constants.HTTP_HOST, urlProperties.get(Constants.HTTP_HOST));
         carbonMessage.setProperty(Constants.HTTP_PORT, Integer.valueOf(urlProperties.get(Constants.HTTP_PORT)));
-        carbonMessage.setProperty(Constants.HTTP_METHOD, PrometheusConstants.DEFAULT_HTTP_METHOD);
-        carbonMessage.setProperty(Constants.REQUEST_URL, urlProperties.get(Constants.REQUEST_URL));
+        carbonMessage.setHttpMethod(PrometheusConstants.DEFAULT_HTTP_METHOD);
+        carbonMessage.setRequestUrl(urlProperties.get(PrometheusConstants.HTTP_REQUEST_URL));
         HttpHeaders httpHeaders = carbonMessage.getHeaders();
         httpHeaders.set(Constants.HTTP_HOST, carbonMessage.getProperty(Constants.HTTP_HOST));
         if (headers != null) {

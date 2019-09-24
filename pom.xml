@@ -30,7 +30,7 @@
     </modules>
     <groupId>io.siddhi.extension.io.prometheus</groupId>
     <artifactId>siddhi-io-prometheus-parent</artifactId>
-    <version>2.0.2-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
     <name>Siddhi IO Prometheus Extension Parent</name>
     <dependencyManagement>
         <dependencies>
@@ -166,23 +166,23 @@
         </plugins>
     </build>
     <properties>
-        <siddhi.version>5.0.2</siddhi.version>
+        <siddhi.version>5.1.4</siddhi.version>
         <siddhi.import.version.range>[5.0.0,6.0.0)</siddhi.import.version.range>
         <prometheus.client.version.range>[0.5.0,)</prometheus.client.version.range>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <carbon.transport.version>4.4.15</carbon.transport.version>
-        <siddhi.map.json.version>5.0.2</siddhi.map.json.version>
-        <siddhi.map.xml.version>5.0.2</siddhi.map.xml.version>
+        <siddhi.map.json.version>5.0.4</siddhi.map.json.version>
+        <siddhi.map.xml.version>5.0.3</siddhi.map.xml.version>
         <jacoco.plugin.version>0.7.9</jacoco.plugin.version>
         <carbon.feature.plugin.version>3.0.0</carbon.feature.plugin.version>
         <testng.version>6.11</testng.version>
         <prometheus.client.version>0.5.0</prometheus.client.version>
-        <keyvalue.mapper.version>2.0.1</keyvalue.mapper.version>
+        <keyvalue.mapper.version>2.0.3</keyvalue.mapper.version>
         <tapestry-json.version>5.4.1.wso2v1</tapestry-json.version>
         <skip.surefire.test>false</skip.surefire.test>
         <prometheus-test.port>9090</prometheus-test.port>
         <prometheus-pushgateway-test.port>9091</prometheus-pushgateway-test.port>
-        <org.wso2.transport.http.version>6.0.163</org.wso2.transport.http.version>
+        <org.wso2.transport.http.version>6.2.26</org.wso2.transport.http.version>
         <org.wso2.carbon.messaging.version>3.0.2</org.wso2.carbon.messaging.version>
         <io.netty.version>4.1.16.Final</io.netty.version>
     </properties>

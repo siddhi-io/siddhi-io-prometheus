@@ -21,8 +21,8 @@ package io.siddhi.extension.io.prometheus.util;
 import io.siddhi.core.exception.SiddhiAppCreationException;
 import io.siddhi.core.util.config.ConfigReader;
 import org.wso2.carbon.messaging.Header;
-import org.wso2.transport.http.netty.common.Constants;
-import org.wso2.transport.http.netty.config.SenderConfiguration;
+import org.wso2.transport.http.netty.contract.Constants;
+import org.wso2.transport.http.netty.contract.config.SenderConfiguration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,7 +55,7 @@ public class PrometheusSourceUtil {
             port = targetURL.getPort() != -1 ? targetURL.getPort() : PrometheusConstants.DEFAULT_HTTP_PORT;
         }
         httpURLProperties.put(Constants.HTTP_PORT, Integer.toString(port));
-        httpURLProperties.put(Constants.REQUEST_URL, targetURL.toString());
+        httpURLProperties.put(PrometheusConstants.HTTP_REQUEST_URL, targetURL.toString());
         return httpURLProperties;
     }
 
