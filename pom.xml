@@ -184,7 +184,7 @@
         <prometheus-pushgateway-test.port>9091</prometheus-pushgateway-test.port>
         <org.wso2.transport.http.version>6.2.26</org.wso2.transport.http.version>
         <org.wso2.carbon.messaging.version>3.0.2</org.wso2.carbon.messaging.version>
-        <io.netty.version>4.1.16.Final</io.netty.version>
+        <io.netty.version>4.1.42.Final</io.netty.version>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/siddhi-io/siddhi-io-prometheus.git</connection>
