@@ -115,15 +115,10 @@
                 <version>${org.wso2.transport.http.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.transport.http</groupId>
-                <artifactId>org.wso2.transport.http.netty.feature</artifactId>
-                <version>${org.wso2.transport.http.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>${io.netty.version}</version>
+                <groupId>org.wso2.orbit.org.apache.tapestry</groupId>
+                <artifactId>tapestry-json</artifactId>
+                <version>${tapestry-json.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
