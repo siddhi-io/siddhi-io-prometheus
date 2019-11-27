@@ -157,7 +157,7 @@ public class PrometheusSinkTest {
      *
      * @throws InterruptedException interrupted exception
      */
-    @Test(sequential = true)
+    @Test
     public void prometheusSinkTest() throws InterruptedException {
 
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -202,15 +202,13 @@ public class PrometheusSinkTest {
         inputHandler.send(inputEvent2);
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
-        Assert.assertTrue(eventArrived.get());
-        Thread.sleep(1000);
+        Thread.sleep(10000);
+
         getAndValidateMetrics("SinkMapTestStream");
 
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 2);
-        } else {
-            Assert.fail("Events does not match");
-        }
+        Assert.assertTrue(eventArrived.get());
+        Assert.assertEquals(eventCount.get(), 2);
+        Assert.assertTrue(SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents));
         siddhiAppRuntime.shutdown();
     }
 
@@ -219,7 +217,7 @@ public class PrometheusSinkTest {
      *
      * @throws Exception Interrupted exception
      */
-    @Test(sequential = true)
+    @Test(dependsOnMethods = "prometheusSinkTest")
     public void prometheusSinkTestServerMode() throws InterruptedException {
 
         log.info("----------------------------------------------------------------------------------");
@@ -268,15 +266,15 @@ public class PrometheusSinkTest {
         inputHandler.send(inputEvent2);
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
-        Assert.assertTrue(eventArrived.get());
-        Thread.sleep(2000);
+
+        Thread.sleep(10000);
+
         getAndValidateMetrics("testing_metrics");
 
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 2);
-        } else {
-            Assert.fail("Events does not match");
-        }
+        Assert.assertTrue(eventArrived.get());
+        Assert.assertEquals(eventCount.get(), 2);
+        Assert.assertTrue(SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents));
+
         siddhiAppRuntime.shutdown();
     }
 
@@ -285,7 +283,7 @@ public class PrometheusSinkTest {
      *
      * @throws Exception Interrupted exception
      */
-    @Test(sequential = true)
+    @Test(enabled = false, dependsOnMethods = "prometheusSinkTest")
     public void prometheusSinkTestPushgatewayMode() throws InterruptedException {
         log.info("----------------------------------------------------------------------------------");
         log.info("Prometheus Sink test with pushgateway mode");
@@ -335,19 +333,18 @@ public class PrometheusSinkTest {
         inputHandler.send(inputEvent2);
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
-        Assert.assertTrue(eventArrived.get());
-        Thread.sleep(1000);
+
+        Thread.sleep(10000);
         getAndValidateMetrics("test_metrics");
 
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 2);
-        } else {
-            Assert.fail("Events does not match");
-        }
+        Assert.assertTrue(eventArrived.get());
+        Assert.assertEquals(eventCount.get(), 2);
+        Assert.assertTrue(SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents));
+
         siddhiAppRuntime.shutdown();
     }
 
-    @Test(sequential = true)
+    @Test(dependsOnMethods = "prometheusSinkTest")
     public void prometheusConnectionTestMultipleSink() throws Exception {
 
         log.info("----------------------------------------------------------------------------------");
@@ -405,27 +402,24 @@ public class PrometheusSinkTest {
         inputHandler.send(inputEvent2);
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
-        Assert.assertTrue(eventArrived.get());
-        Thread.sleep(1000);
+        Thread.sleep(10000);
 
         getAndValidateMetrics("TestStream1");
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 4);
-        } else {
-            Assert.fail("Events does not match");
-        }
+
+        Assert.assertTrue(eventArrived.get());
+        Assert.assertEquals(eventCount.get(), 4);
+        Assert.assertTrue(SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents));
+
         createdEvents.clear();
 
         getAndValidateMetrics("TestStream2");
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 4);
-        } else {
-            Assert.fail("Events does not match");
-        }
+        Assert.assertEquals(eventCount.get(), 4);
+        Assert.assertTrue(SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents));
+
         siddhiAppRuntime.shutdown();
     }
 
-    @Test(sequential = true)
+    @Test(dependsOnMethods = "prometheusSinkTestServerMode")
     public void prometheusConfigurationTest() throws Exception {
 
         log.info("----------------------------------------------------------------------------------");
@@ -439,7 +433,7 @@ public class PrometheusSinkTest {
         serverConfig.put("sink.prometheus.publishMode", "server");
         serverConfig.put("sink.prometheus.serverURL", url);
         serverConfig.put("sink.prometheus.groupingKey", "'name:company','product:APIM'");
-        InMemoryConfigManager configManager = new InMemoryConfigManager(serverConfig, null);
+        InMemoryConfigManager configManager = new InMemoryConfigManager(null, serverConfig);
         configManager.generateConfigReader("sink", "prometheus");
 
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -482,15 +476,14 @@ public class PrometheusSinkTest {
         inputHandler.send(inputEvent2);
         inputEvents.add(inputEvent1);
         inputEvents.add(inputEvent2);
-        Assert.assertTrue(eventArrived.get());
-        Thread.sleep(1000);
+        Thread.sleep(10000);
+
         getAndValidateMetrics("metric_test");
 
-        if (SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents)) {
-            Assert.assertEquals(eventCount.get(), 2);
-        } else {
-            Assert.fail("Events does not match");
-        }
+        Assert.assertTrue(eventArrived.get());
+        Assert.assertEquals(eventCount.get(), 2);
+        Assert.assertTrue(SiddhiTestHelper.isEventsMatch(inputEvents, createdEvents));
+
         siddhiAppRuntime.shutdown();
     }
 
@@ -499,7 +492,7 @@ public class PrometheusSinkTest {
      *
      * @throws InterruptedException
      **/
-    @Test(sequential = true)
+    @Test(dependsOnMethods = "prometheusConfigurationTest")
     public void prometheusSinkTestNodeFailure() throws InterruptedException, CannotRestoreSiddhiAppStateException {
 
         log.info("----------------------------------------------------------------------------------");
