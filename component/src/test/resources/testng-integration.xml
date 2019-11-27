@@ -3,7 +3,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <!--
-  ~ Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
   ~ WSO2 Inc. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
@@ -20,12 +20,11 @@
   ~ under the License.
   -->
 
-<suite name="Siddhi-IO-Prometheus-Test-Suite">
-    <test name="Siddhi-io-prometheus-tests" enabled="true">
+<suite name="Siddhi-IO-Prometheus-Test-Suite Integration">
+    <test name="Prometheus sink run tests" parallel="false">
+        <!--Prometheus server and Pushgateway must be up and running for these test cases to pass-->
         <classes>
-            <class name="io.siddhi.extension.io.prometheus.sink.SinkValidationTestcase"/>
-            <class name="io.siddhi.extension.io.prometheus.source.SourceValidationTestcase"/>
-            <class name="io.siddhi.extension.io.prometheus.source.PrometheusSourceTest"/>
+            <class name="io.siddhi.extension.io.prometheus.sink.PrometheusSinkTest"/>
         </classes>
     </test>
 </suite>
