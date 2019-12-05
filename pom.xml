@@ -30,7 +30,7 @@
     </modules>
     <groupId>io.siddhi.extension.io.prometheus</groupId>
     <artifactId>siddhi-io-prometheus-parent</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2-SNAPSHOT</version>
     <name>Siddhi IO Prometheus Extension Parent</name>
     <dependencyManagement>
         <dependencies>
@@ -185,6 +185,6 @@
         <connection>scm:git:https://github.com/siddhi-io/siddhi-io-prometheus.git</connection>
         <url>https://github.com/siddhi-io/siddhi-io-prometheus.git</url>
         <developerConnection>scm:git:https://github.com/siddhi-io/siddhi-io-prometheus.git</developerConnection>
-        <tag>v2.1.1</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
