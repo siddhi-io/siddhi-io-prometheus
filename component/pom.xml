@@ -259,8 +259,10 @@
                             io.siddhi.extension.io.prometheus.*
                         </Export-Package>
                         <Import-Package>
-                            io.prometheus.client.exporter.*; version="${prometheus.client.version.range}",
-                            io.siddhi.*; version="${siddhi.import.version.range}"
+                            io.siddhi.core.*;version="${siddhi.import.version.range}",
+                            io.siddhi.annotation.*;version="${siddhi.import.version.range}",
+                            io.siddhi.query.api.*;version="${siddhi.import.version.range}",
+                            io.prometheus.client.exporter.*
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Include-Resource>
