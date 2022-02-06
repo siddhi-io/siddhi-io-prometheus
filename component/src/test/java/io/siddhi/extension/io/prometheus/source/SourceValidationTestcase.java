@@ -21,7 +21,8 @@ package io.siddhi.extension.io.prometheus.source;
 import io.siddhi.core.SiddhiManager;
 import io.siddhi.core.exception.SiddhiAppCreationException;
 import io.siddhi.extension.io.prometheus.util.PrometheusConstants;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -30,7 +31,7 @@ import org.testng.annotations.Test;
  * Test cases for invalid source definitions.
  */
 public class SourceValidationTestcase {
-    private static final Logger log = Logger.getLogger(SourceValidationTestcase.class);
+    private static final Logger log = LogManager.getLogger(SourceValidationTestcase.class);
     private static String targetURL;
     private static final String ERROR_MESSAGE = "Error on \'(.*)\' @ Line: (.*). Position: (.*), near \'(.*)\'. ";
 

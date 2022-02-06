@@ -31,7 +31,8 @@ import io.siddhi.core.stream.input.source.SourceEventListener;
 import io.siddhi.extension.io.prometheus.util.PrometheusConstants;
 import io.siddhi.extension.io.prometheus.util.PrometheusSourceUtil;
 import io.siddhi.query.api.definition.Attribute;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.wso2.carbon.messaging.Header;
 import org.wso2.transport.http.netty.contract.Constants;
 import org.wso2.transport.http.netty.contract.HttpClientConnector;
@@ -63,7 +64,7 @@ import static io.siddhi.extension.io.prometheus.util.PrometheusConstants.EMPTY_S
  * retrieved data to {@code PrometheusMetricAnalyser} class.
  */
 public class PrometheusScraper implements Runnable {
-    private static final Logger log = Logger.getLogger(PrometheusScraper.class);
+    private static final Logger log = LogManager.getLogger(PrometheusScraper.class);
     private final String targetURL;
     private final long scrapeTimeout;
     private final String scheme;
