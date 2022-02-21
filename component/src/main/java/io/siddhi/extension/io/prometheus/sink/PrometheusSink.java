@@ -44,7 +44,8 @@ import io.siddhi.query.api.annotation.Annotation;
 import io.siddhi.query.api.definition.Attribute;
 import io.siddhi.query.api.definition.StreamDefinition;
 import io.siddhi.query.api.exception.AttributeNotExistException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -272,7 +273,7 @@ import static java.lang.Double.parseDouble;
 )
 
 public class PrometheusSink extends Sink<PrometheusSink.PrometheusSinkState> {
-    private static final Logger log = Logger.getLogger(PrometheusSink.class);
+    private static final Logger log = LogManager.getLogger(PrometheusSink.class);
 
     private String jobName;
     private String pushURL;

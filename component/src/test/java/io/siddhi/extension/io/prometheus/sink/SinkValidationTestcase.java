@@ -19,7 +19,7 @@ package io.siddhi.extension.io.prometheus.sink;
 
 import io.siddhi.core.SiddhiManager;
 import io.siddhi.core.exception.SiddhiAppCreationException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
  * Test cases for invalid sink definitions.
  */
 public class SinkValidationTestcase {
-    private static final Logger log = Logger.getLogger(SinkValidationTestcase.class);
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(SinkValidationTestcase.class);
     private static String pushgatewayURL;
     private static String serverURL;
     private static String buckets;

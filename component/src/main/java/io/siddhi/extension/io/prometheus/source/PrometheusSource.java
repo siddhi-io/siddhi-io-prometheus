@@ -37,7 +37,8 @@ import io.siddhi.extension.io.prometheus.util.PrometheusConstants;
 import io.siddhi.extension.io.prometheus.util.PrometheusSourceUtil;
 import io.siddhi.query.api.definition.Attribute;
 import io.siddhi.query.api.exception.AttributeNotExistException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.wso2.carbon.messaging.Header;
 
 import java.net.MalformedURLException;
@@ -347,7 +348,7 @@ public class PrometheusSource extends Source<PrometheusSource.PrometheusSourceSt
     private long scrapeIntervalInSeconds;
 
     private PrometheusScraper prometheusScraper;
-    private static final Logger log = Logger.getLogger(PrometheusSource.class);
+    private static final Logger log = LogManager.getLogger(PrometheusSource.class);
 
     @Override
     public StateFactory<PrometheusSourceState> init(SourceEventListener sourceEventListener, OptionHolder optionHolder,

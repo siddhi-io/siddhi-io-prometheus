@@ -35,7 +35,8 @@ import io.siddhi.core.util.SiddhiTestHelper;
 import io.siddhi.core.util.config.InMemoryConfigManager;
 import io.siddhi.core.util.persistence.InMemoryPersistenceStore;
 import io.siddhi.core.util.persistence.PersistenceStore;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -61,7 +62,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class PrometheusSourceTest {
 
-    private static final Logger log = Logger.getLogger(PrometheusSourceTest.class);
+    private static final Logger log = LogManager.getLogger(PrometheusSourceTest.class);
     private String targetURL;
     private HTTPServer server;
     private String serverPort;

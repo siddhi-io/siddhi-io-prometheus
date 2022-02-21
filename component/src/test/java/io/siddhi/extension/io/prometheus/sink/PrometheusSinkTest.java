@@ -28,7 +28,8 @@ import io.siddhi.core.stream.output.StreamCallback;
 import io.siddhi.core.util.SiddhiTestHelper;
 import io.siddhi.core.util.config.InMemoryConfigManager;
 import io.siddhi.core.util.persistence.InMemoryPersistenceStore;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.testng.Assert;
@@ -74,7 +75,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class PrometheusSinkTest {
 
-    private static final Logger log = Logger.getLogger(PrometheusSinkTest.class);
+    private static final Logger log = LogManager.getLogger(PrometheusSinkTest.class);
     private static String pushgatewayURL;
     private static String serverURL;
     private static ExecutorService executorService;

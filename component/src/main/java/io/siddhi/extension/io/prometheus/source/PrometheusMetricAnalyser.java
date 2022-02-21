@@ -22,7 +22,7 @@ import io.siddhi.core.exception.SiddhiAppRuntimeException;
 import io.siddhi.core.stream.input.source.SourceEventListener;
 import io.siddhi.extension.io.prometheus.util.PrometheusConstants;
 import io.siddhi.query.api.definition.Attribute;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 class PrometheusMetricAnalyser {
 
-    private static final Logger log = Logger.getLogger(PrometheusMetricAnalyser.class);
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(PrometheusMetricAnalyser.class);
     private final String metricName;
     private final MetricType metricType;
     private final SourceEventListener sourceEventListener;
